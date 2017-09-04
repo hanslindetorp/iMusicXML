@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="docstyle.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+<body>
+<div id="container">
+<h1>Documentation iMus</h1>
+<h2>Installation</h2>
+<p>Add the following code to your &lt;head&gt;-element:</p>
+
+<div class="code">&lt;script src="http://momdev.se/interactivemusic/interactivemusic.min.js"&gt;&lt;/script&gt;</div>
+
+<h2>Create an instance of iMus</h2>
+<p>You can specify default upbeat for your sound files, time signature, tempo and path to the folder containing the audio files.</p>
+
+<div class="code">var instance = new iMus({
+    upbeat:"1/8",
+    timeSign: "4/4",
+    tempo: 120,
+    audioPath: "audio",
+    suffix: "mp3",
+    onLoadComplete: function(){
+    	A.play(); // specify the section you want to autoplay after all files are loaded
+	}
+});
+</div>
+
+
+<h2>Create a Section</h2>
+<p>A section is similar to a multitrack (or a part of an) arrangement in a music production application. You can add the audio files for the first stem (like a track with bounced tracks) straight away or add them with addStem().</p>
+<p>When you specify your sound files you can either type the url and use the Sections default values for upbeat and length or specify them by wrapping the url in an object.</p>
+
+
+<div class="code">var A = instance.addSection("A1.mp3", {upbeat: 0, length: "2/4", url: "A1.mp3"});
+var A = instance.addSection(); // adds an empty section - add stems with addStem()
+</div>
+
+<p>The length property controls the default position of the next part if not specified. You can also specify a part with a position (format is "bar.beat" i.e. "pos: 10.3" for beat 3 in bar 10 and then the length property is of no use.</p>
+
+
+<h2>Create a second stem for that Section</h2>
+<div class="code">var stem2 = A.addStem("1.mp3");</div>
+<p>You can also specify Stem properties and default part properties with the first value beeing an object (without the URL property) with possible values volume, active, loopEnd, upbeat etc. The following code sets the loopEnd for the stem to 
+bar 9, the active state to 0 (mute) and the stem volume to 0.5:</p>
+<div class="code">var stem3 = A.addStem({loopEnd: "9.1", active: 0, volume: 0.5}, "A31.mp3", "A32.mp3", "A33.mp3");</div>
+<p>By setting active to a value between 0 and 1 you can control the likeliness for parts on this stem to play. 1 = all parts will play. 0 = no parts will play. 0.5 = 50% of the parts will play. If you set active to a negative value between 0 and -1 you can keep the likeliness while muting a stem. I.e. stem.active = -0.5 will mute all parts on the stem but keep the likeliness setting set to 50%. By using stem.active = -stem.active at a later state, you can unmute and keep the likeliness.</p>
+<p>There is also a way of specifying the likeliness for a whole loop on a stem to playback or not. Just set the parameter loopActive to something less than 1.0</p>
+
+
+<h2>Random phrases</h2>
+<p>By adding an array with several urls for a part on a stem, you add a random factor. Only one of the files will be picked each time the part is object to play</p>
+<div class="code">music.addStem({pos: "1.1", url: ["B1-a.mp3", "B1-b.mp3", "B1-c.mp3"]}, {pos: "2.1", url: ["B2-a.mp3", "B2-b.mp3", "B2-c.mp3"]});
+</div>
+
+
+<h2>Create a Transition between different sections (at least two sections are required)</h2>
+<div class="code">A.addTransition(B,{upbeat:0, url: "B-A1.mp3"}, "B-A2.mp3");
+</div>
+
+<p>This adds a transition with two soundfiles with default length (1 bar of 4/4) for transitions from section A to section B. </p>
+<p>When you specify your sound files you can either type the url and use the Sections default values for upbeat and length or specify them by wrapping the url in an object. Instead of sequenced parts with a length that determains
+the position of the following part, you can also specify a part with a position (format is "bar.beat" i.e. "10.3"; for beat 3 in bar 10.
+</p>
+
+
+
+<h2>Create a Motif or LeadIn that syncronizes with the music at the desired note value</h2>
+<p>This soundfile can be played in sync but separately (on top of) the current section. The quantize value is the the position the Motif will be quantized to. Default is the first beat in the next bar.</p>
+
+
+
+<div class="code">var git = instance.addMotif({quantize:"1/4"}, "git.mp3");
+</div>
+
+<p>You can create a set of files with different upbeats and the most appropriate one (depending on time) will be picked.</p>
+<div class="code">var drumFill1 = instance.addLeadIn(
+	{upbeat: "7/8", url: "fill7-8.mp3"},
+	{upbeat: "3/4", url: "fill3-4.mp3"},
+	{upbeat: "5/8", url: "fill5-8.mp3"},
+	{upbeat: "2/4", url: "fill2-4.mp3"},
+	{upbeat: "7/16", url: "fill7-16.mp3"},
+	{upbeat: "3/8", url: "fill3-8.mp3"},
+	{upbeat: "5/16", url: "fill5-16.mp3"},
+	{upbeat: "1/4", url: "fill1-4.mp3"},
+	{upbeat: "1/8", url: "fill1-8.mp3"},
+	{upbeat: "1/16", url: "fill1-16.mp3"}
+);</div>
+
+<p>If two Motifs or LeadIns files share the same upbeat setting, they will be picked randomly</p>
+<div class="code">var drumFill2 = instance.addMotif({upbeat: "2/4"}, "fill2-4a.mp3", "fill2-4b.mp3");</div>
+
+<h2>Create a sound effect to play out of sync with the music</h2>
+
+<div class="code">var sfx1 = instance.addSFX("partyhorn.mp3");
+var sfx1 = instance.addSFX("partyhorn1.mp3", "partyhorn2.mp3","partyhorn3.mp3","partyhorn4.mp3"); // several files for random selection
+</div>
+
+<h2>Trigg the different parts of your music with events from your game or webPage.</h2>
+<p>Create a function that is called from the main script in your page. I.e.</p>
+
+
+<div class="code">function controlSound(event){
+	switch(event){
+		
+		case "enterRoom1":
+			A.play(); // start play Section A
+			break;
+
+		case "enterRoom2":
+			B.play(); // start play Section B (including transition from Section A)
+			break;
+
+	}
+}
+</div>
+
+
+
+
+
+<h2>Trigg sections, stems, Motifs and SoundEffects with .play()</h2>
+<p>Please note:
+<ul>
+<li>stems can be activate (unmuted) and deactivated (muted) with play() - stop() or active = 1 - active = 0</li>
+<li>Motifs and SFX can have a parameter specified to block retrigg within a certain time</li>
+<li>SFX can have a callBack function specified that triggers after the file has finished</li>
+<li>Motifs can have a callBack that triggers when the Motif starts playing and a second callBack that triggers when
+the file has finished playing</li>
+</ul>
+</p>
+
+<div class="code">A.play();
+stem1.play();
+// or
+stem1.active = 1;
+
+git.play();
+// or
+git.play(2000); // don't retrigger within 2000ms
+// or
+git.play(callBackOnStart, callBackOnFinish);
+// or
+git.play(noRetrigTime, callBackOnStart, callBackOnFinish);
+
+
+sfx1.play(2000); // don't retrigger within 2000ms
+sfx1.play(noRetrigTime, callBackOnFinish);
+</div>
+
+<p>In this way it's possible to chain a series of SFXs, Motifs and stem triggers to make things happen in a certain order:</p>
+<div class="code">function controlSound(event){
+	switch(event){
+		
+		case "enterRoom4":
+			sfx1.play(function(){
+				drumFill1.play(function(){
+					stem1.play();
+				});
+			});
+			break;
+			
+	}
+}
+</div>
+
+
+
+
+<h2>Mix your music with busses</h2>
+<p>Every stem in a section is routed to its corresponding bus. I.e. Stem 1 in every section is routed to bus 1 and stem 2 is routed to bus 2. You either retrieve the bus with getBus(id) on your interactiveMusic instance - i.e. instance.getBus(1) or from the bus property on a stem - i.e. stem1.bus</p>
+<p>Make a call to your interactiveMusic instance to retrieve to bus and apply standard webAPI syntax to control the output (gain), filter and panning nodes like this.</p> 
+
+<div class="code">stem1.bus.output.gain.value = 0.5;
+stem1.bus.filter.frequency.value = 300;
+stem1.bus.panning.setPosition(x,y,z);
+</div>
+
+<h2>Send a stem, Motif or SFX to a specific output</h2>
+<p>If you have a multi channel audio interface, you can send a sound to a specified output. If the file has more than one channel (i.e. stereo), it will be merged into one channel (mono).</p>
+<p>The channels are mapped depending on the speaker setup:</p>
+<pre>
+  Mono
+    0: M: mono
+    
+  Stereo
+    0: L: left
+    1: R: right
+  
+  Quad
+    0: L:  left
+    1: R:  right
+    2: SL: surround left
+    3: SR: surround right
+
+  5.1
+    0: L:   left
+    1: R:   right
+    2: C:   center
+    3: LFE: subwoofer
+    4: SL:  surround left
+    5: SR:  surround right
+</pre>
+
+<div class="code">stem1.setOutput(1); // sends all parts on stem1 to output channel 5 (Surround Right in 5.1)
+sfx1.setOutput(2); // sends all parts on stem1 to output channel 3 (Center in 5.1)
+</div>
+
+
+<p>The same syntax applies for Motifs and SoundEffects as well except for the "bus" property which is not needed.</p>
+
+<div class="code">git.output.gain.value = 0.5;
+git.filter.frequency.value = 300;
+git.panning.setPosition(x,y,z);
+sfx1.output.gain.value = 0.5;
+sfx1.filter.frequency.value = 300;
+sfx1.panning.setPosition(x,y,z);
+</div>
+
+
+<p>To make a fade or any other transition for a value, you can use jQuery.animate(). This example fades out the volume for the first stem in 3 seconds:</p>
+<div class="code">function controlSound(event){
+	switch(event){
+		case "exitRoom1":
+			$(stem1.bus.output.gain).animate({value: 0}, 3000);
+			break;
+	}
+}</div>
+
+
+<h2>Extra features:</h2>
+<p>Get the current position (or the "local" position within a looped stem) with getPosition();</p>
+<div class="code">instance.getPosition();
+returns [bar, beat] in current time signature
+
+stem1.getPosition();
+returns the local position (within the loop) in stem1 as an array [bar, beat]
+</div>
+
+
+</div>
+</body>
+</head>
