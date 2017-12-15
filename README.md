@@ -16,12 +16,12 @@ Use underscore to separate logical parts of your file name
 
 i.e.
 simple: 
-- trackGroupA_track1.mp3
-- or shorter: tgA_tr1.mp3
+- "trackGroupA_track1.mp3"
+- or shorter: "tgA_tr1.mp3"
 
 more complex:
-- sectionA_trackGroupA_track1_bar1_version1.mp3
-- or shorter: sA_tgA_tr1_b1_v1.mp3
+- "sectionA_trackGroupA_track1_bar1_version1.mp3"
+- or shorter: "sA_tgA_tr1_b1_v1.mp3"
 
 
 ### Step 2:
