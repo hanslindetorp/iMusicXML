@@ -7,7 +7,11 @@ All rights belongs to Hans Lindetorp. Feel free to use it. The code will change 
 ## Getting started:
 
 ### Step 1:
-Bounce your tracks from your DAW into separate files. Include audio tail to preserve reverb and sustained notes. Use logical names.
+Bounce your tracks from your DAW into separate files. Include audio tail to preserve reverb and sustained notes. Use logical names:
+* All files in a TrackGroup shall share at least one part of the name
+* All files on a LoopTrack shall share at least one part of the name
+* All files in a Motif or LeadIn shall share at least one part of the name
+
 
 ### Step 2:
 Put your files in a folder called ”audio” in your HTML-project.
@@ -72,6 +76,30 @@ iMusic.addLeadIn([
 ]);
 ```
 
+### Step 8
+Now it's time to make calls to iMusic to define WHEN a specific LoopTrack, Motif or LeadIn should play. You refer to the music by adressing them with their full name (without suffix):
+
+```javascript
+function init(){
+    iMusic.play("tgA_tr1");
+}
+```
+
+or ONE part of the name:
+```javascript
+function init(){
+    iMusic.play("tr1");
+}
+```
+
+If you trigger a Motif or LeadIn with several audio files (like the LeadIn-example above), ONE of the files will be triggered depending on the settings for upbeat and the time remaining to the position defined by quantize.
+
+
+```javascript
+function init(){
+    iMusic.play("leadin");
+}
+```
 
 Please follow my research journey at http://hans.arapoviclindetorp.se and https://www.facebook.com/hanslindetorpresearch/
 Enjoy!
