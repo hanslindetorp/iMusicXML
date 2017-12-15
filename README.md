@@ -49,10 +49,10 @@ Create LoopTracks and group them. A TrackGroup makes only one of the tracks play
 
 i.e.
 ```javascript
-iMusic.addLoopTrack("tgA_tr1");
-iMusic.addLoopTrack("tgA_tr2");
-iMusic.addLoopTrack("tgA_tr3");
-iMusic.addTrackGroup("tgA");
+iMusic.addLoopTrack("trackGroupA_track1");
+iMusic.addLoopTrack("trackGroupA_track2");
+iMusic.addLoopTrack("trackGroupA_track3");
+iMusic.addTrackGroup("trackGroupA");
 ```
 
 ### Step 6:
@@ -66,13 +66,13 @@ iMusic.addMotif("motif3");
 ```
 
 ### Step 7:
-Create LeadIns. Typically phrases/fill ins/sounds leading up to the next bar. By setting ”quantize” to the same value as the time signature and ”upbeat” to half the time signature, the phrase will be placed to play before the next barline. Note: The audio file needs to be exported with the starting point exactly at that point (i.e. 2 beats before the barline) and it’s often a good idea to include an audio tail after the barline.
+Create LeadIns. Typically phrases/fill ins/sounds leading up to the next bar. I.e. by setting ”quantize” to the same value as the time signature and ”upbeat” to half the time signature, the phrase will be placed to play before the next barline. Note: The audio file needs to be exported with the starting point exactly at that point (i.e. 2 beats before the barline) and it’s often a good idea to include an audio tail after the barline.
 
 i.e.
 ```javascript
 iMusic.set("quantize", "4/4");
 iMusic.set("upbeat", "2/4");
-iMusic.addLeadIn("leadin1");
+iMusic.addLeadIn("leadin");
 ```
 
 To take advantage of this feature, you might find it useful to create a LeadIn with different files for different length of the upbeat:
