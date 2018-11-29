@@ -42,7 +42,7 @@ iMusic.addSection("A2");
 iMusic.addSection("A3");
 iMusic.addSection("A4");
 ```
-Each section will now contain one single track. See [Multitrack](multitrack.html) if you want to add more.
+Each section will now contain one single track. See [Multitrack](multitrack) if you want to add more.
 
 
 Make calls to iMusic:
