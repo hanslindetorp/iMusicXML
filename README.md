@@ -5,9 +5,34 @@ iMusic lets you arrange, loop, randomize and playback any number of sections, st
 All rights belongs to Hans Lindetorp. Feel free to use it. The code will change a lot during the next next years and will serve as a platform for studies related to music production in interactive media.
 
 ## Getting started:
+Learn how to install iMusic and create two loops that can alternate by a javascript call.
 
-### Step 1:
-Bounce your tracks from your DAW into separate files. Include audio tail to preserve reverb and sustained notes. Use logical names:
+### Prepare the audio loops
+* Bounce your tracks from your DAW into separate files. Include audio tail to preserve reverb and sustained notes.
+* Create a folder called ”audio” in your HTML-project.
+* Put the audio files in that folder
+
+
+### Installation:
+Make sure iMusic is included in your HTML-document. Download it from https://github.com/hanslindetorp/imusic 
+
+i.e.
+```html
+<script src="interactivemusic.min.js"></script>
+```
+
+### Configuration:
+Setup iMusic in your script. Add the lines on top of your script. Before any other iMusic commands.
+
+i.e.
+```javascript
+iMusic.set("tempo", 90);
+iMusic.set("timeSign", "4/4");
+```
+
+
+
+Use logical names:
 * All files in a TrackGroup shall share at least one part of the name
 * All files on a LoopTrack shall share at least one part of the name
 * All files in a Motif or LeadIn shall share at least one part of the name
@@ -25,24 +50,9 @@ more complex:
 
 
 ### Step 2:
-Put your files in a folder called ”audio” in your HTML-project.
 
 ### Step 3:
-Make sure iMusic is included in your HTML-document. Download it from https://github.com/hanslindetorp/imusic 
 
-i.e.
-```html
-<script src="interactivemusic.min.js"></script>
-```
-
-### Step 4:
-Setup iMusic in your script. If you don’t, your time signature is supposed to be 4/4, the tempo is supposed to be 120 and the file type is supposed to be mp3. Add the lines on top of your script. Before any other iMusic commands.
-
-i.e.
-```javascript
-iMusic.set("tempo", 90);
-iMusic.set("timeSign", "3/4");
-```
 
 ### Step 5:
 Create LoopTracks and group them. A TrackGroup makes only one of the tracks play at a time. You don’t need to write the file suffix (mp3/wav/ogg). It’s expecting mp3 by default.
