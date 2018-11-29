@@ -9,8 +9,9 @@ Learn how to install iMusic and implement four loops that can alternate by a jav
 
 ### Prepare the audio loops
 * Create a folder called ”audio” in your HTML-project.
-* Put your audio loops (mp3) in the folder. (There is an audio-folder in this directory including four loops) - If you rather make your own: 
-  * Bounce your tracks from your DAW into separate files
+* Put your audio loops (mp3) in the folder. 
+  * There is an audio-folder in this directory including four loops, but if you rather make your own files then...
+  * Bounce your tracks from your DAW into separate (mp3) files
   * Include audio tail to preserve reverb and sustained notes.
 
 
@@ -41,7 +42,7 @@ iMusic.addSection("A2");
 iMusic.addSection("A3");
 iMusic.addSection("A4");
 ```
-Each section will now contain one single track. See Multitrack to see how you can add more.
+Each section will now contain one single track. See [Multitrack](multitrack.html) if you want to add more.
 
 
 Make calls to iMusic:
