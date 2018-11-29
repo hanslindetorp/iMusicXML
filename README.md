@@ -5,9 +5,11 @@ iMusic lets you arrange, loop, randomize and playback any number of sections, st
 All rights belongs to Hans Lindetorp. Feel free to use it. The code will change a lot during the next next years and will serve as a platform for studies related to music production in interactive media.
 
 ## Getting started:
-Learn how to install iMusic and create two loops that can alternate by a javascript call.
+Learn how to install iMusic and implement four loops that can alternate by a javascript call.
 
 ### Prepare the audio loops
+* Create a folder called ”audio” in your HTML-project.
+* Put your audio loops (mp3) in the folder. (There is an audio-folder in this directory including four loops)
 * Bounce your tracks from your DAW into separate files. Include audio tail to preserve reverb and sustained notes.
 * Create a folder called ”audio” in your HTML-project.
 * Put the audio files in that folder
@@ -26,101 +28,37 @@ Setup iMusic in your script. Add the lines on top of your script. Before any oth
 
 i.e.
 ```javascript
-iMusic.set("tempo", 90);
+iMusic.set("tempo", 60);
 iMusic.set("timeSign", "4/4");
+iMusic.set("loopEnd", "5.1"); // The position in "bar" and "beat" where the tracks should loop
 ```
 
+### Implementation
+Create one section for each loop. Note that you don't need to specify the folder ("audio") or the file extension (".mp3"). They are both default values.
 
-
-Use logical names:
-* All files in a TrackGroup shall share at least one part of the name
-* All files on a LoopTrack shall share at least one part of the name
-* All files in a Motif or LeadIn shall share at least one part of the name
-
-Use underscore to separate logical parts of your file name
-
-i.e.
-simple: 
-- "trackGroupA_track1.mp3"
-- or shorter: "tgA_tr1.mp3"
-
-more complex:
-- "sectionA_trackGroupA_track1_bar1_version1.mp3"
-- or shorter: "sA_tgA_tr1_b1_v1.mp3"
-
-
-### Step 2:
-
-### Step 3:
-
-
-### Step 5:
-Create LoopTracks and group them. A TrackGroup makes only one of the tracks play at a time. You don’t need to write the file suffix (mp3/wav/ogg). It’s expecting mp3 by default.
-
-i.e.
 ```javascript
-iMusic.addLoopTrack("trackGroupA_track1");
-iMusic.addLoopTrack("trackGroupA_track2");
-iMusic.addLoopTrack("trackGroupA_track3");
-iMusic.addTrackGroup("trackGroupA");
+iMusic.addSection("A1");
+iMusic.addSection("A2");
+iMusic.addSection("A3");
+iMusic.addSection("A4");
 ```
+Each section will now contain one single track. See Multitrack to see how you can add more.
 
-### Step 6:
-Create Motifs. Typically short phrases expected to be triggered in musical time. By setting ”quantize”, you can define how the phrase is triggered:
 
-```javascript
-iMusic.set("quantize", "1/4"); // triggers the Motif on the next quarter note
-iMusic.addMotif("motif1");
-iMusic.addMotif("motif2");
-iMusic.addMotif("motif3");
-```
-
-### Step 7:
-Create LeadIns. Typically phrases/fill ins/sounds leading up to the next bar. I.e. by setting ”quantize” to the same value as the time signature and ”upbeat” to half the time signature, the phrase will be placed to play before the next barline. Note: The audio file needs to be exported with the starting point exactly at that point (i.e. 2 beats before the barline) and it’s often a good idea to include an audio tail after the barline.
-
-i.e.
-```javascript
-iMusic.set("quantize", "4/4");
-iMusic.set("upbeat", "2/4");
-iMusic.addLeadIn("leadin");
-```
-
-To take advantage of this feature, you might find it useful to create a LeadIn with different files for different length of the upbeat:
-
-i.e.
-```javascript
-iMusic.set("quantize", "4/4");
-iMusic.addLeadIn([
-	{upbeat: "1/4", url: "leadin_1-4"},
-	{upbeat: "2/4", url: "leadin_2-4"},
-	{upbeat: "3/4", url: "leadin_3-4"}
-]);
-```
-
-### Step 8
-Now it's time to make calls to iMusic to define WHEN a specific LoopTrack, Motif or LeadIn should play. You refer to the music by adressing them with their full name (without suffix):
+Make calls to iMusic:
 
 ```javascript
-function init(){
-    iMusic.play("tgA_tr1");
+function myFunction1(){
+    iMusic("A1").play();
 }
-```
 
-or ONE part of the name:
-```javascript
-function init(){
-    iMusic.play("tr1");
+function myFunction2(){
+    iMusic("A2").play();
 }
+
+// etc..
 ```
 
-If you trigger a Motif or LeadIn with several audio files (like the LeadIn-example above), ONE of the files will be triggered depending on the settings for upbeat and the time remaining to the position defined by quantize.
-
-
-```javascript
-function init(){
-    iMusic.play("leadin");
-}
-```
 
 Please follow my research journey at http://hans.arapoviclindetorp.se and https://www.facebook.com/hanslindetorpresearch/
 Enjoy!
