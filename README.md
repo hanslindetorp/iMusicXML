@@ -28,9 +28,15 @@ Setup iMusic in your script. Add the lines on top of your script. Before any oth
 
 i.e.
 ```javascript
+
+// Specify tempo in bpm (default is 120)
 iMusic.set("tempo", 60);
+
+// Specify the time signature (default is "4/4")
 iMusic.set("timeSign", "4/4");
-iMusic.set("loopEnd", "5.1"); // The position in "bar" and "beat" where the tracks should loop
+
+// Specify the position in "bar" and "beat" where the tracks should loop (default is "2.1")
+iMusic.set("loopEnd", "5.1");
 ```
 
 ### Implementation
@@ -59,6 +65,18 @@ function myFunction2(){
 // etc..
 ```
 
+### On load
+If you want to wait for the preloading of all audio files use this syntax:
+```javascript
+
+// Specify which function to run when all audio files are loaded
+iMusic.set("onLoadComplete", init);
+
+function init(){
+   // auto play section "A1" when all files are loaded
+   iMusic("A1").play();
+}
+```
 
 Please follow my research journey at http://hans.arapoviclindetorp.se and https://www.facebook.com/hanslindetorpresearch/
 Enjoy!
