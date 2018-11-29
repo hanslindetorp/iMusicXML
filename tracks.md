@@ -1,6 +1,6 @@
 ## Tracks
 
-In each Section (see [Sections.md](Sections.md) to learn more about sections) there can be any number of Tracks playing back simultaneously in sync.
+In each Section (see [Sections](Sections.md) to learn more about sections) there can be any number of Tracks playing back simultaneously in sync.
 
 i.e.
 ```javascript
