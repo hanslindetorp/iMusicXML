@@ -9,6 +9,9 @@ iMusic("A").addLoopTrack("keys");
 iMusic("A").addLoopTrack("bass");
 ```
 
+Note: This creates one long part on each track. If you rather want to use several parts on a track, please check out [Parts](parts.md)
+
+
 ### Looping
 To specify different loop lengths for different tracks; use the "loopEnd"-property (It is specified as a string with the syntax "bar.beat":
 
