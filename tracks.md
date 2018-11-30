@@ -47,7 +47,7 @@ iMusic("A").addLoopTrack("drums").set("loopEnd", "5.1").stop();
 ### Track Groups
 If you want to have different variations of a track (similar to the concept of Scenes in [Ableton Live](https://www.ableton.com) or Levels in [Elias Studio](https://eliassoftware.com) you can create a "Track Group":
 A TrackGroup makes only one of the tracks play at a time. The first track in the group will be active by default.
-Note: All the tracks in a track group need to share a part of their name. In this example all filenames contains "keys" which makes it possible to group them with addTrackGroup().
+Note: All the tracks in a track group need to share a part of their name. In this example all filenames contains "keys" which makes it possible to group them with addTrackGroup(). Read more about [Naming conventions](naming_conventions.md) to use the power of tagging musical objects.
 
 ```javascript
 iMusic.addLoopTrack("keys_v1");
