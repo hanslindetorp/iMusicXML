@@ -17,7 +17,7 @@ A part is one bar by default one bar long but this can be changed with set("barL
 
 i.e. two bars:
 ```javascript
-iMusic("A").set("barLength", "2/1");
+iMusic("A").set("partLength", "2/1");
 iMusic("A").addLoopTrack(["A1", "A2", "A3", "A4"]);
 ```
 
