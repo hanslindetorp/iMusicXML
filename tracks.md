@@ -1,6 +1,6 @@
 ## Tracks
 
-In each Section (see [Sections](Sections.md) to learn more about sections) there can be any number of Tracks playing back simultaneously in sync.
+In each [Section](Sections.md) there can be any number of Tracks playing back simultaneously in sync.
 
 i.e.
 ```javascript
@@ -36,7 +36,7 @@ iMusic("drums").stop();
 
 iMusic("drums").play();
 ```
-Note: The change happens at the next barline if nothing else is specified.
+Note: The change happens at the next barline.
 If you want a track to be muted by default you can add a stop command att creation:
 
 ```javascript
@@ -46,10 +46,9 @@ iMusic("A").addLoopTrack("drums").set("loopEnd", "5.1").stop();
 
 ### Track Groups
 If you want to have different variations of a track (similar to the concept of Scenes in [Ableton Live](https://www.ableton.com) or Levels in [Elias Studio](https://eliassoftware.com) you can create a "Track Group":
-
 A TrackGroup makes only one of the tracks play at a time. The first track in the group will be active by default.
+Note: All the tracks in a track group need to share a part of their name. In this example all filenames contains "keys" which makes it possible to group them with addTrackGroup().
 
-i.e.
 ```javascript
 iMusic.addLoopTrack("keys_v1");
 iMusic.addLoopTrack("keys_v2");
