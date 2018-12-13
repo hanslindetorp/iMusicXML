@@ -1,65 +1,42 @@
 # Lead-Ins
 
-iMusic offers a feature to make transitions between different sections or tracks
+iMusic offers a feature to make transitions between different [sections](sections.md) or [tracks](tracks.md). You attach a lead-in to a section and trigger it at the same time as you trigger the new section/track. The lead-in file is played together with the looped files.
 
+### 1. Add two sections
+
+```javascript
 iMusic("A").addLoopTrack("A_loop");
 iMusic("B").addLoopTrack("B_loop");
+```
 
+### 2. Add a lead-in from A to B and one from B to A
+In this example the files should contain sound starting one beat (1/4) before the barline:
+```javascript
+iMusic("A").set("upbeat", "1/4");
+iMusic("A").addLeadIn("toB");
+iMusic("B").addLeadIn("toA");
+```
 
-// LEAD INs
-// Ett leadIn spelas (precis som Motifs) tillsammans med bakgrunden
+### 3. Auto-select a lead-in that matches the time to the next barline
+iMusic uses a file naming convention to markup the number of upbeats leading up to the barline. If you use three different files starting one, two and three beats before the barline and name them with "up-1", "up-2" and "up-3" respectively and separated from the rest of the filename with underscore ( _ ), iMusic will automatically pick the file that suites the remaining time to the next barline when the function is called.
 
-// om man bara har en enda variation på ett leadIn skriver man så här:
-//iMusic("A").addLeadIn("toB");
-
-
-// om man har olika variationer som ska slumpas skriver man t.ex. så här:
-//iMusic("A").addLeadIn(["toB_v1", "toB_v2", "toB_v3"]);
-
-// men om man vill göra det lite genomarbetat kan man använda olika 
-// med olika lång upbeat kommer (bouncade med olika längd till nästa takt)
-// iMusic väljer sedan automatiskt den version som passar bäst när den triggas
-// berodende på hur lång tid det är kvar till taktstrecket.
-
-// Varje ljudfil innehåller informationen om hur många beats den har före nästa takt: "up-1", "up-2", "up-3"
-// OBS! Det är just beteckningen "up-" som gör att iMusic förstår att siffran efter anger upbeat
-
+```javascript
 iMusic("A").addLeadIn(["toB_up-1", "toB_up-2", "toB_up-3"]);
 iMusic("B").addLeadIn(["toA_up-1", "toA_up-2", "toA_up-3"]);
+```
 
+### 4. Trigger the lead-in
+When we trigger the leadins, we omit the upbeat-markups and use the shared part of the file-names within one lead-in, in this case "toA" and "toB" respectively.
 
-
-//iMusic("B").addLeadIn("leadInToA");
-
-
-iMusic.onload = init;
-
-
-function init(){
-	
-	// välj vilken sida som ska visas när sidan laddas
-	location.href = "#page1"; 
-	iMusic("A").play();
-	
-}
-
-
-
-// ##############################
-// Här kan du börja fylla på med egna funktioner
-
-
-function toPage1(){
-
-	location.href = "#page1";
+```javascript
+function playSectionA(){
 	iMusic("toA").play();
 	iMusic("A").play();
 }
 
 
-function toPage2(){
-
-	location.href = "#page2";
+function playSectionB(){
 	iMusic("toB").play();
 	iMusic("B").play();
 }
+```
