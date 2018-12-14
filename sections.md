@@ -1,4 +1,4 @@
-#Sections
+# Sections
 As we learned in [Getting Started](README.md), iMusic consists of any number of "Sections". One section is like a "Live set" in [Ableton Live](https://www.ableton.com) or a "Theme" in [Elias Studio](https://eliassoftware.com) and can have its own [properties](properties.md) and [tracks](tracks.md).
 
 The easies way of creating a section and adding a track with a loop is this syntax:
