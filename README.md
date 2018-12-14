@@ -12,6 +12,7 @@ All rights belongs to Hans Lindetorp. Feel free to use it. The code will change 
 * [Lead-Ins](lead-ins.md)
 * [Properties](properties.md)
 * [Naming conventions](naming_conventions.md)
+* [Reverb](reverb.md)
 
 ## Getting started:
 Learn how to install iMusic and implement four loops that can alternate by a javascript call.
