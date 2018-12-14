@@ -1,4 +1,4 @@
-# Tracks
+## Tracks
 
 In each [Section](Sections.md) there can be any number of Tracks playing back simultaneously in sync.
 
