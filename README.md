@@ -10,7 +10,7 @@ All rights belongs to Hans Lindetorp. Feel free to use it. The code will change 
 * [Parts](parts.md)
 * [Motifs](motifs.md)
 * [Lead-Ins](lead-ins.md)
-* [Properties](properties.ms)
+* [Properties](properties.md)
 * [Naming conventions](naming_conventions.md)
 
 ## Getting started:
