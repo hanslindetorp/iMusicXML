@@ -45,8 +45,11 @@ iMusic.set("tempo", 60);
 // Specify the time signature (default is "4/4")
 iMusic.set("timeSign", "4/4");
 
-// Specify the position in "bar" and "beat" where the tracks should loop (default is "2.1")
-iMusic.set("loopEnd", "5.1");
+// Specify the number of "bars" (default is one bar)
+iMusic.set("loopLength", "4");
+
+// Specify the section that should autoplay when all files are loaded
+iMusic.set("onLoadComplete", "A1");
 ```
 
 ### Implementation
@@ -76,7 +79,7 @@ function myFunction2(){
 ```
 
 ### On load
-If you want to wait for the preloading of all audio files use this syntax:
+If you want to run a function when all iMusic files are loaded, use this syntax:
 ```javascript
 
 // Specify which function to run when all audio files are loaded
