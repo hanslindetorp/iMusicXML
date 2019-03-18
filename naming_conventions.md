@@ -1,95 +1,69 @@
 ## Naming conventions
-It's often useful to use a structured naming system when working with adaptive music production. iMusic is built upon the concept of using filenames to tag the audiofiles with meaningful information.
-The metaphore is a bit similar to how HTML-elements are tagged with "classes" to make it possible for javascript to address it:
+It's often useful to use a structured naming system when working with adaptive music production. iMusic is built upon the concept of using filenames to tag the audiofiles with meaningful information. There are a set of predefined markup rules aimed for speeding up the implementation process.
 
+ex:
+```javascript
+// This file belongs to section "A", loopTrack "drums"
+sc-A_tr-drums.mp3
 
-### HTML
-i.e.
-```html
-<div class="myclass myselector mytag"></div>
+// These two files belongs to section "A", loopTrack "keys"
+// and is positioned in bar 1 on the first beat as two variations on the same part
+// They will be randomly selected when their part is being played.
+sc-A_tr-keys_p-1.1_v-1.mp3
+sc-A_tr-keys_p-1.1_v-2.mp3
 ```
+
+There is an "importer" available at http://momdev.se/interactivemusic/import/. The importer takes the information from the file names and generates all code needed to build the musical structure. The default mode would genarate the following code for the two files:
 
 ```javascript
-var myelement = document.querySelector(".myclass");
+iMusic.loadFiles([
+	'sc-A_tr-keys_p-1.1_v-1',
+	'sc-A_tr-keys_p-1.1_v-2'
+]);
 ```
 
-### iMusic
-In iMusic you use the filename to specify the tags. In this example, the track will get the tags used in all filenames.
+### Syntax
+The following markup rules is supported:
 
-filenames:
-```html
-sectionA_drums.mp3
-sectionA_bass.mp3
-sectionA_keys.mp3
-sectionA_perc_conga.mp3
-sectionA_perc_shaker.mp3
-```
+
+| Parameter   | syntax   | Values   | Example  |
+| Section     | sc       | 
+
+There is also a mode for getting more detaild data. This allows for further editing of the data, including repeating, copying and moving files between your sections and tracks. This example shows the detailed data for the two files:
 
 ```javascript
-iMusic("A").addLoopTrack("sectionA_drums");
-iMusic("A").addLoopTrack("sectionA_bass");
-iMusic("A").addLoopTrack("sectionA_keys");
-iMusic("A").addLoopTrack("sectionA_perc_conga");
-iMusic("A").addLoopTrack("sectionA_perc_shaker");
-
-// set the volume for both percussion tracks
-iMusic("perc").set("volume", 0.5);
+iMusic.loadData(
+{
+	"sections": [
+		{
+			"id": "A",
+			"tracks": [
+				{
+					"id": "keys",
+					"parts": [
+						{
+							"pos": "2.3",
+							"url": [
+								"sc-A_tr-keys_p-1.1_v-1",
+								"sc-A_tr-keys_p-1.1_v-2"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+});
 ```
 
-In a more complex situation including trackgroups, parts on tracks and random variations it could look like:
+By using this naming convention, you can later refer to a section, track, motif or sound through the keywords in the filename. The ewxample above will create a section named "A" and a track named "keys" and can therefor be targeted in this way:_
 
-
-filenames:
-```html
-sectionA_drums_dyn1_part1_v1.mp3
-sectionA_drums_dyn1_part1_v2.mp3
-sectionA_drums_dyn1_part2_v1.mp3
-sectionA_drums_dyn1_part2_v2.mp3
-
-sectionA_drums_dyn2_part1.mp3
-sectionA_drums_dyn2_part2.mp3
-
-sectionA_drums_dyn3_part1.mp3
-sectionA_drums_dyn3_part2.mp3
-
-sectionA_bass_dyn1.mp3
-sectionA_bass_dyn2.mp3
-sectionA_bass_dyn3.mp3
-
-sectionA_keys_dyn1.mp3
-sectionA_keys_dyn1.mp3
-sectionA_keys_dyn1.mp3
-```
+By using this naming convention, you can later refer to a section, track, motif or sound through the keywords in the filename. The ewxample above will create a section named "A" and a track named "keys" and can therefor be targeted in this way:
 
 ```javascript
-iMusic("A").addLoopTrack([["sectionA_drums_dyn1_part1_v1", "sectionA_drums_dyn1_part1_v2"], ["sectionA_drums_dyn1_part2_v1", "sectionA_drums_dyn1_part2_v2"]]);
-iMusic("A").addLoopTrack(["sectionA_drums_dyn2_part1", "sectionA_drums_dyn2_part2"]);
-iMusic("A").addLoopTrack(["sectionA_drums_dyn3_part1", "sectionA_drums_dyn3_part2"]);
+// play section "A"
+iMusic("A").play();
 
-// all drum tracks get the tag "drums" and can therefor be grouped
-iMusic.addTrackGroup("drums");
-
-
-
-iMusic("A").addLoopTrack("sectionA_bass_dyn1");
-iMusic("A").addLoopTrack("sectionA_bass_dyn2");
-iMusic("A").addLoopTrack("sectionA_bass_dyn3");
-
-// all bass tracks get the tag "bass" and can therefor be grouped
-iMusic.addTrackGroup("bass");
-
-
-
-iMusic("A").addLoopTrack("sectionA_keys_dyn1");
-iMusic("A").addLoopTrack("sectionA_keys_dyn2");
-iMusic("A").addLoopTrack("sectionA_keys_dyn3");
-
-// all keys tracks get the tag "keys" and can therefor be grouped
-iMusic.addTrackGroup("keys");
-
+// set the volume for the track named "keys"
+iMusic("keys").set("volume", 0.5);
 ```
-
-Because all track groups contain tracks with the tags "dyn1", "dyn2" and "dyn3", they can be refered to directly to make all track groups shift to the specified track:
-
-```javascript
-iMusic("dyn2").play();
