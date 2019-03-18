@@ -2,23 +2,23 @@
 It's often useful to use a structured naming system when working with adaptive music production. iMusic is built upon the concept of using filenames to tag the audiofiles with meaningful information. There are a set of predefined markup rules aimed for speeding up the implementation process.
 
 ex:
-```html
+```javascript
 // This file belongs to section "A", loopTrack "drums"
-sc-A_tr-drums.mp3
+"sc-A_tr-drums.mp3"
 
 // These two files belongs to section "A", loopTrack "keys"
 // and is positioned in bar 1 on the first beat as two variations on the same part
 // They will be randomly selected when their part is being played.
-sc-A_tr-keys_p-1.1_v-1.mp3
-sc-A_tr-keys_p-1.1_v-2.mp3
+"sc-A_tr-keys_p-1.1_v-1.mp3"
+"sc-A_tr-keys_p-1.1_v-2.mp3"
 ```
 
 There is an "importer" available at http://momdev.se/interactivemusic/import/. The importer takes the information from the file names and generates all code needed to build the musical structure. The default mode would genarate the following code for the two files:
 
 ```javascript
 iMusic.loadFiles([
-	'sc-A_tr-keys_p-1.1_v-1',
-	'sc-A_tr-keys_p-1.1_v-2'
+	"sc-A_tr-keys_p-1.1_v-1",
+	"sc-A_tr-keys_p-1.1_v-2"
 ]);
 ```
 
