@@ -27,6 +27,7 @@ The following markup rules is supported:
 
 
 | Parameter   | syntax   | Values   | Example  | Comment |
+|-------------|----------|----------|----------|---------|
 | Section ID   | sc       | any string   | sc-A     | |
 | Track ID     | tr      | any string    | tr-drums   | |
 | Position    | p       | bar.beat.subbeat   | p-2.1.25  | bar 2, beat 1, 2nd sixteenth note |
