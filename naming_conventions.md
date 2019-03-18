@@ -26,8 +26,17 @@ iMusic.loadFiles([
 The following markup rules is supported:
 
 
-| Parameter   | syntax   | Values   | Example  |
-| Section     | sc       | 
+| Parameter   | syntax   | Values   | Example  | Comment |
+| Section ID   | sc       | any string   | sc-A     | |
+| Track ID     | tr      | any string    | tr-drums   | |
+| Position    | p       | bar.beat.subbeat   | p-2.1.25  | bar 2, beat 1, 2nd sixteenth note |
+| Motif ID    | mt       | any string    | mt-fanfar   | |
+| Quantize    | q       | any division    | q-1-4  | Quantized to nearest quater note |
+| Upbeat    | up       | any number    | up-2  | Is played two beats before q-point|
+| Sound ID    | sn       | any string    | sn-explosion  | |
+
+	
+
 
 There is also a mode for getting more detaild data. This allows for further editing of the data, including repeating, copying and moving files between your sections and tracks. This example shows the detailed data for the two files:
 
