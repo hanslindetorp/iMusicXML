@@ -2,7 +2,7 @@
 It's often useful to use a structured naming system when working with adaptive music production. iMusic is built upon the concept of using filenames to tag the audiofiles with meaningful information. There are a set of predefined markup rules aimed for speeding up the implementation process.
 
 ex:
-```javascript
+```html
 // This file belongs to section "A", loopTrack "drums"
 sc-A_tr-drums.mp3
 
