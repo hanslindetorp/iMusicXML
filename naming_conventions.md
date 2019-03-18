@@ -34,25 +34,25 @@ There is also a mode for getting more detaild data. This allows for further edit
 ```javascript
 iMusic.loadData(
 {
-	"sections": [
-		{
-			"id": "A",
-			"tracks": [
-				{
-					"id": "keys",
-					"parts": [
-						{
-							"pos": "2.3",
-							"url": [
-								"sc-A_tr-keys_p-1.1_v-1",
-								"sc-A_tr-keys_p-1.1_v-2"
-							]
-						}
-					]
-				}
-			]
-		}
-	]
+  "sections": [
+    {
+      "id": "A",
+      "tracks": [
+        {
+          "id": "keys",
+          "parts": [
+            {
+              "pos": "2.3",
+              "url": [
+                "sc-A_tr-keys_p-2.3_v-1",
+                "sc-A_tr-keys_p-2.3_v-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 });
 ```
 
