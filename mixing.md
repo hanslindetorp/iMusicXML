@@ -155,7 +155,6 @@ iMusic("kick").set("delay", "1/8");
 NOTE:
 If delayTimes is provided, then set the delay to any of those values using:
 
-```
 // if delayTimes is set to ["1/8", "1/16", "1/32"]
 // then 
 iMusic("kick").set("delay", 0);   // selects "1/8"
