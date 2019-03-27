@@ -129,10 +129,10 @@ If you don't want to use the default values, you can (optionally) set the follow
 ```
 // five eight note delay bouncing through output channel 1-6, decreasing volume with 3dB for 
 // each bounce
-iMusic("motif").addDelay({delay: "1/8", feedBack: 5, volume: 0.5, decrease: 0.5, outputs: [0,1,2,3,4,5]});
+iMusic("kick").addDelay({delay: "1/8", feedBack: 5, volume: 0.5, decrease: 0.5, outputs: [0,1,2,3,4,5]});
 
 // or with a specified list of possible delay time values:
-iMusic("kick").set("delay", {delay: "1/8", delayTimes: ["1/32", "1/24", "1/16", "1/12", "1/8", "1/6"], volume: 0.8, decrease: 0.8});
+iMusic("kick").addDelay({delay: "1/8", delayTimes: ["1/32", "1/24", "1/16", "1/12", "1/8", "1/6"], volume: 0.8, decrease: 0.8});
 ```
 * delay - the time between the bounces expressed as note values (strings) or milliseconds (numbers)(default = 250ms)
 * delayTimes - array of possible values (any number or strings)
@@ -141,11 +141,26 @@ iMusic("kick").set("delay", {delay: "1/8", delayTimes: ["1/32", "1/24", "1/16", 
 * decrease - the rate with which the volume decreases for each bounce (0.5 equals 3dB per bounce)
 * outputs - a serie of outputs through which the bounces are traveling (a list of numbers corresponding to the outputs)
 
+It's possible to dynamically change some of the values:
+```
+iMusic("kick").set("delay", {volume: 0.3});
+iMusic("kick").set("delay", {delay: "1/4"});
+iMusic("kick").set("delay", {decrease: 0.3});
+
+// If the value is not an object but a number or string,
+// it's supposed to be the delay time
+iMusic("kick").set("delay", "1/8");
+
+
 NOTE:
 If delayTimes is provided, then set the delay to any of those values using:
 
 ```
-iMusic("kick").set("delay", 0); // a value between 0 - 1 for selection from the array. 0 = first value. 1 = last value.
+// if delayTimes is set to ["1/8", "1/16", "1/32"]
+// then 
+iMusic("kick").set("delay", 0);   // selects "1/8"
+iMusic("kick").set("delay", 0.5); // selects "1/16"
+iMusic("kick").set("delay", 0.1); // selects "1/32"
 ```
 
 
