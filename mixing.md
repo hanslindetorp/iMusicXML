@@ -150,10 +150,11 @@ iMusic("kick").set("delay", {decrease: 0.3});
 // If the value is not an object but a number or string,
 // it's supposed to be the delay time
 iMusic("kick").set("delay", "1/8");
-
+```
 
 NOTE:
 If delayTimes is provided, then set the delay to any of those values using:
+
 
 // if delayTimes is set to ["1/8", "1/16", "1/32"]
 // then 
