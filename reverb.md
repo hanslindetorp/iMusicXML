@@ -5,18 +5,18 @@ http://momdev.se/interactivemusic/audio/convolve/
 
 Here are the files you can try out:
 
-block-inside.wav
-cement-blocks-1.wav
-conic-long-echo-hall.wav
-deep-space.wav
-french-18th-century-salon.wav
-going-home.wav
-large-bottle-hall.wav
-large-long-echo-hall.wav
-large-wide-echo-hall.wav
-st-nicolaes-church.wav
-trig-room.wav
-vocal-duo.wav
+* block-inside.wav
+* cement-blocks-1.wav
+* conic-long-echo-hall.wav
+* deep-space.wav
+* french-18th-century-salon.wav
+* going-home.wav
+* large-bottle-hall.wav
+* large-long-echo-hall.wav
+* large-wide-echo-hall.wav
+* st-nicolaes-church.wav
+* trig-room.wav
+* vocal-duo.wav
 
 
 i.e.
