@@ -173,3 +173,5 @@ Set the cutoff frequency for the low pass filter at 1000Hz
 ```
 iMusic("motif1").set("filter", 1000);
 ```
+
+To make more changes to the filter, use get("bus").filter
