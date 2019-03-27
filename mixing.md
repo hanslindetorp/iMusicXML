@@ -174,8 +174,9 @@ Set the cutoff frequency for the low pass filter at 1000Hz
 iMusic("motif1").set("filter", 1000);
 ```
 
-To make more changes to the filter, use get("bus").filter
+To make more changes to the filter, use get("bus").filter and change any properties available for the biquad filter node in Web Audio API: (https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode)
+
 ```
-
-iMusic("drums").get("bus");
-
+// ex. Change the filter type to highpass
+iMusic("drums").get("bus").filter.type = "highpass";
+```
