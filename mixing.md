@@ -175,3 +175,7 @@ iMusic("motif1").set("filter", 1000);
 ```
 
 To make more changes to the filter, use get("bus").filter
+```
+
+iMusic("drums").get("bus");
+
