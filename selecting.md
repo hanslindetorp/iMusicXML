@@ -10,8 +10,8 @@ Add two arrangements/sections and connect them to the same select-key. In this e
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
 	
-	<arrangement select-key="theme" select-value="A" src="themeA" selected="true" />
-	<arrangement select-key="theme" select-value="B" src="themeB" />		
+    <arrangement select-key="theme" select-value="A" src="themeA" selected="true" />
+    <arrangement select-key="theme" select-value="B" src="themeB" />		
 	
 </imusic>
 
@@ -36,12 +36,12 @@ This example shows an arrangement with four tracks, all assigned to the select-k
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
 
-	<arrangement>
-	  <track select-key="intensity" select-value="1" src="int1" selected="true" />
-	  <track select-key="intensity" select-value="2" src="int2" />
-	  <track select-key="intensity" select-value="3" src="int3" />
-	  <track select-key="intensity" select-value="4" src="int4" />	
-	</arrangement>
+    <arrangement>
+        <track select-key="intensity" select-value="1" src="int1" selected="true" />
+        <track select-key="intensity" select-value="2" src="int2" />
+        <track select-key="intensity" select-value="3" src="int3" />
+	<track select-key="intensity" select-value="4" src="int4" />	
+    </arrangement>
   
 </imusic>
 
