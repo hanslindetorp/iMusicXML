@@ -35,7 +35,7 @@ iMusic("A").set("partLength", "2");
 
 Here are all possible properties and their default values:
 
-###Master settings (applies to the imusic-object and arrangements/sections)
+### Master settings (applies to the imusic-object and arrangements/sections)
 
 ```javascript
 
@@ -46,7 +46,7 @@ timeSign = "4/4";     // Time Signature
 
 ```
 
-###Selection settings (applies to Arrangements, Tracks and Motifs)
+### Selection settings (applies to Arrangements, Tracks and Motifs)
 
 ```javascript
 
@@ -55,7 +55,7 @@ select-value = ""     // Specifies an (optional) value or several comma-separate
 
 ```
 
-###Track and Motif settings
+### Track and Motif settings
 
 ```javascript
 
@@ -65,7 +65,7 @@ retrig = "shuffle";   // ...to control the order of random selection for a part 
 
 ```
 
-###Track settings
+### Track settings
 
 ```javascript
 
@@ -77,7 +77,7 @@ loopActive = 1;       // The likeliness for a track to play each loop (i.e. a va
 
 ```
 
-###Motif settings
+### Motif settings
 
 ```javascript
 
