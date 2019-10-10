@@ -54,3 +54,38 @@ In javascript you control the playback (muting and unmuting) by sending a select
 iMusic.select("intensity", "2");
 
 ```
+
+### Motifs and selecting
+Motifs follows their parent arrangement when select. I.e. Motifs are deselected if its parent arrangement is deselected. It can also react to its own select-key (like tracks). In the case above, we could therefor have matching motifs to the different
+intensity levels used for the track selection. Please remember, though, that Motifs do not auto play when selected (as tracks do) but wait for play-call (refering to its tag(s)):
+
+```XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
+
+    <arrangement>
+        <track select-key="intensity" select-value="1" src="int1" selected="true" />
+        <track select-key="intensity" select-value="2" src="int2" />
+        <track select-key="intensity" select-value="3" src="int3" />
+	<track select-key="intensity" select-value="4" src="int4" />	
+	    
+	    
+	<motif tags="motif1" select-key="intensity" select-value="1" src="motif1_1" />
+        <motif tags="motif1" select-key="intensity" select-value="2" src="motif1_2" />
+        <motif tags="motif1" select-key="intensity" select-value="3" src="motif1_3" />
+        <motif tags="motif1" select-key="intensity" select-value="4" src="motif1_4" />
+    </arrangement>
+  
+</imusic>
+
+```
+
+In javascript you control the playback setting by sending a select call, but for motifs you also have to call 'play' to trigger the Motif (in this case we refer to the tag "motif" set in XML)
+
+```javascript
+
+iMusic.select("intensity", "2");
+iMusic.play("motif1");
+
+```
