@@ -47,11 +47,11 @@ timeSign = "4/4";     // Time Signature
 ```
 
 ### Selection settings (applies to Arrangements, Tracks and Motifs)
-
+Read more about selecting: [Selecting](selecting.md)
 ```javascript
 
 select-key = ""       // Specifies an (optional) variable to control the mute-state of this object
-select-value = ""     // Specifies an (optional) value or several comma-separated values to control the mute-state (see selecting)
+select-value = ""     // Specifies an (optional) value or several comma-separated values to control the mute-state
 
 ```
 
