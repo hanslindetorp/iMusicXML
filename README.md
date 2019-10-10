@@ -5,12 +5,13 @@ iMusic lets you arrange, loop, randomize and playback any number of sections, st
 All rights belongs to Hans Lindetorp. Feel free to use it. The code will change a lot during the next next years and will serve as a platform for studies related to music production in interactive media.
 
 ## Content
-* [Sections](sections.md)
+* [Sections/Arrangements](sections.md)
 * [Tracks](tracks.md)
-* [Parts](parts.md)
+* [Parts/Regions](parts.md)
 * [Motifs](motifs.md)
 * [Lead-Ins](lead-ins.md)
 * [Properties](properties.md)
+* [Selecting](selecting.md)
 * [Naming conventions](naming_conventions.md)
 * [Reverb](reverb.md)
 * [Mixing](mixing.md)
