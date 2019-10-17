@@ -8,10 +8,15 @@ Add two arrangements/sections and connect them to the same select-group. In this
 ```XML
 
 <?xml version="1.0" encoding="UTF-8"?>
-<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" loopLength="4">
 	
-    <arrangement select-group="theme" select-value="A" src="themeA" selected="true" />
-    <arrangement select-group="theme" select-value="B" src="themeB" />		
+    <arrangement select-group="theme" select-value="A" selected="true">
+	<track src="themeA" />
+    </arrangement>
+    
+    <arrangement select-group="theme" select-value="B">
+        <track src="themeB" />
+    </arrangement>
 	
 </imusic>
 
