@@ -1,42 +1,58 @@
 # Lead-Ins
 
-iMusic offers a feature to make transitions between different [sections](sections.md) or [tracks](tracks.md). You attach a lead-in to a section and trigger it at the same time as you trigger the new section/track. The lead-in file is played together with the looped files.
+iMusic offers a feature to make transitions between different [arrangements](sections.md). You add a lead-in as a track without loop to an arrangement.
 
-### 1. Add two sections
+The following example shows two arrangements with one looped track each. Both tracks contains two regions.
+In addition both arrangements contain one track each that are not looped. It will only be played once, when the arrangement gets selected and the playback moves from one arrangement to the other.
 
-```javascript
-iMusic("A").addLoopTrack("A_loop");
-iMusic("B").addLoopTrack("B_loop");
-```
+By using the attribute 'upbeat' on the different sources, it's possible to have different files selected depending on the time left to the downbeat. iMusic will select the source with the longest possible upbeat after the selection in triggered.
 
-### 2. Add a lead-in from A to B and one from B to A
-In this example the files should contain sound starting one beat (1/4) before the barline:
-```javascript
-iMusic("A").set("upbeat", "1/4");
-iMusic("A").addLeadIn("toB");
-iMusic("B").addLeadIn("toA");
-```
+It's possible to use select-group and select-value on those lead-in-tracks as you do with standard looped tracks.
 
-### 3. Auto-select a lead-in that matches the time to the next barline
-iMusic uses a file naming convention to markup the number of upbeats leading up to the barline. If you use three different files starting one, two and three beats before the barline and name them with "up-1", "up-2" and "up-3" respectively and separated from the rest of the filename with underscore ( _ ), iMusic will automatically pick the file that suites the remaining time to the next barline when the function is called.
+```XML
 
-```javascript
-iMusic("A").addLeadIn(["toB_up-1", "toB_up-2", "toB_up-3"]);
-iMusic("B").addLeadIn(["toA_up-1", "toA_up-2", "toA_up-3"]);
-```
-
-### 4. Trigger the lead-in
-When we trigger the leadins, we omit the upbeat-markups and use the shared part of the file-names within one lead-in, in this case "toA" and "toB" respectively.
-
-```javascript
-function playSectionA(){
-	iMusic("toA").play();
-	iMusic("A").play();
-}
-
-
-function playSectionB(){
-	iMusic("toB").play();
-	iMusic("B").play();
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
+	
+	<arrangement select-group="section" select-value="A" selected="true">
+		
+		<track>
+			<region src="A_bg_1_1a" />
+			<region src="A_bg_1_1a" />
+		</track>
+		
+		
+		
+		<track loop="off">
+			<region>
+				<source src="toA_up-1" upbeat="1/4" />
+				<source src="toA_up-2" upbeat="2/4" />
+				<source src="toA_up-3" upbeat="3/4" />
+			</region>
+		</track>
+				
+		
+	</arrangement>
+	
+	<arrangement select-group="section" select-value="B">
+		
+		<track>
+			<region src="B_bg_1_1a" />
+	  		<region src="B_bg_1_2a" />
+		</track>
+		
+		
+		
+		<track loop="off">
+			<region>
+				<source src="toB_up-1" upbeat="1/4" />
+				<source src="toB_up-2" upbeat="2/4" />
+				<source src="toB_up-3" upbeat="3/4" />
+			</region>
+		</track>
+		
+	</arrangement>
+		
+	
+</imusic>
 ```
