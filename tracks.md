@@ -49,7 +49,7 @@ A Select Group makes only one of the tracks play at a time. If one track in the 
 		<track select-group="intensity" select-value="2" src="bass2" />
 		<track select-group="intensity" select-value="3" src="bass3" />
 		<track select-group="intensity" select-value="4" src="bass4" />
-  </arrangement>
+  	</arrangement>
 </imusic>
 ```
 
