@@ -10,7 +10,7 @@ i.e. add a Motif available for all sections:
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
   <motif tags="motif1" src="motif1" />
-	<arrangement src="loopA" />
+  <arrangement src="loopA" />
 </imusic>
 ```
 
@@ -28,15 +28,15 @@ Place it INSIDE the &lt;arrangement>-element:
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
 	
-	<arrangement select-group="section" select-value="A" selected="true">
-		<track src="loopA" />
-		<motif tags="motif1" src="motif1A" />
-	</arrangement>
+  <arrangement select-group="section" select-value="A" selected="true">
+    <track src="loopA" />
+    <motif tags="motif1" src="motif1A" />
+  </arrangement>
 	
-	<arrangement select-group="section" select-value="B">
-		<track src="loopB" />
-		<motif tags="motif1" src="motif1B" />
-	</arrangement>
+  <arrangement select-group="section" select-value="B">
+    <track src="loopB" />
+    <motif tags="motif1" src="motif1B" />
+  </arrangement>
 
 </imusic>
 ```
@@ -53,7 +53,7 @@ To make Motif use different files selected randomly, just add a list with differ
 ```XML
 <motif tags="motif1">
   <source src="motif1a" />
-	<source src="motif1b" />
+  <source src="motif1b" />
 </motif>
 ```
 
