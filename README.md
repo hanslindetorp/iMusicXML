@@ -5,7 +5,7 @@ iMusic lets you arrange, loop, randomize and playback any number of sections, st
 All rights belongs to Hans Lindetorp. Feel free to use it. The code will change a lot during the next next years and will serve as a platform for studies related to music production in interactive media.
 
 ## Content
-* [Sections/Arrangements](sections.md)
+* [Arrangements](arrangements.md)
 * [Tracks](tracks.md)
 * [Parts/Regions](parts.md)
 * [Motifs](motifs.md)
@@ -28,69 +28,48 @@ Learn how to install iMusic and implement four loops that can alternate by a jav
 
 
 ### Installation:
-Make sure iMusic is included in your HTML-document. Download it from https://github.com/hanslindetorp/imusic 
+Make sure iMusic is included in your HTML-document. Download it from https://github.com/hanslindetorp/imusic
+and specify a XML-file with your musical structure.
 
 i.e.
 ```html
-<script src="interactivemusic.min.js"></script>
+<script src="interactivemusic.min.js" data-music-structure="imusic.xml"></script>
 ```
 
 ### Configuration:
-Setup iMusic in your script. Add the lines on top of your script. Before any other iMusic commands.
+Open your XML-document and write the structure of your interactive music.
 
 i.e.
-```javascript
+```XML
 
-// Specify tempo in bpm (default is 120)
-iMusic.set("tempo", 60);
-
-// Specify the time signature (default is "4/4")
-iMusic.set("timeSign", "4/4");
-
-// Specify the number of "bars" (default is one bar)
-iMusic.set("loopLength", "4");
-
-// Specify the section that should autoplay when all files are loaded
-iMusic.set("onLoadComplete", "A1");
 ```
 
 ### Implementation
 Create one section for each loop. Note that you don't need to specify the folder ("audio") or the file extension (".mp3"). They are both default values.
 
 ```javascript
-iMusic.addSection("A1");
-iMusic.addSection("A2");
-iMusic.addSection("A3");
-iMusic.addSection("A4");
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4" >
+	
+	<arrangement select-group="section" select-value="A" src="A" selected="true" />
+	<arrangement select-group="section" select-value="B" src="B" />		
+	<arrangement select-group="section" select-value="C" src="C" />		
+	<arrangement select-group="section" select-value="D" src="D" />		
+	
+</imusic>
 ```
-Each section will now contain one single track. See [Tracks](tracks.md) if you want to add more.
+The Arrangements belongs to the same "select-group" with different values. This is the base for iMusic to play one Arrangement at a time.
+Each Arrangement will now contain one single track. They will all have 4 bars loops. See [Tracks](tracks.md) if you want to add more tracks.
 
 
-Make calls to iMusic:
+Use Javascript for playing, stopping and selecting different Arrangements:
 
 ```javascript
-function myFunction1(){
-    iMusic("A1").play();
-}
+iMusic.play();
 
-function myFunction2(){
-    iMusic("A2").play();
-}
+iMusic.stop();
 
-// etc..
-```
-
-### On load
-If you want to run a function when all iMusic files are loaded, use this syntax:
-```javascript
-
-// Specify which function to run when all audio files are loaded
-iMusic.set("onLoadComplete", init);
-
-function init(){
-   // auto play section "A1" when all files are loaded
-   iMusic("A1").play();
-}
+iMusic.select("section", "B");
 ```
 
 Please follow my research journey at http://hans.arapoviclindetorp.se and https://www.facebook.com/hanslindetorpresearch/
