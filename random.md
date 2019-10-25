@@ -31,7 +31,7 @@ Or for [Motifs](motifs.md)
 ```
 
 
-###Control the random selection
+### Control the random selection
 You can control how the random selection function shall work with the attribute "retrig".
 
 retrig = "next" - everytime the element is triggered it will play the next file in the list. When it reaches the end, it starts all over again.
