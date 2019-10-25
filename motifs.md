@@ -57,7 +57,7 @@ To make Motif use different files selected randomly, just add a list with differ
 </motif>
 ```
 
-
+Read more about random functions: [Random](random.md)
 
 Motifs are by default played on the next beat in the music. If you want to change that, you set the quantize property:
 
