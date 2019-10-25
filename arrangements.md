@@ -6,7 +6,7 @@ The easies way of creating a section and adding a loop is this syntax:
 <arrangement src="loop1" />
 ```
 
-You can add different attributes to an arrangement. Please read more on [Variables](variables.md):
+You can add different attributes to an arrangement. Please read more on [Properties](properties.md):
 ```XML
 <arrangement select-group="section" select-value="A" src="loop1" selected="true" />
 ```
