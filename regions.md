@@ -7,14 +7,15 @@ A track can consist of any number of regions. There are some advantages using se
 * Make random patterns using Parts and [Random features](random.md)
 
 Use this syntax to create a loopTrack with four regions:
+Note: Set fadeTime="0" and bounce the audio files with audio tails to make all regions play their full length and blend smoothly with each other. 
 
 ```XML
 <?xml version="1.0" encoding="UTF-8"?>
-<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4" fadeTime="0">
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
 	
 	<arrangement>
 		
-		<track>
+		<track fadeTime="0">
 			<region src="dr_bar1" />
 			<region src="dr_bar2" />
 			<region src="dr_bar3" />
