@@ -59,7 +59,7 @@ select-value = ""       // Specifies an (optional) value or several comma-separa
 
 ```XML
 
-volume = "1"            // Audio is played back with normal volume. With multiple files you might need to decrease the volume.
+volume = "1" or "0dB"   // Audio is played back with normal volume. With multiple files you might need to decrease the volume.
 pan = "0.5";            // 0.5 is center
 retrig = "shuffle";     // ...to control the order of random selection for a part on a track or Motif ("shuffle", "next", "other"). This require multiple source-files to be specifed for the part/region or Motif. 
 
