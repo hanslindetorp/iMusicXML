@@ -1,4 +1,4 @@
-##Random selection
+## Random selection
 
 Every [Region](regions.md) or [Motif](motif.md) can consist of any number or randomly selected files. Just add sources to the element:
 
