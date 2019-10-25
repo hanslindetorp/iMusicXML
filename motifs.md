@@ -17,7 +17,7 @@ i.e. add a Motif available for all sections:
 Play the Motif with a call from iMusic:
 ```javascript
 function myFunction(){
-  iMusic("motif1").play();
+  iMusic.play("motif1");
 }
 ```
 
@@ -42,11 +42,6 @@ Place it INSIDE the &lt;arrangement>-element:
 ```
 
 
-```javascript
-function myFunction(){
-  iMusic("motif1").play();
-}
-```
 
 To make Motif use different files selected randomly, just add a list with different &lt;source>-elements:
 
