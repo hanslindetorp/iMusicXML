@@ -14,7 +14,7 @@ i.e.
 </imusic>
 ```
 
-Note: This creates one long region on each track. If you rather want to use several regions on a track, please check out [Regions](parts.md)
+Note: This creates one long region on each track. If you rather want to use several regions on a track, please check out [Regions](regions.md)
 
 
 ### Looping
