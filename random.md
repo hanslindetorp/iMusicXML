@@ -1,3 +1,5 @@
+##Random selection
+
 Every [Region](regions.md) or [Motif](motif.md) can consist of any number or randomly selected files. Just add sources to the element:
 
 
@@ -47,4 +49,15 @@ i.e.
 ```
 
 
+### The active-property
+The propery "active" can be set on a track determining the likeliness for a region on the track to play. If "active" is set to "0.5" for a track, there is an even chance for the regions on the track to either play or not.
+
+```XML
+<track active="0.5">
+  <region src="bar1" />
+  <region src="bar2" />
+  <region src="bar3" />
+  <region src="bar4" />
+</track>
+```
 
