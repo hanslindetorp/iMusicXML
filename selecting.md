@@ -84,9 +84,9 @@ The select-value attribute can be specified with single numbers or strings as se
 
 Expression | Comment
 ------------ | -------------
-<10 | Less than 10
-11-20 | Within the range of (and including) 11-20
->20 | Greater than 20
+select-value="<10" | Less than 10
+select-value="11-20" | Within the range of (and including) 11-20
+select-value=">20" | Greater than 20
 
 
 
