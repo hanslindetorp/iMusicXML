@@ -60,6 +60,36 @@ iMusic.select("intensity", "2");
 
 ```
 
+### Connect iMusic selection to a javascript variable
+If you want to connect the music to respond to a variable change in javascript, then change 'select-group' to select-variable'. Then iMusic will watch that variable (it can be a global variable or any property of an object) an update the selection according to the changes. It can refere to window properties like 'window.scrollY' or evaluated expressions like 'document.querySelector("#myElement").offsetLeft'
+
+```XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
+
+    <arrangement>
+        <track select-variable="intensity" select-value="1" src="int1" selected="true" />
+        <track select-variable="intensity" select-value="2" src="int2" />
+        <track select-variable="intensity" select-value="3" src="int3" />
+	<track select-variable="intensity" select-value="4" src="int4" />	
+    </arrangement>
+  
+</imusic>
+
+```
+
+### Advanced ways to specify select-value
+The select-value attribute can be specified with single numbers or strings as seen in the examples above, but can also be expressions like:
+
+Expression | Comment
+------------ | -------------
+<10 | Less than 10
+11-20 | Within the range of (and including) 11-20
+>20 | Greater than 20
+
+
+
 ### Motifs and selecting
 Motifs follows their parent arrangement when select. I.e. Motifs are deselected if its parent arrangement is deselected. It can also react to its own select-group (like tracks). In the case above, we could therefor have matching motifs to the different intensity levels used for the track selection. Please remember, though, that Motifs do not auto play when selected (as tracks do) but wait for play-call (refering to its tag(s)):
 
