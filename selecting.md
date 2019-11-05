@@ -79,14 +79,15 @@ If you want to connect the music to respond to a variable change in javascript, 
 
 ```
 
-### Advanced ways to specify select-value
-The select-value attribute can be specified with single numbers or strings as seen in the examples above, but can also be expressions like:
+### Different ways to specify select-value
+The select-value attribute can be specified with single numbers or strings as seen in the examples above, but can also be a range of numeric values:
 
 Expression | Comment
 ------------ | -------------
-select-value="<10" | Less than 10
-select-value="11-20" | Within the range of (and including) 11-20
-select-value=">20" | Greater than 20
+select-value="10" | Value equals to numeric value
+select-value="11-19" | Value is within the range of (and including) 11-20
+select-value="0, 2, 4-5" | Value is 0, 2 or within the range of (and including) 4-5
+select-value="Any string value" | Value is equal to the string
 
 
 
