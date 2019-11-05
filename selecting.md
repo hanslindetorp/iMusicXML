@@ -92,7 +92,7 @@ select-value="Any string value" | Value is equal to the string
 
 
 ### Motifs and selecting
-Motifs follows their parent arrangement when select. I.e. Motifs are deselected if its parent arrangement is deselected. It can also react to its own select-group (like tracks). In the case above, we could therefor have matching motifs to the different intensity levels used for the track selection. Please remember, though, that Motifs do not auto play when selected (as tracks do) but wait for play-call (refering to its tag(s)):
+Motifs follows their parent arrangement when select. I.e. Motifs are deselected if its parent arrangement is deselected. It can also react to its own select-group or select-variable (like tracks). In the case above, we could therefor have matching motifs to the different intensity levels used for the track selection. Please remember, though, that Motifs do not auto play when selected (as tracks do) but wait for play-call (refering to its tag(s)):
 
 ```XML
 
