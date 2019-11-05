@@ -54,6 +54,8 @@ To make Motif use different files selected randomly, just add a list with differ
 
 Read more about random functions: [Random](random.md)
 
+Read more about selecting different files with selection-groups or variables: [Selecting](selecting.md)
+
 Motifs are by default played on the next beat in the music. If you want to change that, you set the quantize property:
 
 ```XML
