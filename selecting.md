@@ -91,6 +91,27 @@ select-value="Any string value" | Value is equal to the string
 
 
 
+### ChangeOnNext
+The tracks automatically fades in or out when selected or deselected through select-group or select-variable. The default time is 10ms and the position for the crossfade is at the next barline. It's possible to change both the fadeTime and the musical position for the fade.
+
+This example will crossfade between the tracks at next beat and the crossfade will take 200ms.
+```XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
+
+    <arrangement changeOnNext="1/4 fadeTime="200" >
+        <track select-variable="intensity" select-value="1" src="int1" selected="true" />
+        <track select-variable="intensity" select-value="2" src="int2" />
+        <track select-variable="intensity" select-value="3" src="int3" />
+	<track select-variable="intensity" select-value="4" src="int4" />	
+    </arrangement>
+  
+</imusic>
+
+```
+
+
 ### Motifs and selecting
 Motifs follows their parent arrangement when select. I.e. Motifs are deselected if its parent arrangement is deselected. It can also react to its own select-group or select-variable (like tracks). In the case above, we could therefor have matching motifs to the different intensity levels used for the track selection. Please remember, though, that Motifs do not auto play when selected (as tracks do) but wait for play-call (refering to its tag(s)):
 
