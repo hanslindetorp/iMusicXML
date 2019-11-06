@@ -50,8 +50,9 @@ timeSign = "4/4";     // Time Signature
 Read more about selecting: [Selecting](selecting.md)
 ```XML
 
-select-group = ""       // Specifies an (optional) variable to control the mute-state of this object
-select-value = ""       // Specifies an (optional) value or several comma-separated values to control the mute-state
+select-variable = ""    // Specifies an (optional) variable (from the global scope) to control the mute-state of this object i.e. "window.scrollY" or "targetObject.targetProperty" (the expression are evaluated)
+select-group = ""       // Specifies an (optional) group name to control the mute-state of this object
+select-value = ""       // Specifies an (optional) value to control the mute-state. i.e. "A", "3", "3,4" or "1-4, 6"
 
 ```
 
