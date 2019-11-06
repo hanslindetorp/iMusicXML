@@ -70,7 +70,8 @@ retrig = "shuffle";     // ...to control the order of random selection for a par
 ```XML
 
 upbeat = "0/4";         // Can be set in seconds or musical values like "1/4" to specify the preroll of a file before a the barline
-partLength = "1/1";     // The part length controls two things; the legal point to make a musical jump after a play()-call and the position of the next part if multiple parts are used on a track
+partLength = "1/1";     // Controls the position of the next part if multiple parts are used on a track without pos specified
+changeOnNext = "1/1"    // The next point to make a musical jump after a selection() or play()-call or if a change is caused automatically by a select-variable change.
 fadeTime = "10";        // The fadeTime when iMusic makes a crossfade between two files. Use longer fadeTime for textures and short for rhytmic loops. Set to zero if the files are supposed to play its full audio-tail when before the track are muted.
 active = "1";           // The likeliness for a part on a track to play (by reducing the value you can cause random pauses on a track i.e. a value of 0.5 sets the likeliness for a specific part to play to 50%)
 loopActive = "1";       // The likeliness for a track to play each loop (i.e. a value of 0.5 sets the likeliness for a track to play on a loop to 50%)
