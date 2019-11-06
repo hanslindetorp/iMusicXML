@@ -100,7 +100,7 @@ This example will crossfade between the tracks at next beat and the crossfade wi
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio">
 
-    <arrangement changeOnNext="1/4 fadeTime="200" >
+    <arrangement changeOnNext="1/4" fadeTime="200" >
         <track select-variable="intensity" select-value="1" src="int1" selected="true" />
         <track select-variable="intensity" select-value="2" src="int2" />
         <track select-variable="intensity" select-value="3" src="int3" />
