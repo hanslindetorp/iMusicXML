@@ -85,7 +85,7 @@ The select-value attribute can be specified with single numbers or strings as se
 Expression | Comment
 ------------ | -------------
 select-value="10" | Value equals to numeric value
-select-value="11-19" | Value is within the range of (and including) 11-20
+select-value="11...19" | Value is within the range of (and including) 11-20
 select-value="0, 2, 4-5" | Value is 0, 2 or within the range of (and including) 4-5
 select-value="Any string value" | Value is equal to the string
 
