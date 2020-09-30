@@ -3,17 +3,17 @@ As we learned in [Getting Started](README.md), iMusic consists of any number of 
 
 The easies way of creating a section and adding a loop is this syntax:
 ```XML
-<arrangement src="loop1" />
+<arrangement src="loop1"></arrangement>
 ```
 
 You can add different attributes to an arrangement. Please read more on [Properties](properties.md):
 ```XML
-<arrangement select-group="section" select-value="A" src="loop1" selected="true" />
+<arrangement select-group="section" select-value="A" src="loop1" selected="true"></arrangement>
 ```
 
 Every Arrangement can have its own tempo and time-signature
 ```XML
-<arrangement tempo="110" timeSig="3/4" src="loop1" />```
+<arrangement tempo="110" timeSig="3/4" src="loop1"></arrangement>```
 ```
 
 
