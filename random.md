@@ -8,11 +8,11 @@ i.e. for [Tracks](tracks.md):
 ```XML
 <track>
   <region>
-    <source src="var1" />
-    <source src="var2" />
-    <source src="var3" />
-    <source src="var4" />
-    <source src="var5" />
+    <option src="var1"></option>
+    <option src="var2"></option>
+    <option src="var3"></option>
+    <option src="var4"></option>
+    <option src="var5"></option>
   </region>
 </track>	
 
@@ -23,10 +23,10 @@ Or for [Motifs](motifs.md)
 
 ```XML
 <motif>
-  <source src="var1" />
-  <source src="var2" />
-  <source src="var3" />
-  <source src="var4" />
+  <option src="var1"></option>
+  <option src="var2"></option>
+  <option src="var3"></option>
+  <option src="var4"></option>
 </motif>
 ```
 
@@ -54,10 +54,10 @@ The propery "active" can be set on a track determining the likeliness for a regi
 
 ```XML
 <track active="0.5">
-  <region src="bar1" />
-  <region src="bar2" />
-  <region src="bar3" />
-  <region src="bar4" />
+  <region src="bar1"></option>
+  <region src="bar2"></option>
+  <region src="bar3"></option>
+  <region src="bar4"></option>
 </track>
 ```
 
