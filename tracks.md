@@ -7,9 +7,9 @@ i.e.
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
 	<arrangement>
-		<track src="bass" />
-		<track src="drums" />
-		<track src="keyboard" />
+		<track src="bass"></track>
+		<track src="drums"></track>
+		<track src="keyboard"></track>
 	</arrangement>
 </imusic>
 ```
@@ -25,9 +25,9 @@ i.e.
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3">
 	<arrangement>
-		<track loopLength="2" src="bass" />
-		<track loopLength="1" src="drums" />
-		<track loopLength="4" src="keyboard" />
+		<track loopLength="2" src="bass"></track>
+		<track loopLength="1" src="drums"></track>
+		<track loopLength="4" src="keyboard"></track>
 	</arrangement>
 </imusic>
 ```
@@ -45,10 +45,10 @@ A Select Group makes only one of the tracks play at a time. If one track in the 
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" quantize="1/8" loopLength="1" fadeTime="0">
 	
 	<arrangement>
-		<track select-group="intensity" select-value="1" src="bass1" selected="true" />
-		<track select-group="intensity" select-value="2" src="bass2" />
-		<track select-group="intensity" select-value="3" src="bass3" />
-		<track select-group="intensity" select-value="4" src="bass4" />
+		<track select-group="intensity" select-value="1" src="bass1" selected="true"></track>
+		<track select-group="intensity" select-value="2" src="bass2"></track>
+		<track select-group="intensity" select-value="3" src="bass3"></track>
+		<track select-group="intensity" select-value="4" src="bass4"></track>
   	</arrangement>
 </imusic>
 ```
