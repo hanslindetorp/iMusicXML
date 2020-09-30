@@ -16,10 +16,10 @@ Note: Set fadeTime="0" and bounce the audio files with audio tails to make all r
 	<arrangement>
 		
 		<track fadeTime="0">
-			<region src="dr_bar1" />
-			<region src="dr_bar2" />
-			<region src="dr_bar3" />
-			<region src="dr_bar4" />
+			<region src="dr_bar1"></region>
+			<region src="dr_bar2"></region>
+			<region src="dr_bar3"></region>
+			<region src="dr_bar4"></region>
 		</track>
 		
 		
@@ -34,10 +34,10 @@ A region is one bar by default one bar long but this can be changed with "partLe
 i.e. every region is two bars:
 ```XML
 		<track partLength="2">
-			<region src="dr_bar1" />
-			<region src="dr_bar3" />
-			<region src="dr_bar5" />
-			<region src="dr_bar7" />
+			<region src="dr_bar1"></region>
+			<region src="dr_bar3"></region>
+			<region src="dr_bar5"></region>
+			<region src="dr_bar7"></region>
 		</track>
 ```
 
@@ -45,10 +45,10 @@ i.e. every region is two bars:
 Different parts with different length
 ```XML
 		<track>
-			<region length="1" src="dr_bar1" />
-			<region length="2" src="dr_bar2" />
-			<region length="2" src="dr_bar4" />
-			<region length="1" src="dr_bar6" />
+			<region length="1" src="dr_bar1"></region>
+			<region length="2" src="dr_bar2"></region>
+			<region length="2" src="dr_bar4"></region>
+			<region length="1" src="dr_bar6"></region>
 		</track>
 ```
 
@@ -61,7 +61,7 @@ i.e.
 "1.3.50" = bar 1, beat 3, second eight note (50% of a beat if the time signature is set to quarter notes)
 
 ```XML
-<region pos="1.3" src="SN" />
+<region pos="1.3" src="SN"></region>
 ```
 
 
@@ -73,10 +73,10 @@ i.e. a track with four parts (three repeats plus a fill) with a preroll of 1/16t
 
 ```XML
 		<track loopEnd="4">
-			<region upbeat="1/8" src="dr_bar1" />
-			<region src="dr_bar2" />
-			<region src="dr_bar3" />
-			<region src="dr_bar4" />
+			<region upbeat="1/8" src="dr_bar1"></region>
+			<region src="dr_bar2"></region>
+			<region src="dr_bar3"></region>
+			<region src="dr_bar4"></region>
 		</track>
 ```
 
