@@ -9,8 +9,8 @@ i.e. add a Motif available for all sections:
 ```XML
 <?xml version="1.0" encoding="UTF-8"?>
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
-  <motif tags="motif1" src="motif1" />
-  <arrangement src="loopA" />
+	<motif tags="motif1" src="motif1"></motif>
+	<arrangement src="loopA"></arrangment>
 </imusic>
 ```
 
@@ -29,13 +29,13 @@ Place it INSIDE the &lt;arrangement>-element:
 <imusic version="1.0" tempo="60" timeSign="4/4" audioPath="audio" suffix="mp3" loopLength="4">
 	
   <arrangement select-group="section" select-value="A" selected="true">
-    <track src="loopA" />
-    <motif tags="motif1" src="motif1A" />
+	  <track src="loopA"></track>
+	  <motif tags="motif1" src="motif1A"></motif>
   </arrangement>
 	
   <arrangement select-group="section" select-value="B">
-    <track src="loopB" />
-    <motif tags="motif1" src="motif1B" />
+	  <track src="loopB"></track>
+	  <motif tags="motif1" src="motif1B"></motif>
   </arrangement>
 
 </imusic>
@@ -47,8 +47,8 @@ To make Motif use different files selected randomly, just add a list with differ
 
 ```XML
 <motif tags="motif1">
-  <source src="motif1a" />
-  <source src="motif1b" />
+	<option src="motif1a"></option>
+	<option src="motif1b"></option>
 </motif>
 ```
 
@@ -60,9 +60,9 @@ Motifs are by default played on the next beat in the music. If you want to chang
 
 ```XML
 <!-- to eight note -->
-<motif quantize="1/8" tags="motif1" src="motif1B" />
+<motif quantize="1/8" tags="motif1" src="motif1B"></motif>
 
 <!-- to bar -->
-<motif quantize="bar" tags="motif1" src="motif1B" />
+<motif quantize="bar" tags="motif1" src="motif1B"></motif>
 ```
 
