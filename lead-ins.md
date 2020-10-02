@@ -5,7 +5,7 @@ iMusic offers a feature to make transitions between different [arrangements](sec
 The following example shows two arrangements with one looped track each. Both tracks contains two regions.
 In addition both arrangements contain one track each that are not looped. It will only be played once, when the arrangement gets selected and the playback moves from one arrangement to the other.
 
-By using the attribute 'upbeat' on the different sources, it's possible to have different files selected depending on the time left to the downbeat. iMusic will select the source with the longest possible upbeat after the selection in triggered.
+By using the attribute 'upbeat' on the different options, it's possible to have different files selected depending on the time left to the downbeat. iMusic will select the option with the longest possible upbeat after the selection in triggered.
 
 It's possible to use select-group and select-value on those lead-in-tracks as you do with standard looped tracks.
 
@@ -17,17 +17,17 @@ It's possible to use select-group and select-value on those lead-in-tracks as yo
 	<arrangement select-group="section" select-value="A" selected="true">
 		
 		<track>
-			<region src="A_bg_1_1a" />
-			<region src="A_bg_1_1a" />
+			<region src="A_bg_1_1a"></region>
+			<region src="A_bg_1_1a"></region>
 		</track>
 		
 		
 		
 		<track loop="off">
 			<region>
-				<source src="toA_up-1" upbeat="1/4" />
-				<source src="toA_up-2" upbeat="2/4" />
-				<source src="toA_up-3" upbeat="3/4" />
+				<option src="toA_up-1" upbeat="1/4"></option>
+				<option src="toA_up-2" upbeat="2/4"></option>
+				<option src="toA_up-3" upbeat="3/4"></option>
 			</region>
 		</track>
 				
@@ -37,17 +37,17 @@ It's possible to use select-group and select-value on those lead-in-tracks as yo
 	<arrangement select-group="section" select-value="B">
 		
 		<track>
-			<region src="B_bg_1_1a" />
-	  		<region src="B_bg_1_2a" />
+			<region src="B_bg_1_1a"></region>
+	  		<region src="B_bg_1_2a"></region>
 		</track>
 		
 		
 		
 		<track loop="off">
 			<region>
-				<source src="toB_up-1" upbeat="1/4" />
-				<source src="toB_up-2" upbeat="2/4" />
-				<source src="toB_up-3" upbeat="3/4" />
+				<option src="toB_up-1" upbeat="1/4"></option>
+				<option src="toB_up-2" upbeat="2/4"></option>
+				<option src="toB_up-3" upbeat="3/4"></option>
 			</region>
 		</track>
 		
