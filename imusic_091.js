@@ -16,175 +16,358 @@
 
 
 	// ******************************************************
-	// GUI  jQuery
-
-	if($){
+	// GUI
 
 
-		$.fn.iMusGUI = function() {
+class GUI {
 
-		    return this.each(function() {
+	constructor(target = document.body){
 
-		    	initGUI($(this));
+		let style = document.createElement("style");
+		style.innerHTML = `
 
-		    });
+			* {
+				font-family: sans-serif;
+			}
+			#iMusic-GUI {
+				top: 0px;
+				left: 0px;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				overflow: auto;
+					padding: 1em;
+				transition: 0.5s;
+				background-color: #eef;
+				color: black;
+			}
 
-		};
+			#iMusic-GUI > button {
+				border-radius: 5px;
+				padding: 5px;
+				margin-top: 0px;
+				margin-left: 0px;
+			}
 
-	}
-
-
-
-
-	function initGUI($target){
-
-		if(!$target){ $target = $(body) }
-		var instID = 1;
-
-		iMus.instances.forEach(function(inst){
-
-			var allTags = [];
-			var allIDs = [];
-
-			inst.sections.forEach(function(section){
-
-				section.tags.forEach(function(tag){
-						if(!inArray(tag, allTags) && tag.length){allTags.push(tag)}
-				});
-
-				section.idName.split(" ").forEach(function(idName){
-					if(!inArray(idName, allIDs) && idName.length){allIDs.push(idName)}
-				});
-
-				section.tracks.forEach(function(track){
-
-
-					track.tags.forEach(function(tag){
-						if(!inArray(tag, allTags) && tag.length){allTags.push(tag)}
-					});
-
-					track.idName.split(" ").forEach(function(idName){
-						if(!inArray(idName, allIDs) && idName.length){allIDs.push(idName)}
-					});
-
-				});
-
-			});
-
-
-			inst.motifs.forEach(function(motif){
-
-				motif.tags.forEach(function(tag){
-					if(!inArray(tag, allTags) && tag.length){allTags.push(tag)}
-				});
-
-				motif.idName.split(" ").forEach(function(idName){
-					if(!inArray(idName, allIDs) && idName.length){allIDs.push(idName)}
-				});
-			});
-
-
-
-
-			// instance container
-			var $title = $("<h2>").html("Music " + instID);
-
-			var $instanceMixer = $("<div>", {class: "mixerInstance", id: "mixerInstance-" + instID}).append($title);
-			var $groups = $("<div>", {class: "mixerGroups"});
-			var $singles = $("<div>", {class: "mixerSingles"});
-			$instanceMixer.append($groups, $singles);
-			$target.append($instanceMixer);
-
-
-
-			allTags.forEach(function(tag){
-				var $channel = new ChannelStrip(inst, ".", tag);
-				$groups.append($channel);
-			});
-
-			allIDs.forEach(function(idName){
-				var $channel = new ChannelStrip(inst, "#", idName);
-				$singles.append($channel);
-			});
-
-			var height  = $singles.offset().top + $singles.innerHeight();
-			$target.innerHeight(height);
-
-			instID++;
-
-		});
-
-	}
-
-
-	function ChannelStrip(inst, prefix, str){
-
-		$label = $("<span>", {class: "label"}).html(prefix + str);
-		$gui = $("<div>", {class: "channelstrip"});
-		$slider = $("<div>");
-		$slider.append($label);
-		$playBtn = $("<button>", {class: "playBtn"}).css({backgroundColor: "white"}).html(">");
-		$gui.append($slider, $playBtn);
-
-
-		if($.ui){
-
-			var curVolume = inst.find(prefix + str).getVolume();
-			curVolume = curVolume == -1 ? 1 : curVolume;
-			curVolume = Math.floor(curVolume*100)/100;
-
-			$slider.slider({
-			      value: curVolume * 100,
-			      min: 0,
-			      max: 200,
-			      orientation: 'vertical',
-			      slide: function( event, ui ) {
-			      	var val = ui.value/100;
-			        $(this).find(".ui-slider-handle").html(val);
-			        $(this).data("changed", true);
-
-			        inst.find(prefix + str).setVolume(val);
-			      },
-			      change: function( event, ui) {
-			      	//$(this).find(".ui-slider-handle").html(ui.value/100);
-			      	//$("#mixer > div").css({backgroundColor: "white"});
-			      	//$(this.parentNode.parentNode).css({backgroundColor: "#aaffaa"});
-			      }
-		    }).data("selector", prefix + str).dblclick(function(){
-		    	$(this).slider('value', 100);
-		    	$(this).find(".ui-slider-handle").html(1);
-		    	inst.find(prefix + str).setVolume(1);
-		    }).find(".ui-slider-handle").html(curVolume);
-
-		}
-
-
-
-		$playBtn.click(function(){
-
-			var state = $(this).data("state") ? false : true;
-			$(this).data("state", state);
-			var color = state ? "green" : "white";
-			$(this).css({backgroundColor: color});
-
-			var targets = inst.find(prefix + str);
-
-			if(state){
-				targets.play();
-			} else {
-				targets.stop();
+			#iMusic-GUI > button.close {
+				min-width: 40px;
+				font-weight: bold;
+				background-color: red;
 			}
 
 
+			#iMusic-GUI > button.control {
+				font-weight: bold;
+			}
+
+			#iMusic-GUI > p {
+				width: 80%;
+
+			}
+
+			#iMusic-GUI div > span.arrangement {
+				margin-right: 20px;
+			}
+			#iMusic-GUI button.tag {
+				border-radius: 5px;
+				padding: 5px;
+				min-width: 100px;
+			}
+			#iMusic-GUI span.label {
+				display: inline-block;
+				width: 150px;
+				overflow: hidden;
+			}
+			#iMusic-GUI span.numOutput {
+				font-size: 80%;
+				display: inline-block;
+				text-align: right;
+				padding: 2px;
+				border: 1px solid grey;
+				border-radius: 5px;
+				min-width: 40px;
+			}
+			#iMusic-GUI input[type='range'] {
+				width: 200px;
+				margin: 0px 20px;
+				vertical-align: middle;
+			}
+		`;
+
+
+		var instID = 1;
+
+		iMus.instances.forEach(inst => {
+
+			let sectionTags = [];
+			let motifTags = [];
+			let selectGroups = {};
+			let el, row, span;
+
+			inst.sections.forEach(section => {
+
+				section.tags.forEach(tag => {
+						if(!inArray(tag, sectionTags) && tag.length){sectionTags.push(tag)}
+				});
+
+				let selectGroup = section.parameters["select-group"] || section.parameters["select-variable"];
+				let selectValues = section.parameters["select-value"];
+				let values;
+				if(selectGroup){
+					if(!selectGroups[selectGroup]){
+						selectGroups[selectGroup] = [];
+					}
+					values = selectGroups[selectGroup];
+					selectValues.forEach(val => {
+						if(!inArray(val, values)){
+							values.push(val);
+						}
+					});
+				}
+
+				section.tracks.forEach(track => {
+					track.soloGroups.forEach(group => {
+						if(!selectGroups[group.name]){
+							selectGroups[group.name] = [];
+						}
+						values = selectGroups[group.name];
+						group.value.forEach(val => {
+							if(!inArray(val, values)){
+								values.push(val);
+							}
+						});
+					});
+				});
+
+
+				section.motifs.forEach(motif => {
+					motif.tags.forEach(tag => {
+							if(!inArray(tag, motifTags) && tag.length){motifTags.push(tag)}
+					});
+				});
+
+			});
+
+			inst.motifs.forEach(motif => {
+				motif.tags.forEach(function(tag){
+					if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
+						motifTags.push(tag);
+					}
+				});
+			});
+
+
+
+			let shadowContainer = document.createElement("div");
+			shadowContainer.style.width = "0%";
+			shadowContainer.style.height = "0%";
+			shadowContainer.style.display = "none";
+			shadowContainer.style.overflow = "visible";
+			target.appendChild(shadowContainer);
+
+			let shadowElement = shadowContainer.attachShadow({mode: 'open'});
+	    shadowElement.appendChild(style);
+
+			let container = document.createElement("div");
+			shadowElement.appendChild(container);
+
+			container.id = "iMusic-GUI";
+			var iMusBtn;
+			if(!(iMus.getDefaultInstance().parameters.showGUI == "false")){
+				iMusBtn = document.createElement("button");
+				iMusBtn.innerHTML = "iMusic";
+				iMusBtn.style.position = "absolute";
+				target.appendChild(iMusBtn);
+				iMusBtn.addEventListener("click", e => {
+					e.target.style.display = "none";
+					shadowContainer.style.width = "100%";
+					shadowContainer.style.height = "100%";
+					shadowContainer.style.display = "block";
+				});
+			}
+
+			el = document.createElement("button");
+			el.innerHTML = "X";
+			el.classList.add("close");
+			container.appendChild(el);
+			el.addEventListener("click", e => {
+				iMusBtn.style.display = "block";
+				shadowContainer.style.width = "0%";
+				shadowContainer.style.height = "0%";
+				shadowContainer.style.display = "none";
+			});
+
+			el = document.createElement("button");
+			el.innerHTML = "PLAY";
+			el.classList.add("control");
+			container.appendChild(el);
+			el.addEventListener("click", e => iMusic.play());
+
+			el = document.createElement("button");
+			el.innerHTML = "STOP";
+			el.classList.add("control");
+			container.appendChild(el);
+			el.addEventListener("click", e => iMusic.stop());
+
+
+			el = document.createElement("h1");
+			el.innerHTML = "iMusic";
+			container.appendChild(el);
+
+			// PLAY BUTTONS
+			el = document.createElement("h3");
+			el.innerHTML = "class (arrangements/leadins/motifs):";
+			container.appendChild(el);
+
+			el = document.createElement("p");
+			el.innerHTML = `Give arrangements and motifs a class name in the file <a target="_blank" href='imusic.xml'>imusic.xml</a>.
+			This generates one button for each class name. Use the buttons to play the corresponding
+			arrangements/motifs/leadins.`;
+			container.appendChild(el);
+
+			row = document.createElement("div");
+			container.appendChild(row);
+			//
+			// span = document.createElement("span");
+			// span.classList.add("arrangement");
+			// row.appendChild(span);
+
+			sectionTags.forEach(tag => {
+				el = document.createElement("button");
+				el.innerHTML = tag;
+				el.classList.add("tag");
+				row.appendChild(el);
+
+				el.addEventListener("click", e => {
+					iMusic.play(tag);
+				});
+			});
+
+			el = document.createElement("h3");
+			el.innerHTML = "class (separate motifs):";
+			container.appendChild(el);
+
+			row = document.createElement("div");
+			container.appendChild(row);
+
+			// span = document.createElement("span");
+			// span.classList.add("motifs");
+			// row.appendChild(span);
+
+			motifTags.forEach(tag => {
+				el = document.createElement("button");
+				el.innerHTML = tag;
+				el.classList.add("tag");
+				row.appendChild(el);
+
+				el.addEventListener("click", e => {
+					iMusic.play(tag);
+				});
+			});
+
+
+			el = document.createElement("h3");
+			el.innerHTML = "select-group: (tracks)";
+			container.appendChild(el);
+
+
+			el = document.createElement("p");
+			el.innerHTML = `Give the tracks different select-group and select-values to
+			make a variable control the dynamics by muting and unmuting them.
+			Use the slider (for numeric values) or menu (string values) to select
+			different tracks depending on their select-group and select-value settings.`;
+			container.appendChild(el);
+
+			// selection sliders and radio buttons
+			Object.keys(selectGroups).forEach(key => {
+
+				let value = selectGroups[key];
+				let range = new Range(value);
+				row = document.createElement("div");
+				container.appendChild(row);
+
+				el = document.createElement("span");
+				el.innerHTML = key;
+				el.classList.add("label");
+				row.appendChild(el);
+
+
+				switch (range.type) {
+					case "number":
+						// slider
+						//let minVal = Math.min(0, range.min);
+						let minVal = range.min;
+
+						el = document.createElement("input");
+						el.setAttribute("type", "range");
+						el.setAttribute("min", minVal);
+						el.setAttribute("max", range.max);
+						el.setAttribute("value", minVal);
+						el.setAttribute("class", "slider");
+						row.appendChild(el);
+						let numOutput = document.createElement("span");
+						numOutput.classList.add("numOutput");
+						row.appendChild(numOutput);
+
+						numOutput.innerHTML = minVal;
+						iMusic.select(key, minVal);
+
+						el.addEventListener("input", e => {
+							numOutput.innerHTML = e.target.value;
+							iMusic.select(key, parseFloat(e.target.value).toFixed(2));
+						});
+						break;
+					case "string":
+						// radio
+						let popMenu = document.createElement("select");
+						value.forEach(str => {
+
+							//
+							// el = document.createElement("input");
+							// el.value = str;
+							//
+							// let id = key + "-" + str;
+							// el.id = id;
+							// el.name = key;
+							// el.type = "radio";
+							// row.appendChild(el);
+							//
+							// el.addEventListener("change", e => {
+							// 	iMusic.select(key, e.target.value);
+							// });
+							//
+							// el = document.createElement("label");
+							// el.innerHTML = str;
+							// el.for = id;
+
+							el = document.createElement("option");
+							el.value = str;
+							el.innerHTML = str;
+							popMenu.appendChild(el);
+
+						});
+						popMenu.addEventListener("change", e => {
+							iMusic.select(key, e.target.value);
+						});
+						iMusic.select(key, value[0]);
+						row.appendChild(popMenu);
+						break;
+					default:
+
+				}
+
+			});
+			instID++;
+
 		});
-
-
-	    return $gui;
-
 	}
 
 
+	setCurrentSection(currentSection){
 
+	}
+
+}
 
 
 
@@ -251,6 +434,7 @@
 		if(!div){return 0;}
 
 		if(div == "off"){
+			// One year ;-)
 			return 60 * 60 * 24 * 365;
 		} else {
 			ts = ts || this.parameters.timeSign;
@@ -559,7 +743,6 @@
 			url = obj.url;
 		}
 
-
 		var length = obj.length;
 		var urlObj = url;
 
@@ -606,7 +789,6 @@
 
 	 		var rnd = Math.random();
 	 		if(rnd < obj.active || obj.parameters.fadeTime){
-
 
 		 		// play
 				if (typeof source.start === 'undefined'){
@@ -679,15 +861,18 @@
 
 			obj.timeouts = obj.timeOuts || [];
 	 		let timeout = setTimeout(function(){
+				// this function  will be called for parts or motifs after specified time
+				// There have been some confusion when the part length is not specified
+				// and I therefore skip the disconnection . It doesn't seem necessary
 	 			obj.playing = false; // denna rad var bortkommenterad men jag kan inte komma på varför
 	 			//if(source){source.disconnect(0);}
 	 			if(obj.playingSources) {
-		 			if(obj.playingSources.length){
-		 				var oldSource = obj.playingSources.shift();
-/*
-		 				oldSource.disconnect(0);
-		 				oldSource = 0;
-*/
+		 			while(obj.playingSources.length){
+		 				let oldSource = obj.playingSources.shift();
+
+		 				// oldSource.disconnect(0);
+		 				// oldSource = 0;
+
 		 			}
 	 			}
 
@@ -801,20 +986,25 @@
 		//this.splitter.channelInterpretation = "discrete";
 
 
-		var destination = o.destination || audioContext.destination;
+		let webAudioDest;
+		// if(o.output && window.webAudioXML){
+		// 	let el = window.webAudioXML._xml.querySelector(o.output);
+		// 	if(el){webAudioDest = el.audioObject.input}
+		// }
+		var destination = webAudioDest || o.destination || audioContext.destination;
 
 		this.output = createGainNode();
 		this.output.gain.value = (typeof o.volume == "number") ? o.volume : 1;
 		this.output.connect(destination);
 
-		this.compressor = audioContext.createDynamicsCompressor();
-		this.compressor.connect(this.output);
-		this.compressor.ratio.value = 1;
+		// this.compressor = audioContext.createDynamicsCompressor();
+		// this.compressor.connect(this.output);
+		// this.compressor.ratio.value = 1;
 
 
-		this.panner = audioContext.createPanner();
-		this.panner.setPosition(0,0,0);
-		this.panner.connect(this.output);
+		// this.panner = audioContext.createPanner();
+		// this.panner.setPosition(0,0,0);
+		// this.panner.connect(this.output);
 
 		this.filter = audioContext.createBiquadFilter();
 		this.filter.frequency.value = 20000;
@@ -823,7 +1013,7 @@
 		this.inserts = [];
 		this.inserts.push(this.filter);
 
-	    this.input = createGainNode();
+	  this.input = createGainNode();
 		this.input.connect(this.filter);
 		this.sends = {};
 
@@ -1408,8 +1598,8 @@
 
 			var params;
 
-			if(arguments.length){
-				var args = Array.prototype.slice.call(arguments, 0);
+			//if(arguments.length){
+				var args = Array.prototype.slice.call(arguments, 0) || [];
 				if(typeof args[0] === "object"){
 
 					// if first value is a Section params object
@@ -1418,7 +1608,7 @@
 					}
 				}
 
-			}
+			//}
 			params = params || {};
 			if(!params.urls){
 				if(args.length){params.urls = args}
@@ -1688,7 +1878,7 @@
 
 
 						if(track.parameters.fadeTime && track.active > 0 && track.playing == false){
-							track.fadeIn();
+							//track.fadeIn();
 						}
 
 
@@ -1719,7 +1909,7 @@
 
 								var hitInNextLoop = timeInLoop <= posInNextLoop && (timeInLoop + timeWindow) > posInNextLoop;
 								var fadeTrackNeedsTrigging = track.parameters.fadeTime && !trackWasNotPlaying;
-
+								fadeTrackNeedsTrigging = false; // do I really need fadeTrackNeedsTrigging any more??
 
 								//if(iMus.debug){console.log("hit?", timeInLoop, loopEnd, loopID)};
 								// terrible, terrible line to cope with all possible exceptions...
@@ -1895,6 +2085,7 @@
 				this.upbeat = self.getTime(o.upbeat);
 			}
 
+			this.motifs  = [];
 			this.tracks = [];
 			this.transitions = [];
 			this.leadIns = [];
@@ -1989,7 +2180,7 @@
 				self.busses.push(bus);
 
 				if(params.output){
-					bus.connect(params.output)
+					bus.connect(params.output);
 				}
 
 
@@ -2158,6 +2349,7 @@
 				//variableWatcher.update(true);
 
 
+				// reset if instance is not playing
 	 			if(!self.playing){
 
 	 				initAudioContextTimer(self);
@@ -2165,22 +2357,11 @@
 
 					if(!self.queueID){
 
-						this.tracks.forEach(function(track){
-							track.nextTime = 0;
-							// if(track.parameters.fadeTime){
-								if(track.active > 0){track.fadeIn()}
-								delete track.loopID;
-							// }
-						});
-
 						self.queueID = setInterval(self.checkQueue, checkQueueTime);
 						// There are timing problems with first event on track. Is this a solution?
 						self.checkQueue();
 					}
 	 			}
-
-	 			// reset if instance is not playing
-
 
 
 	 			var barDuration = this.getBarDuration();
@@ -2249,25 +2430,22 @@
 
 
 
-
-		 			this.tracks.forEach(track => {
-
-			 			// reset all volumes on faded tracks
-			 			// if(track.parameters.fadeTime){
-
-				 			track.parts.forEach(function(part){
-					 			//playSound(part, nextTime);
-				 			});
-
-				 			if(track.active > 0){
-					 			track.fadeIn();
-				 			}
-			 			// }
-
-
-
-
-		 			});
+					//
+		 			// this.tracks.forEach(track => {
+					//
+			 		// 	// reset all volumes on faded tracks
+			 		// 	if(track.parameters.fadeTime){
+					//
+				 	// 		track.parts.forEach(function(part){
+					//  			//playSound(part, nextTime);
+				 	// 		});
+					//
+				 	// 		if(track.active > 0){
+					//  			track.fadeIn(0, 0);
+				 	// 		}
+			 		// 	}
+					//
+		 			// });
 
 
 
@@ -2336,7 +2514,33 @@
 	 					track.nextTime = nextTime;
 	 				}
 
-					self.currentSection = this;
+					let preroll = timeWindow * 2;
+					let delay = timeToLegalBreak - maxOffset;
+					delay = delay > preroll ? delay - preroll: 0;
+
+
+
+					setTimeout(() => {
+						// this will make the queue change to this section after
+						// timeToLegalBreak
+
+						self.currentSection = this;
+						console.log("currentSection = " + this.tags[0]);
+						this.resetFades();
+
+						// reset track fades and loopIDs
+						this.tracks.forEach(function(track){
+
+							track.nextTime = 0;
+							// if(track.parameters.fadeTime){
+							// 	if(track.active > 0){track.fadeIn(0,0)}
+							//
+							// }
+							delete track.loopID;
+						});
+
+					}, delay * 1000);
+
 
 				}
 
@@ -2358,7 +2562,10 @@
 		Section.prototype.addLoopTrack = function(urls){
 
 			if(typeof urls === "string"){urls = [urls];}
-			var tags = mergeArrays(urlsToTags(urls), this.tags);
+			if(!this.tags.length){
+				let tags = urlsToTags(urls);
+			}
+			// let tags = mergeArrays(urlsToTags(urls), this.tags);
 			//var tags = urlsToTags(urls).concat(this.tags);
 			return this.addStem({tags: tags}, urls);
 
@@ -2384,8 +2591,31 @@
 				var activeVal = (id == 0 ? 1 : 0);
 				track.setActive(activeVal);
 			});
+		}
 
+		Section.prototype.resetFades = function(){
 
+			this.tracks.forEach(track => {
+				let state;
+				if(track.soloGroups.length){
+					state = false;
+					defaultInstance.selectFilter.forEach(filter => {
+						state = state || getSoloState(track.soloGroups, filter.name, filter.value);
+					});
+				} else {
+					state = true;
+				}
+				// if(state){
+				// 	track.active = track.active ? Math.abs(track.active) : 1;
+				// } else {
+				// 	track.active ? -Math.abs(track.active) : 0;
+				// }
+				if(track.parameters.fadeTime){
+					let targetVolume = state ? 1 : 0;
+					//console.log("resetFades", track, targetVolume);
+					track.fade(targetVolume, 0, 0);
+				}
+			});
 		}
 
 
@@ -2551,7 +2781,7 @@
 
 			// används dessa rader alls? kolla addMotif
 			params.quantize = params.quantize || "bar";
-			var leadin = self.addLeadIn(params, urls);
+			var leadin = self.addLeadIn(params, urls, this);
 			leadin.parameters.type = "leadIn";
 			this.leadIns.push(leadin);
 			return leadin;
@@ -2632,6 +2862,7 @@
 			this.type = "track";
 
 			this.liveValues = {};
+			this.soloGroups = [];
 
 
 			this.bus = o.bus || self.getBus(this.id);
@@ -2711,7 +2942,7 @@
 		}
 
 
-		Track.prototype.play = function(){
+		Track.prototype.play = function(nextLegalBreakTimeLeft){
 
 			// auto play the section of this track if iMusic is not playing
 			if(!self.playing){
@@ -2729,17 +2960,22 @@
 			});
 			*/
 
-			if(this.active > 0){
-				if(this.parameters.fadeTime){
-					this.fadeIn();
-				}
-				return;
-			} else if(this.active == 0){
-				this.active = 1;
-			} else {
-				this.active = -this.active;
-			}
+			/* The following lines are probably a confusion after
+			adding fadeTime and keep on to the active setting.
+			It seem to interfer with keeping active setting
+			between arrangements */
 
+			// if(this.active > 0){
+			// 	if(this.parameters.fadeTime){
+			// 		this.fadeIn();
+			// 	}
+			// 	return;
+			// } else if(this.active == 0){
+			// 	this.active = 1;
+			// } else {
+			// 	this.active = -this.active;
+			// }
+			this.active = Math.abs(this.active);
 
 			//console.log(this, "play");
 
@@ -2751,27 +2987,30 @@
 					// add a track output before common bus input
 					// or add a bus for each track
 
-					var nextLegalBreak;
-					nextLegalBreak = this.getNextLegalBreak();
+					var nextLegalBreak = this.getNextLegalBreak();
 					if(!nextLegalBreak){
 						nextLegalBreak = this.section.getNextLegalBreak();
 						nextLegalBreak.fadeTime = this.parameters.fadeTime;
 					}
-					var timeToLegalBreak = nextLegalBreak.time - audioContext.currentTime;
-					this.fade(1, timeToLegalBreak, nextLegalBreak.fadeTime);
+					// if(nextLegalBreakTimeLeft != nextLegalBreak.timeLeft){
+					// 	console.log("legalTimeOverride", nextLegalBreakTimeLeft);
+					// }
+					nextLegalBreak.timeLeft = nextLegalBreakTimeLeft || nextLegalBreak.timeLeft;
+					//var timeToLegalBreak = nextLegalBreak.time - audioContext.currentTime;
+					this.fade(1, nextLegalBreak.timeLeft, nextLegalBreak.fadeTime);
 				}
 			}
 		}
 
 
-		Track.prototype.stop = function(){
+		Track.prototype.stop = function(nextLegalBreakTimeLeft){
 
 			// delete this.loopID;
 
 			if(this.active <= 0){
 				return;
 			}
-			this.active = -this.active;
+			this.active = -Math.abs(this.active);
 
 			if(this.parameters.fadeTime){
 				if(self.playing){
@@ -2781,6 +3020,8 @@
 					// or add a bus for each track
 
 					var nextLegalBreak = this.getNextLegalBreak(); // [{prop:"out", comp:"=", val:true}]
+
+					nextLegalBreak.timeLeft = nextLegalBreakTimeLeft || nextLegalBreak.timeLeft;
 					this.fade(0, nextLegalBreak.timeLeft, nextLegalBreak.fadeTime);
 					this.playing = false;
 
@@ -2814,15 +3055,22 @@
 								//clearTimeout(timeout);
 							}
 							let source = part.playingSources.pop();
-							if(fadeTime){
-								source.disconnect(0);
-							}
+							source.disconnect(0);
+
+							// this does not handle the forced fade caused by
+							// short regions triggered within loop before
+							// nextLegalBreak
+							// if(fadeTime){
+							// 	source.disconnect(0);
+							// }
 
 						}
 					}
 
 				}
-
+				// Is this really neeed? Is it enough to reset fades
+				// When a section starts to play?
+				//if(this.active > 0){this.fadeIn()}
 			});
 
 			/*
@@ -2874,21 +3122,28 @@
 		}
 
 
-		Track.prototype.setSoloState = function(_param1, _param2){
-			if(!this.soloGroups){return}
-
+		Track.prototype.setSoloState = function(_param1, _param2, nextLegalBreakTimeLeft){
+			if(!this.getSoloGroup(_param1)){return}
 
 			var state = getSoloState(this.soloGroups, _param1, _param2);
 
 			//console.log(`${this.section.id} - ${this.id} - ${state}`);
 
+			// get longest nextLegalBreak time for involved tracks
+
 			if(state === true){
-				this.play();
+				this.play(nextLegalBreakTimeLeft);
 			} else if(state === false){
-				this.stop();
+				this.stop(nextLegalBreakTimeLeft);
 			}
 		}
 
+		Track.prototype.getSoloState = function(_param1, _param2){
+			return getSoloState(this.soloGroups, _param1, _param2);
+		}
+
+
+		Track.prototype.getSoloGroup = getSoloGroup;
 
 		Track.prototype.setPartLength = function(value){
 
@@ -3071,7 +3326,7 @@
 							loadComplete();
 						});
 
-						console.log(this.url[urlID] + ": pos: " + this.pos + "; offset: " + this.offset + "; length: " + this.length);
+						//console.log(this.url[urlID] + ": pos: " + this.pos + "; offset: " + this.offset + "; length: " + this.length);
 					}
 				}
 			}
@@ -3127,15 +3382,16 @@
 			this.loopCnt = 0;
 			this.idName = o.id || "";
 
-
-			this.tags = o.tags || urlsToTags(o.urls) || [];
+			this.tags = o.tags || o.class || urlsToTags(o.urls) || [];
 			if(typeof this.tags === "string"){this.tags = this.tags.split(" ")};
 
 			this.parameters.destination = self.motifBus.input;
 			this.parameters.channelMerger = self.channelMerger;
 			this.bus = new Bus(this.parameters);
 
-
+			if(this.parameters.output){
+				this.bus.connect(this.parameters.output);
+			}
 
 
 
@@ -3166,7 +3422,7 @@
 					// url with parameters
 					obj = url;
 
-					obj.url = addAudioPath(self.parameters.audioPath, obj.url);
+					obj.url = addAudioPath(self.parameters.audioPath, obj.url || obj.src);
 
 					// length
 					if(obj.length){
@@ -3715,37 +3971,23 @@
 		}
 
 		var values = new Range(valStr).values;
-		/*
-		var values = [];
-
-		var arr = valStr.split(",");
-		arr.forEach(function(val){
-
-			var numVal = eval(val);
-			if(numVal == val){
-				values.push(numVal);
-			} else {
-				if(val.indexOf("-")){
-					var minMaxStrings = val.split("-");
-					var numValMin = eval(minMaxStrings[0]);
-					var numValMax = eval(minMaxStrings[1]);
-					values.push({min: numValMin, max: numValMax});
-				} else {
-					values.push(val);
-				}
-
-			}
-		});
-		*/
 
 		this.soloGroups.push({name:grp, value: values});
 
+	}
+
+	function getSoloGroup(grp){
+		if(!this.soloGroups){return}
+		if(!this.soloGroups.length){return}
+		var group = this.soloGroups.find(obj => {return obj.name == grp});
+		return group;
 	}
 
 
 	function getSoloState(_soloGroups, _param1, _param2){
 
 		if(!_soloGroups){return}
+		if(!_soloGroups.length){return}
 
 		var grp, val;
 
@@ -3775,6 +4017,8 @@
 				}
 			}
 		});
+
+
 
 		return state;
 	}
@@ -3924,8 +4168,31 @@
 
 				}
 
+				let  nlbtl = 0;
+				// find furtherst nextLegalBreak for affected tracks
 
-				section.tracks.forEach(track => track.setSoloState(grp, val));
+				let affectedTracks = [];
+				section.tracks.forEach(track => {
+					let curState = track.active > 0;
+					let newState = track.getSoloState(grp, val);
+					if(newState != curState){
+						affectedTracks.push(track);
+						let nlb = track.getNextLegalBreak();
+						if(nlb){
+							nlbtl = Math.max(nlbtl, nlb.timeLeft);
+						}
+					}
+				});
+
+
+				affectedTracks.forEach(trackObj => {
+					if(trackObj.state){
+						trackObj.track.play(nlbtl);
+					} else {
+						trackObj.track.stop(nlbtl);
+					}
+				});
+
 			});
 
 			instance.motifs.forEach(motif => motif.setSoloState(grp, val));
@@ -4146,7 +4413,7 @@
 
 
 		var objects = [];
-
+		var targetSection;
 
 
 		allObjects.some(function(obj){
@@ -4164,11 +4431,13 @@
 				var matchedClass = inArray(selector, obj.tags);
 
 				// check if this is a section. If so just add this section to objects
-
+				// Why? I think it is better to also select motifs, leadins and tracks
+				// if matching
 				if(matchedClass){
 					if(obj.type == "section"){
 						objects = [obj];
-						return true;
+						targetSection = obj;
+						//return true;
 					} else {
 						objects.push(obj);
 					}
@@ -5027,6 +5296,12 @@
 			this.active = 0;
 		}
 
+		if(this.parts){
+			this.parts.forEach(part => {
+				part.active = this.active;
+			});
+		}
+
 
 		if(this.parameters.fadeTime){
 
@@ -5071,26 +5346,32 @@
 
 	function inArray(needle, haystack){
 
-		if(typeof haystack !== "object"){
+		if(!(haystack instanceof Array)){return}
 
-			console.log("no haystack");
+		let needles = [];
+		if(typeof needle == "string"){
+			needles = needle.split(" ");
+		} else if(typeof needle == "number"){
+			needles.push(needle);
+		} else if(needle instanceof Array){
+			// all is well with my soul
 		}
 
-		var needles = needle.split(" ");
 		var matches = 0;
 
-		needles.forEach(function(needle){
+		needles.forEach(n => {
 
-			var thisNeedelIsMatched = false;
+			let needle = String(n);
+			let thisNeedelIsMatched = false;
 
-			var matchPattern = needle.substr(0, 1) == "*";
+			let matchPattern = needle.substr(0, 1) == "*";
 			if(matchPattern){
 				needle = needle.substr(1);
 			}
 
 
 
-			haystack.forEach(function(str){
+			haystack.forEach(str => {
 				if(matchPattern){
 					if(str.substr(str.length-needle.length) == needle){
 						thisNeedelIsMatched = true;
@@ -5227,25 +5508,26 @@
 
 	function fade(val, delay, duration, callBack){
 
+		//console.log("delay", delay);
 		var gainNode = this.bus.output;
+		gainNode.gain.cancelScheduledValues(audioContext.currentTime);
+		if(this.fadeCallbackID){clearTimeout(this.fadeCallbackID);}
 
-		// return if not needed
-		if(gainNode.gain.value == val){return}
-
-
-		//if(!this.playing){return;}
 		var myObj = this;
-		delay = delay || 0;
-		//console.log("delay = " + delay);
 
 		if(typeof duration === "undefined"){
 			duration = this.parameters.fadeTime || 0.001;
 		}
+		duration = duration || 0.001;
+
+		// make sure fade is finished at delay time
+		delay -= duration;
+		delay = delay > 0 ? delay : 0;
 
 
+		var fadeEndTime = audioContext.currentTime+delay+duration/2;
+		var fadeStartTime = Math.max(audioContext.currentTime, fadeEndTime-duration);
 
-		var fadeEndTime = audioContext.currentTime+delay+duration;
-		var fadeStartTime = fadeEndTime-duration;
 		var oldVolume = gainNode.gain.value;
 
 		if(this.parameters){
@@ -5255,17 +5537,11 @@
 		val = (typeof val === "undefined") ? (defaultVal || 1) : val;
 		val = Math.max(val, 0);
 
-		//val = Math.max(val, 0.00000000000001);
-
-		gainNode.gain.cancelScheduledValues(0);
-		gainNode.gain.setValueAtTime(oldVolume, fadeStartTime);
-		//gainNode.gain.exponentialRampToValueAtTime(val, fadeEndTime);
-		gainNode.gain.linearRampToValueAtTime(val, fadeEndTime);
+		gainNode.gain.setTargetAtTime(val, fadeStartTime, duration);
 
 		if(typeof callBack === "function"){
-			setTimeout(callBack, (delay+duration)*1000);
+			this.fadeCallbackID = setTimeout(callBack, (delay+duration)*1000);
 		}
-
 
 	}
 
@@ -5648,6 +5924,8 @@
 		return defaultParams[param];
 	}
 
+
+	// what is the difference between iMus.solo and iMus.select??
 	iMus.select = function(key, value){
 
 		var targetFilter = defaultInstance.selectFilter.find(curFilter => curFilter.name == key);
@@ -5676,7 +5954,37 @@
 				}
 
 
-				section.tracks.forEach(track => track.setSoloState(key, value));
+				let nlbtl = 0;
+				// find furtherst nextLegalBreak for affected tracks
+
+				let affectedTracks = [];
+				section.tracks.forEach(track => {
+					let curState = track.active > 0;
+					let newState = track.getSoloState(key, value);
+					if(newState != curState){
+						let nlb = track.getNextLegalBreak();
+						if(nlb){
+							nlbtl = Math.max(nlbtl, nlb.timeLeft);
+						}
+						affectedTracks.push({
+							track: track,
+							state: newState,
+							timeToLegalBreak: nlb.timeLeft
+						});
+						//console.log(track.id, nlb.timeLeft);
+					}
+				});
+
+				//console.log("nlbtl: " + nlbtl);
+
+				affectedTracks.forEach(trackObj => {
+					if(trackObj.state){
+						trackObj.track.play(nlbtl);
+					} else {
+						trackObj.track.stop(nlbtl);
+					}
+				});
+
 			});
 
 			instance.motifs.forEach(motif => motif.setSoloState(key, value));
@@ -5846,7 +6154,7 @@
 		}
 
 		if(data.leadins){
-			data.leadins.forEach(function(leadin){
+			data.gs.forEach(function(leadin){
 				defaultInstance.addLeadIn({quantize: "bar"}, leadin.urls);
 			});
 		}
@@ -6076,7 +6384,8 @@
 	}
 
 	var defaultInstance = new iMus();
-	defaultInstance.addSection({tags: defaultSectionName});
+	//defaultInstance.addSection({tags: defaultSectionName});
+	defaultInstance.addSection();
 	iMus.addSection = defaultInstance.addSection;
 
 
@@ -6125,14 +6434,36 @@
 			iMusic.set(param, val);
 		});
 
+		let elements;
+		document.querySelectorAll("a[data-imusic-select-group]").forEach(el => {
+
+			var deadLink = "javascript:void(0)";
+			if(!el.attributes.href){
+				el.setAttribute("href", deadLink);
+			} else if(el.attributes.href.nodeValue == "#"){
+				el.attributes.href.nodeValue = deadLink;
+			}
+			el.addEventListener("click", function(e){
+				let dataset = e.target.dataset;
+				iMus.select(dataset.imusicSelectGroup, dataset.imusicSelectValue);
+				// if(el.attributes.href.nodeValue == "#"){
+				// 	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+				// }
+			});
+
+		});
+
+
 		// read through all elements that should trigger iMusic
-		var elements = document.querySelectorAll("[data-imusic]");
-		var bgElements = [];
+
+
+		elements = document.querySelectorAll("[data-imusic], [data-imusic-play]");
+		let bgElements = [];
 		elements.forEach(function(el){
 
-
+			let musicData = el.dataset.imusic || el.dataset.imusicPlay;
 			// split comma separated string into array!!
-			var selection = iMusic.loadFile(el.dataset.imusic);
+			let selection = iMusic.loadFile(musicData);
 
 			switch(el.localName){
 
@@ -6149,7 +6480,18 @@
 					el.attributes.href.nodeValue = deadLink;
 				}
 				el.addEventListener("click", function(e){
-					iMus(selection.objects[0].tags[0]).play();
+					switch (musicData) {
+						case "play":
+							iMus.play();
+						break;
+						case "stop":
+							iMus.stop();
+						break;
+						default:
+							iMus.play(musicData);
+						break;
+					}
+
 					if(el.attributes.href.nodeValue == "#"){
 						e.preventDefault ? e.preventDefault() : e.returnValue = false;
 					}
@@ -6163,16 +6505,16 @@
 		});
 
 		// add target watcher
-		var lastTarget;
-		setInterval(function(){
-			var el = document.querySelector("*:target");
-			if(bgElements.includes(el)){
-				if(el != lastTarget){
-					lastTarget = el;
-					iMus(el.dataset.imusic).play();
-				}
-			}
-		}, 100);
+		// var lastTarget;
+		// setInterval(function(){
+		// 	var el = document.querySelector("*:target");
+		// 	if(bgElements.includes(el)){
+		// 		if(el != lastTarget){
+		// 			lastTarget = el;
+		// 			iMus(el.dataset.imusic).play();
+		// 		}
+		// 	}
+		// }, 100);
 
 
   	});
@@ -6316,14 +6658,14 @@
 		  	.then(xml => {
 			  	let parser = new DOMParser();
 			  	let xmlDoc = parser.parseFromString(xml,"text/xml");
-
-			  	this.parseXML(xmlDoc.firstChild, el);
+					let imusicData = xmlDoc.querySelector("imusic");
+			  	this.parseXML(imusicData, el);
 			})
 		}
 
   	}
 
-  	Data.parseXML = function(root, el){
+  	Data.parseXML = function(root){
 
 
 	  	if(root){
@@ -6332,16 +6674,7 @@
 		  	var url, params, part;
 		  	var selectKeys = [];
 
-
-		  	let playBtn = document.createElement("webaudio-switch", {type: "toggle"});
-		  	//el.appendChild(playBtn);
-		  	playBtn.addEventListener("change", e => {
-			  	if(e.target.value){
-				  	iMusic.play();
-				} else {
-				  	iMusic.stop();
-			  	}
-		  	});
+				this.tags = [];
 
 
 		  	let busses = root.querySelectorAll("bus");
@@ -6497,7 +6830,7 @@
 
 							if(!url){
 								url = [];
-								var sources = region.querySelectorAll("source");
+								var sources = region.querySelectorAll("source, option");
 								sources.forEach((source) => {
 									var src = source.getAttribute("src");
 									if(src){url.push(src)}
@@ -6537,21 +6870,27 @@
 				});
 
 
-				var motifs = arr.querySelectorAll("motif");
-				motifs.forEach((motif) => {
+				var motifs = arr.querySelectorAll("motif, leadin");
+				motifs.forEach(motif => {
 
 					let urls = [];
 
 					let params = attributesToObject(motif.attributes);
 					let url = motif.getAttribute("src");
 					if(url){urls.push(url)}
-					let sources = motif.querySelectorAll("source");
-					sources.forEach((source) => {
-						var src = source.getAttribute("src");
+					let sources = motif.querySelectorAll("source, option");
+					sources.forEach(source => {
+						var src = attributesToObject(source.attributes);
+						//var src = source.getAttribute("src");
 						if(src){urls.push(src)}
 					});
 
-					let motifObj = section.addMotif(params, urls);
+					if(motif.nodeName == "motif"){
+						let motifObj = section.addMotif(params, urls);
+					} else {
+						let motifObj = section.addLeadIn(params, urls);
+					}
+
 
 					// the solo-function needs to be reworked xxx
 			  		if(motif.hasAttribute("select-group")){
@@ -6570,11 +6909,7 @@
 				  		// store solo values
 				  		motifObj.setSoloGroup(key, value);
 			  		}
-
 				});
-
-
-
 			});
 
 			root.querySelectorAll("*[selected='true']").forEach((obj) => {
@@ -6596,7 +6931,7 @@
 				variableWatcher.addVariable(obj.getAttribute("select-variable"));
 			});
 
-
+			iMus.GUI = new GUI();
 			console.log("XML parse time: " + (Date.now() - XMLtimeStamp));
 
 	  	}
@@ -6621,13 +6956,10 @@
 		if(musicStructure){
 			let xmlDoc = document.querySelector(musicStructure);
 
-			let el = document.createElement("div");
-			el.id = "iMusic-GUI";
-			document.body.appendChild(el);
 			if(xmlDoc){
-				Data.parseXML(xmlDoc, el);
+				Data.parseXML(xmlDoc);
 			} else {
-				Data.loadXML(musicStructure, el);
+				Data.loadXML(musicStructure);
 			}
 		}
 
@@ -7108,26 +7440,41 @@
 
   	class Range {
 
-		constructor(str){
+		constructor(_values){
 
 			this.values = [];
-			if(str){
-
-				let arr = str.split(",");
+			this._valueType = "number";
+			if(_values){
+				let arr;
+				if(_values instanceof Array){
+					arr = _values;
+				} else {
+					arr = _values.split(",");
+				}
 				arr.forEach(val => {
 
-					if(val.includes("...")){
-						var minMaxStrings = val.split("...");
-						var numValMin = eval(minMaxStrings[0]);
-						var numValMax = eval(minMaxStrings[1]);
+					let v = Number(val);
 
-						this.values.push(new MinMax(numValMin, numValMax));
+					if(isNaN(v)){
+
+						if(val.includes("...")){
+							var minMaxStrings = val.split("...");
+							var numValMin = eval(minMaxStrings[0]);
+							var numValMax = eval(minMaxStrings[1]);
+							this.values.push(numValMin);
+							this.values.push(numValMax);
+							val = new MinMax(numValMin, numValMax);
+						}
+
+						this._valueType = "string";
 					} else {
-						this.values.push(Number(val));
+						val = v;
 					}
-					this.values.sort();
+					this.values.push(val);
 
 				});
+
+				this.values.sort();
 
 				if(!this.values.length){
 					this.values.push({min:0,max:1});
@@ -7137,7 +7484,10 @@
 
 		}
 
-
+		sort(){
+			this.values = this.values.sort((a, b) => a - b);
+			return this;
+		}
 
 		get value(){
 
@@ -7148,6 +7498,35 @@
 		getRandomVal(dec, fn){
 			return Range.getRandomVal(this.values, dec, fn);
 		}
+
+		get sortedValues() {
+			let allValues = [];
+			this.values.forEach(val => {
+				if(val instanceof MinMax){
+					allValues.push(val.min);
+					allValues.push(val.max);
+				} else {
+					allValues.push(val);
+				}
+			});
+			return allValues.sort((a, b) => a - b);
+		}
+
+		get min(){
+			return this.sortedValues.shift();
+		}
+		get max(){
+			return this.sortedValues.pop();
+		}
+
+		get type(){
+			return this._valueType;
+		}
+
+		get isNumber(){
+			return this._valueType == "number";
+		}
+
 
 	}
 
