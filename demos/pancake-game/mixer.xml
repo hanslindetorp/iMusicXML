@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This WebAudioXML-document describes a virtual mixing console. The root-element
+shall be named "Audio". There is only one element in this element - the Mixer.
+Read more: https://github.com/hanslindetorp/WebAudioXML/wiki -->
+<Audio>
+	<Mixer>
+
+
+		<!-- This is a Chain element in a mixer. It works similar to a standard mixer-channel
+		with the signal passing through a number of insert effects. This Chain hasn't got any
+		insert effect. There are two attributes specified - "id" and "gain". Id is used for
+		connecting incomming signals (i.e. from iMusic) to this Chain and gain acts as the
+		channel volume slider. Gain can be specified with power values (between 0 - 1) or
+		decibels. Read more: https://en.wikipedia.org/wiki/Decibel -->
+		<Chain id="ch1" gain="0dB"></Chain>
+
+
+		<!-- This channel as one insert-effect: a lowpass filter with the cutoff frequency
+		set to 300Hz. Read more about the BiquadFilterNode:
+		https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode) -->
+		<Chain id="ch2" gain="-3dB">
+			<BiquadFilterNode type="highpass" frequency="300"></BiquadFilterNode>
+		</Chain>
+
+		<!-- This Chain has its gain set to -6dB which reduces the volume of
+		sounds playing through this channel -->
+		<Chain id="ch3" gain="-6dB"></Chain>
+
+		<!-- This Chain is a bit more complex. It contains the following elements:
+
+		BiquadFilterNode:
+		Similar to the Chain above
+
+		StereoPannerNode:
+		Controls the pan between left and right audio channel. This setup maps the variable
+		"gameLevel.character.x" to control the pan value between -1 to +1 depending on the
+		x-position of the character between 200 and 700 pixels.
+		(Read more about mapping parameters: https://github.com/hanslindetorp/WebAudioXML/wiki/Parameters)
+
+		Send:
+		The last object in the Chain is a send-element. It splits the signal and sends one dry signal to the
+		master output of the Mixer plus sends a signal to a reverb bus channel using the "output"-attribute.
+		(Read more about routing signals: https://github.com/hanslindetorp/WebAudioXML/wiki/Connecting)
+		-->
+		<Chain id="ch4" gain="0dB">
+			<BiquadFilterNode type="highpass" frequency="800"></BiquadFilterNode>
+			<StereoPannerNode>
+				<pan follow="gameLevel.character.x" map="200, 700, -1, 1"></pan>
+			</StereoPannerNode>
+			<Send output="#reverb" gain="0"></Send>
+		</Chain>
+
+		<!-- This is a Chain with a "convolution-reverb" (Read more:
+		https://en.wikipedia.org/wiki/Convolution_reverb). The audio file defining the reverb
+		is placed inside the fx-folder. It's possible to create your own convolution files or
+		downloading from i.e. https://www.voxengo.com/impulses/ -->
+		<Chain id="reverb">
+			<ConvolverNode src="fx/large-bottle-hall.wav"></ConvolverNode>
+		</Chain>
+
+	</Mixer>
+</Audio>

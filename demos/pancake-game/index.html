@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Pancakes</title>
+		<link href="mystyle.css" rel="stylesheet" type="text/css" />
+		<link rel="shortcut icon" href="favicon.ico" />
+	</head>
+
+
+	<body>
+
+
+		<game-engine data-max-size="true">
+
+			<section id="start">
+				<a href="javascript: nav('#intro')" data-imusic-play="intro">ENTER</a>
+			</section>
+
+			<section id="intro">
+				<h1>The Pancake Game</h1>
+				<p>This is a DEMO-game to illustrate how music and sound effects can be implemented
+					in an online game using <a target="_blank" href="https://github.com/hanslindetorp/imusic">iMusic</a>
+					and mixed in a virtual mixer created using
+					<a target="_blank" href="https://github.com/hanslindetorp/WebAudioXML">WebAudioXML</a>. Both technologies
+					build on <a target="_blank" href="https://www.w3.org/TR/webaudio/">WebAudioAPI</a>. More documentation
+					is found on <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">
+					MDN web docs</a>.</p>
+
+					<p>Play the game and listen to how the music adapts to the different pages and intensity
+						levels in the game. The more lost pancakes - the more intense music and background noise.
+						There are also Motifs playing when picking or loosing pancakes (synchronized to the
+						nearest 1/16-note in the background loops) and as well as when winning or loosing the
+						game (played on trumpet by our youngest son quantized to the nearest 1/8-note).</p>
+						<p>For more details about the implementation of the music, please read the comments in
+							the <a target="_blank" href="imusic.xml">imusic.xml-file</a>.</p>
+						<p>For more details about the mixer implementation, please read the comments in the
+							<a target="_blank" href="mixer.xml">mixer.xml-file</a>.</p>
+						<p>Finally, for more details about the game logic and how the events and variables are
+							connected to iMusic and WebAudioXML, please refere to the
+							<a target="_blank" href="myscript.js">myscript.js-file</a></p>
+
+				<p>Programming and music by <a href="mailto:hans.lindetorp@kmh.se">Hans Lindetorp</a></p>
+			</section>
+
+			<game-level id="game" class="game-level">
+
+				<div class="kitchen" id="bg1"></div>
+				<div class="kitchen" id="bg2"></div>
+
+				<a class="button left"></a>
+				<a class="button right"></a>
+
+				<div class="game-collectable " id="pancake1" data-direction="down" data-speed="2" data-speed-factor="pancakeSpeed" data-respawn-delay="100...1000" data-x="200,300,400,500,600,700" data-event-name="pick"></div>
+				<div class="game-collectable " id="pancake2" data-direction="down" data-speed="2" data-speed-factor="pancakeSpeed" data-respawn-delay="100...1000" data-x="200,300,400,500,600,700" data-event-name="pick"></div>
+				<div class="game-collectable " id="pancake3" data-direction="down" data-speed="2" data-speed-factor="pancakeSpeed" data-respawn-delay="100...1000" data-x="200,300,400,500,600,700" data-event-name="pick"></div>
+
+				<div class="game-character" id="character" data-move="x" data-max-speed="10" data-acceleration="100" data-follow-rotation="mirror">
+					<div id="pan"></div>
+				</div>
+
+				<div class="game-obstacle left"></div>
+				<div class="game-obstacle right"></div>
+
+				<p class="scoreNr missed">Missade: <span></span></p>
+				<div class="score" id="missed"></div>
+
+				<p class="scoreNr picked">Fångade: <span></span></p>
+				<div class="score" id="picked"></div>
+
+			</game-level>
+
+			<section id="complete">
+				<a>COMPLETE!</a>
+			</section>
+
+			<section id="gameOver">
+				<a>GAME OVER!</a>
+			</section>
+
+			<section id="quit"></section>
+
+			<nav>
+				<a href="javascript: nav('#quit')" data-imusic-play="quit">AVSLUTA</a>
+				<a href="javascript: nav('#game')" data-imusic-play="game">SPELA</a>
+				<a href="javascript: nav('#intro')" data-imusic-play="intro">INTRO</a>
+			</nav>
+
+		</game-engine>
+
+
+		<script src="GameElements.js"></script>
+		<script src="WebAudioXML.js" data-source="mixer.xml"></script>
+		<script src="imusic_091.js" data-music-structure="imusic.xml"></script>
+		<script src="myscript.js"></script>
+	</body>
+</html>

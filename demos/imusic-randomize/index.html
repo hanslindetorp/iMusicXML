@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>iMusic - Randomize</title>
+		<link href="mystyle.css" rel="stylesheet" type="text/css" />
+		<link rel="shortcut icon" href="favicon.ico" />
+		<script src="max.size.js"></script>
+	</head>
+
+
+	<body>
+
+		<main data-max-size="true">
+			<section id="start">
+
+				<header>
+					<h1>iMusic - randomize</h1>
+					<button id="play">PLAY</button>
+					<button id="stop">STOP</button>
+				</header>
+
+				<p>The music is made by Hans Lindetorp integrated into the web page using <a target="_blank" href="https://github.com/hanslindetorp/imusic">iMusic</a>. All tracks contain short files organized in time (see  <a target="_blank" href="imusic.xml">imusic.xml</a>). Selections are done randomly and
+					the chance for files to be triggered is controlled with the sliders from <a target="_blank" href="myscript.js">myscript.js</a>. With this
+					strategy the loop will, according to the statistics, not repeat itself within the nearest 28000 years.</p>
+
+
+					<!-- There is a div element for each track in iMusic. They all have
+					one slider, one label and one span for each file. If the div element
+					keeps its id and the span elements correspond to the file names, the
+					logic will work -->
+				<div id="tr1" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>BD & SN</h3>
+					<span id="bd" class="file">bd</span>
+					<span id="sn" class="file">sn</span>
+				</div>
+
+				<div id="tr2" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>HiHat</h3>
+					<span id="hh1" class="file">hh1</span>
+					<span id="hh2" class="file">hh2</span>
+					<span id="hh3" class="file">hh3</span>
+					<span id="hh4" class="file">hh4</span>
+				</div>
+
+				<div id="tr3" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>Fill</h3>
+					<span id="fill1" class="file">fill1</span>
+					<span id="fill2" class="file">fill2</span>
+				</div>
+
+				<div id="tr4" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>Bass</h3>
+					<span id="bass1-1" class="file">bass1-1</span>
+					<span id="bass1-2" class="file">bass1-2</span>
+					<span id="bass1-3" class="file">bass1-3</span>
+					<span id="bass1-4" class="file">bass1-4</span>
+					<span id="bass2-1" class="file">bass2-1</span>
+					<span id="bass2-2" class="file">bass2-2</span>
+					<span id="bass2-3" class="file">bass2-3</span>
+					<span id="bass2-4" class="file">bass2-4</span>
+				</div>
+
+				<div id="tr5" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>Sine</h3>
+					<span id="sine1" class="file">sine1</span>
+					<span id="sine2" class="file">sine2</span>
+					<span id="sine3" class="file">sine3</span>
+					<span id="sine4" class="file">sine4</span>
+				</div>
+
+				<div id="tr6" class="track">
+					<input type="range" min="0" max="100" value="50" class="slider" />
+					<h3>Chord</h3>
+					<span id="chord1" class="file">chord1</span>
+					<span id="chord2" class="file">chord2</span>
+					<span id="chord3" class="file">chord3</span>
+				</div>
+
+
+			</section>
+		</main>
+
+
+		<script src="imusic_091.js" data-music-structure="imusic.xml"></script>
+		<script src="myscript.js"></script>
+
+
+	</body>
+
+</html>

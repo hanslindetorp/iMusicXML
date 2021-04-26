@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an XML document speciying iMusic content. Read more about iMusic: https://github.com/hanslindetorp/imusic
+The first element contains various global settings -->
+<imusic showGUI="true" version="1.0" tempo="80" timeSign="4/4" audioPath="audio" fadeTime="200" changeOnNext="bar">
+
+<!-- The music is devided into separate Arrangements. In this project, each Arrangement is connected to a
+Section in the HTML-document using the attributes "select-group" and "select-value".
+Read more: https://github.com/hanslindetorp/imusic/blob/master/selecting.md -->
+	<arrangement class="intro">
+		<track loopLength="8" src="intro" output="#ch1"></track>
+	</arrangement>
+
+	<arrangement class="game">
+
+		<!-- This Arrangement plays the adaptive music when the game is running.
+		It consists of five musical stems and seven sound effect tracks - all looping
+		with independent loop lengts. They all play in sync and are muted or
+		unmuted according to the "intensity" javascript variable in "myscript.js" -->
+		<track loopLength="16" src="game-1.mp3" select-group="intensity" select-value="1" output="#ch1"></track>
+		<track loopLength="16" src="game-2.mp3" select-group="intensity" select-value="2" output="#ch1"></track>
+		<track loopLength="16" src="game-3.mp3" select-group="intensity" select-value="3" output="#ch1"></track>
+		<track loopLength="16" src="game-4.mp3" select-group="intensity" select-value="4" output="#ch1"></track>
+		<track loopLength="16" src="game-5.mp3" select-group="intensity" select-value="5...9" output="#ch1"></track>
+
+		<track loopLength="4" src="flakt1.mp3" select-group="intensity" select-value="4" output="#ch2"></track>
+		<track loopLength="4" src="flakt2.mp3" select-group="intensity" select-value="5" output="#ch2"></track>
+		<track loopLength="2" src="flakt3.mp3" select-group="intensity" select-value="6...9" output="#ch2"></track>
+
+		<track loopLength="4" src="elvisp1.mp3" changeOnNext="beat" select-group="intensity" select-value="7" output="#ch2"></track>
+		<track loopLength="2" src="elvisp2.mp3" changeOnNext="beat" select-group="intensity" select-value="8" output="#ch2"></track>
+		<track loopLength="2" src="elvisp3.mp3" changeOnNext="beat" select-group="intensity" select-value="9" output="#ch2"></track>
+
+		<track loopLength="3" src="blipp.mp3" changeOnNext="beat" select-group="intensity" select-value="9" output="#ch2"></track>
+
+		<!-- In addition to the tracks, there are also four "Motifs". They are separate audio files that will be played back in sync
+		with the background music according to the "quantize"-attribute. In this setup, they will be triggered by their filenames from
+		"myscript.js". Read more about Motifs: https://github.com/hanslindetorp/imusic/blob/master/motifs.md -->
+		<motif class="complete" src="complete-motif.mp3" quantize="1/8" output="#ch1"></motif>
+		<motif class="game-over" src="game-over-motif.mp3" quantize="1/8" output="#ch1"></motif>
+
+		<!-- These Motifs has different outputs. It connects them to different channels in <a href="mixer.xml">mixer.xml</a> -->
+		<motif class="pick" src="pick.mp3" quantize="1/16" output="#ch3"></motif>
+		<motif class="miss" src="miss.mp3" quantize="1/16" output="#ch4"></motif>
+	</arrangement>
+
+	<arrangement class="game-over" loopLength="8">
+
+		<!-- This Arrangement has got two music-Tracks. The first is played back once
+		and the other is looped. -->
+		<track src="game-over-no-loop.mp3" loopLength="off" output="#ch1"></track>
+		<track src="game-over-loop.mp3" output="#ch1"></track>
+
+		<!-- This Track is played once and only if intesity has reached 7 or more -->
+		<track src="complete-elvisp.mp3" loopLength="off" select-group="intensity" select-value="7...9" output="#ch2"></track>
+	</arrangement>
+
+
+	<arrangement class="complete" loopLength="8">
+		<track upbeat="1/4" src="complete-no-loop.mp3" loopLength="off" output="#ch1"></track>
+		<track src="complete-loop.mp3" loopLength="8" output="#ch1"></track>
+
+		<track src="complete-elvisp.mp3" loopLength="off" select-group="intensity" select-value="7...9" output="#ch2"></track>
+	</arrangement>
+
+	<arrangement class="quit">
+		<track upbeat="1/4" src="ending.mp3" loopLength="off" output="#ch1"></track>
+	</arrangement>
+</imusic>

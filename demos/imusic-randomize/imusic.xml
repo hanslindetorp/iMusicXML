@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an XML document speciying iMusic content. Read more about iMusic: https://github.com/hanslindetorp/imusic
+The first element contains various global settings.
+This implementation focuses on the random features of iMusic.
+(Read more: https://github.com/hanslindetorp/imusic/blob/master/random.md ) -->
+<imusic version="1.0" tempo="140" timeSign="4/4" audioPath="audio" changeOnNext="bar">
+
+	<!-- READ THIS -->
+	<!-- Before you follow these steps to create randomly created music, please note that
+	in order to make it work, you have to turn fadeTime off on that particular track.
+  -->
+	<arrangement>
+
+		<!-- DRUMS -->
+		<!-- This track contains two sound - kick and snare. They are positioned in
+		"regions" (read more: https://github.com/hanslindetorp/imusic/blob/master/regions.md)
+	 	This makes sure that WHEN the kick plays it will  play on the first downbeat and
+		the snare will be on the third beat in each bar (half tempo feel) -->
+		<track class="tr1" fadeTime="0" loopLength="2" active="0.5">
+			<region pos="1.1" src="bd"></region>
+			<region pos="1.3" src="sn"></region>
+			<region pos="2.3" src="sn"></region>
+		</track>
+
+		<!-- This track has four different files placed IN THE SAME region in different "options". This means
+		that they will alter randomly when the region is triggered. There is a 50% chance
+		that it will be "hh1"-file beacuse it's repeated four times in the list.
+		In addition to the random selection, the slider might cause the file to not trigger at all if it's set
+		below maximum. -->
+		<track class="tr2" fadeTime="0" loopLength="1/8" active="0.5">
+			<region>
+				<option src="hh1"></option>
+				<option src="hh1"></option>
+				<option src="hh1"></option>
+				<option src="hh1"></option>
+				<option src="hh2"></option>
+				<option src="hh2"></option>
+				<option src="hh3"></option>
+				<option src="hh4"></option>
+			</region>
+		</track>
+
+		<!-- This fill has two options and is placed on the downbeat in the
+		fourth bar -->
+		<track class="tr3" fadeTime="0" loopLength="4" active="0.5">
+			<region pos="4.1">
+				<option src="fill1"></option>
+				<option src="fill2"></option>
+			</region>
+		</track>
+
+
+
+		<!-- BASS -->
+		<!-- The bass is built with eight files (four in "G minor" and four in "C minor").
+		They are structured into four regions (two beats each), all containing different sets
+		of combinations of files to control the musical flow. -->
+		<track class="tr4" fadeTime="0" loopLength="2" active="0.5">
+			<region length="2/4" src="bass1-1"></region>
+			<region length="2/4">
+				<option src="bass1-1"></option>
+				<option src="bass1-2"></option>
+				<option src="bass1-3"></option>
+			</region>
+			<region length="2/4">
+				<option src="bass1-2"></option>
+				<option src="bass1-3"></option>
+			</region>
+			<region length="2/4">
+				<option src="bass2-1"></option>
+				<option src="bass2-2"></option>
+				<option src="bass2-3"></option>
+				<option src="bass2-4"></option>
+			</region>
+		</track>
+
+
+		<!-- SINE -->
+		<!-- The sine-wave-melody plays one note per bar and is randomly selecting
+		from the four options and reflect the slider setting -->
+		<track class="tr5" fadeTime="0" loopLength="1" active="0.5">
+			<region>
+				<option src="sine1"></option>
+				<option src="sine2"></option>
+				<option src="sine3"></option>
+				<option src="sine4"></option>
+			</region>
+		</track>
+
+		<!-- CHORD -->
+		<!-- The chord loop has a loopLength of 3/8 which makes the loop
+		assymetric with the other loops -->
+		<track class="tr6" fadeTime="0" loopLength="3/8" active="0.5">
+			<region>
+				<option src="chord1"></option>
+				<option src="chord2"></option>
+				<option src="chord3"></option>
+			</region>
+		</track>
+
+
+	</arrangement>
+
+</imusic>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>iMusic-Test-bench</title>
+		<style>
+			/* A few CSS-rules are embedded into this HTML-document to make it self-contained */
+			body {
+				font-family: sans-serif;
+			}
+			a.btn {
+				display: inline-block;
+				text-decoration: none;
+				text-align: center;
+				width: 100px;
+				padding: 5px;
+				margin: 5px;
+				border: 1px solid #333;
+				border-radius: 5px;
+			}
+
+			a.btn:active {
+				background-color: #ddd;
+			}
+
+		</style>
+
+	</head>
+
+
+	<body>
+
+		<h1>iMusic-Test-bench</h1>
+		<p>This app is an example of how an iMusic-project can be
+			tested by triggering arrangements, motifs and selecting
+			tracks for playback. The connection is made by the attributes
+			'data-imusic-play', 'data-imusic-select-group' and 'data-imusic-select-value'.
+			'play' corresponds to the class name(s) set for arrangements and motifs and
+			the select commands correspond to the  select-group and select-value attributes
+			resepectively. Please, see the  <a href="imusic.xml">imusic.xml</a>-file for details.
+		</p>
+		<h3>Arrangements:</h3>
+		<a class="btn" data-imusic-play="intro">Intro</a>
+		<a class="btn" data-imusic-play="game">Game</a>
+		<a class="btn" data-imusic-play="complete">Complete</a>
+		<a class="btn" data-imusic-play="game-over">GameOver</a>
+		<a class="btn" data-imusic-play="quit">Quit</a>
+		<a class="btn" href="javascript:iMusic.stop()">STOP</a>
+
+		<h3>Intensity:</h3>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="1">1</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="2">2</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="3">3</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="4">4</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="5">5</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="6">6</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="7">7</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="8">8</a>
+		<a class="btn" data-imusic-select-group="intensity" data-imusic-select-value="9">9</a>
+
+		<h3>Motifs:</h3>
+		<a class="btn" data-imusic-play="pick">Intro</a>
+		<a class="btn" data-imusic-play="miss">Game</a>
+		<a class="btn" data-imusic-play="complete-motif">Complete</a>
+		<a class="btn" data-imusic-play="game-over-motif">GameOver</a>
+
+
+		<script src="WebAudioXML.js" data-source="mixer.xml"></script>
+		<script src="imusic_091.js" data-music-structure="imusic.xml"></script>
+	</body>
+</html>

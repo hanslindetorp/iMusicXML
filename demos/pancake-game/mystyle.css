@@ -1,0 +1,232 @@
+/* Detta sätter alla grundmarginaler till 0 och ser till att sidan fyller hela webbläsaren */
+html, body {
+	margin: 0px;
+	padding: 0px;
+
+	width: 100%;
+	height: 100%;
+
+}
+
+
+body {
+	background-color: black;
+	color: black;
+	font-family: sans-serif;
+}
+
+a {
+	text-decoration: none; /* tar bort understrykningar i länkar */
+}
+
+/* De här måtten gör att formatet för den sidans innehåll är 16:9 med bredden 1000 pixlar */
+game-engine {
+	width: 1000px;
+	height: 565.5px;
+}
+
+
+/* Det här är ett sätt att skapa olika sidor/sections som är gömda från början (opacity: 0)
+	och ligger underst (z-index: -1)
+	Toningnen sker på en halv sekund (transition: 0.5s)
+*/
+
+game-level, section {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	z-index: -2;
+	transition: 0.5s;
+	padding: 20px;
+	background-size: cover;
+	box-sizing: border-box;
+}
+
+/* När en section är "target" (d.v.s. man har klickat på en länk som pekar på det id:t blir den synlig - opacity: 1
+	och ligger längst fram - z-index: 1 */
+game-level:target, section:target {
+	opacity: 1;
+	z-index: -1;
+}
+
+
+
+/* ####################################### */
+/* Lägg till dina egna regler nedan */
+
+
+* {
+	background-repeat: no-repeat;
+}
+
+nav {
+	width: 100%;
+	height: 50px;
+	background-color: #633;
+	display: none;
+}
+
+nav a {
+	margin: 0.5em;
+	padding: 0.2em;
+	border-radius: 0.5em;
+	width: 5em;
+	color: black;
+	background-color: #ccc;
+	border: 2px solid #300;
+	float: right;
+
+	text-align: center;
+}
+
+
+#start {
+	xbackground-color: black;
+}
+
+section > a, game-level > a {
+	position: absolute;
+	color: white;
+	font-size: 50px;
+	top: 240px;
+	left: 0px;
+	width: 960px;
+	text-align: center;
+
+}
+
+#intro {
+	padding-top: 80px;
+	font-size: 100%;
+}
+
+#intro, #game {
+	background-color: white;
+}
+
+
+.button {
+	position: absolute;
+	background-size: contain;
+	top: 60px;
+	width: 60px;
+	height: 60px;
+}
+
+.button.left {
+	left: 10px;
+	background-image: url(images/leftBtn.png);
+}
+.button.right {
+	left: 930px;
+	background-image: url(images/rightBtn.png);
+}
+
+.kitchen {
+	position: absolute;
+	top: 243px;
+	left: 3px;
+	width: 500px;
+	height: 324px;
+	background-image: url(images/kitchen.jpg);
+	background-size: contain;
+}
+
+#intensity {
+	position: absolute;
+	left: 300px;
+	width: 400px;
+}
+#bg1 {
+
+}
+#bg2 {
+	left: 496px;
+	-webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.game-obstacle {
+	bottom:0px;
+	width: 130px;
+	height: 400px;
+}
+
+.game-obstacle.left {
+	left: 0px;
+}
+.game-obstacle.right {
+	left: 870px;
+}
+
+#start {
+	text-align: center;
+}
+
+.game-character {
+	width: 200px;
+	height: 159px;
+	top: 399px;
+	left: 350px;
+	position: absolute;
+	background-image: url(images/chef.png);
+	background-size: contain;
+}
+
+.game-character #pan {
+	position: absolute;
+	top: 70px;
+	left: 140px;
+	width: 30px;
+	height: 25px;
+}
+
+.game-collectable {
+	top: 0px;
+	width: 45px;
+	height: 16px;
+	position: absolute;
+	background-image: url(images/pancake.png);
+	background-size: contain;
+}
+
+
+.scoreNr {
+	font-size: 18px;
+	font-weight: bold;
+	position: absolute;
+	top: 200px;
+}
+
+.scoreNr.missed {
+	left: 59px;
+}
+
+.scoreNr.picked {
+	left: 840px;
+}
+
+.score {
+	position: absolute;
+	bottom: 6px;
+	width: 45px;
+	background-repeat: repeat-y;
+	background-image: url(images/pancake.png);
+	background-size: 45px 16px;
+	background-position: bottom center;
+	box-sizing: border-box;
+}
+
+#missed {
+	left: 84px;
+}
+
+#picked {
+	left: 873px;
+}
+
+
+section#quit {
+	xbackground-color: black;
+}

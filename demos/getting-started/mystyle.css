@@ -1,0 +1,10 @@
+/* Detta sätter alla grundmarginaler till 0 och ser till att sidan fyller hela webbläsaren */
+
+
+body {
+	font-family: sans-serif;
+}
+
+a {
+	text-decoration: none; /* tar bort understrykningar i länkar */
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<imusic version="1.0" tempo="60" timeSign="4/4" loopLength="4" showGUI="false">
+  <arrangement id="A" src="audio/A.mp3"></arrangement>
+  <arrangement id="B" src="audio/B.mp3"></arrangement>
+</imusic>
