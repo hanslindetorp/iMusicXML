@@ -7,7 +7,10 @@ All rights belongs to Hans Lindetorp. Feel free to use it. The code will change 
 * [Randomized music](https://hanslindetorp.github.io/imusic/demos/imusic-randomize/)
 * [Game Music](https://hanslindetorp.github.io/imusic/demos/pancake-game/)
 
-## [Documentation](https://github.com/hanslindetorp/imusic/wiki)
+## Documentation
+* [Concept](https://github.com/hanslindetorp/imusic/wiki)
+* [Tutorial](https://github.com/hanslindetorp/imusic/wiki/Getting-Started)
+* [Javascript API](https://github.com/hanslindetorp/imusic/wiki/Javascript-API)
 
 
 Please follow my research journey at http://hans.arapoviclindetorp.se and https://www.facebook.com/hanslindetorpresearch/
