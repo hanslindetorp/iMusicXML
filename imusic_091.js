@@ -6479,6 +6479,7 @@ class GUI {
 				} else if(el.attributes.href.nodeValue == "#"){
 					el.attributes.href.nodeValue = deadLink;
 				}
+				case "button":
 				el.addEventListener("click", function(e){
 					switch (musicData) {
 						case "play":
@@ -6492,7 +6493,7 @@ class GUI {
 						break;
 					}
 
-					if(el.attributes.href.nodeValue == "#"){
+					if(el.attributes.href && el.attributes.href.nodeValue == "#"){
 						e.preventDefault ? e.preventDefault() : e.returnValue = false;
 					}
 				});
