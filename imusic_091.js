@@ -801,10 +801,19 @@ class GUI {
 		 		if(iMus.debug){console.log(url, time, audioContext.currentTime);}
 
 
-		 		if(track){
-			 		setTimeout(function(){
-				 		track.eventHandler.execute("playFile", url);
+				if(obj && obj.eventHandler){
+					// for regions (parts) and motifs
+					setTimeout(function(){
+				 		obj.eventHandler.execute("playFile", url);
 			 		}, msToStart);
+				}
+
+
+		 		if(track){
+					// for tracks
+					setTimeout(function(){
+						track.eventHandler.execute("playFile", url);
+					}, msToStart);
 		 		}
 
 
@@ -3382,8 +3391,9 @@ class GUI {
 			this.loopCnt = 0;
 			this.idName = o.id || "";
 
-			this.tags = o.tags || o.class || urlsToTags(o.urls) || [];
+			this.tags = o.tags || o.class || [];
 			if(typeof this.tags === "string"){this.tags = this.tags.split(" ")};
+			this.tags = this.tags.concat(urlsToTags(o.urls));
 
 			this.parameters.destination = self.motifBus.input;
 			this.parameters.channelMerger = self.channelMerger;
@@ -3393,7 +3403,7 @@ class GUI {
 				this.bus.connect(this.parameters.output);
 			}
 
-
+			this.eventHandler = new EventHandler();
 
 
 			this.active = typeof o.active === "number" ? o.active : 1;
@@ -6463,7 +6473,10 @@ class GUI {
 
 			let musicData = el.dataset.imusic || el.dataset.imusicPlay;
 			// split comma separated string into array!!
-			let selection = iMusic.loadFile(musicData);
+
+			if(!musicStructure){
+				let selection = iMusic.loadFile(musicData);
+			}
 
 			switch(el.localName){
 
@@ -6479,7 +6492,7 @@ class GUI {
 				} else if(el.attributes.href.nodeValue == "#"){
 					el.attributes.href.nodeValue = deadLink;
 				}
-				case "button":
+				default:
 				el.addEventListener("click", function(e){
 					switch (musicData) {
 						case "play":
@@ -6499,9 +6512,9 @@ class GUI {
 				});
 				break;
 
-				default:
-				bgElements.push(el);
-				break;
+				//default:
+				//bgElements.push(el);
+				//break;
 			}
 		});
 
