@@ -36,7 +36,7 @@ class GUI {
 				height: 100%;
 				position: absolute;
 				overflow: auto;
-					padding: 1em;
+				padding: 1em;
 				transition: 0.5s;
 				background-color: #eef;
 				color: black;
@@ -62,7 +62,6 @@ class GUI {
 
 			#iMusic-GUI > p {
 				width: 80%;
-
 			}
 
 			#iMusic-GUI div > span.arrangement {
@@ -151,7 +150,10 @@ class GUI {
 			inst.motifs.forEach(motif => {
 				motif.tags.forEach(function(tag){
 					if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
-						motifTags.push(tag);
+						if(!tag.includes(".")){
+							// avoid file names
+							motifTags.push(tag);
+						}
 					}
 				});
 			});
@@ -173,7 +175,7 @@ class GUI {
 
 			container.id = "iMusic-GUI";
 			var iMusBtn;
-			if(!(iMus.getDefaultInstance().parameters.showGUI == "false")){
+			if(iMus.getDefaultInstance().parameters.showGUI == "true"){
 				iMusBtn = document.createElement("button");
 				iMusBtn.innerHTML = "iMusic";
 				iMusBtn.style.position = "absolute";
@@ -216,14 +218,14 @@ class GUI {
 
 			// PLAY BUTTONS
 			el = document.createElement("h3");
-			el.innerHTML = "class (arrangements/leadins/motifs):";
+			el.innerHTML = "class (arrangements + leadins):";
 			container.appendChild(el);
 
-			el = document.createElement("p");
-			el.innerHTML = `Give arrangements and motifs a class name in the file <a target="_blank" href='imusic.xml'>imusic.xml</a>.
-			This generates one button for each class name. Use the buttons to play the corresponding
-			arrangements/motifs/leadins.`;
-			container.appendChild(el);
+			// el = document.createElement("p");
+			// el.innerHTML = `Give arrangements and motifs a class name in the file <a target="_blank" href='music.xml'>music.xml</a>.
+			// This generates one button for each class name. Use the buttons to play the corresponding
+			// arrangements/motifs/leadins.`;
+			// container.appendChild(el);
 
 			row = document.createElement("div");
 			container.appendChild(row);
@@ -267,16 +269,16 @@ class GUI {
 
 
 			el = document.createElement("h3");
-			el.innerHTML = "select-group: (tracks)";
+			el.innerHTML = "follow-variables: (e.g. intensity)";
 			container.appendChild(el);
 
 
-			el = document.createElement("p");
-			el.innerHTML = `Give the tracks different select-group and select-values to
-			make a variable control the dynamics by muting and unmuting them.
-			Use the slider (for numeric values) or menu (string values) to select
-			different tracks depending on their select-group and select-value settings.`;
-			container.appendChild(el);
+			// el = document.createElement("p");
+			// el.innerHTML = `Give the tracks different select-group and select-values to
+			// make a variable control the dynamics by muting and unmuting them.
+			// Use the slider (for numeric values) or menu (string values) to select
+			// different tracks depending on their select-group and select-value settings.`;
+			// container.appendChild(el);
 
 			// selection sliders and radio buttons
 			Object.keys(selectGroups).forEach(key => {
@@ -1888,6 +1890,7 @@ class GUI {
 
 						if(track.parameters.fadeTime && track.active > 0 && track.playing == false){
 							//track.fadeIn();
+							//console.log(track.id, "no fadeIn");
 						}
 
 
@@ -2204,7 +2207,10 @@ class GUI {
 					var newTrack = new Track(params, this);
 
 					if(params.fadeTime){
-						newTrack.setVolume(0, true); // true == dontStoreInParameters
+						// This line does not seem to be needed any more. And it creates a conflict for tracks 
+						// with both fadeTime and follow-variable set.
+						// newTrack.setVolume(0, true); // true == dontStoreInParameters
+						// console.log("fade out crossFaded track")
 					}
 
 					this.tracks.push(newTrack);
@@ -5635,6 +5641,19 @@ class GUI {
 		return obj;
 	}
 
+	function getFollowAttributes(attributes){
+		let selectAttributes = [];
+		Array.from(attributes).forEach(attribute => {
+			if(attribute.name.includes("follow-")){
+				let arr = attribute.name.split("-");
+				arr.shift();
+				let key = arr.join("-");
+				selectAttributes.push({key: key, value: attribute.value});
+			}
+		});
+		return selectAttributes;
+	}
+
 
 	function typeFixParam(param, value){
 
@@ -6876,6 +6895,16 @@ class GUI {
 					  		stem.setSoloGroup(key, value);
 				  		}
 
+
+						// new XML syntax where group name is part of the attribute name
+						// and value is the value of the old select-value attribute.
+						// This allows for a system with multiple select-groups for one track
+						// i.e. select-intensity="0...25"
+
+						getFollowAttributes(track.attributes).forEach(entry => {
+							stem.setSoloGroup(entry.key, entry.value);
+						});
+
 					/* } */
 
 
@@ -6899,10 +6928,11 @@ class GUI {
 						if(src){urls.push(src)}
 					});
 
+					let motifObj;
 					if(motif.nodeName == "motif"){
-						let motifObj = section.addMotif(params, urls);
+						motifObj = section.addMotif(params, urls);
 					} else {
-						let motifObj = section.addLeadIn(params, urls);
+						motifObj = section.addLeadIn(params, urls);
 					}
 
 
@@ -6923,6 +6953,16 @@ class GUI {
 				  		// store solo values
 				  		motifObj.setSoloGroup(key, value);
 			  		}
+
+
+			  		// new XML syntax where group name is part of the attribute name
+					// and value is the value of the old select-value attribute.
+					// This allows for a system with multiple select-groups for one track
+					// i.e. select-intensity="0...25"
+
+					getFollowAttributes(motif.attributes).forEach(entry => {
+						motifObj.setSoloGroup(entry.key, entry.value);
+					});
 				});
 			});
 
@@ -7605,6 +7645,7 @@ class GUI {
 
 	}
 
+	console.log("iMusicXML is installed. Version 0.91.10");
 
 
 
