@@ -4,19 +4,22 @@
 		<meta charset="UTF-8" />
 		<title>iMusic - Getting Started</title>
 		<link href="mystyle.css" rel="stylesheet" type="text/css" />
+		<script src="max.size.js"></script>
 	</head>
 
 
 	<body>
-		<h1>Tapping</h1>
-		<div>
-			<a data-imusic="play">START</a>
-			<a data-imusic="stop">STOP</a>
-		</div>
-		<div id="touchpad"></div>
-		<div id="output"></div>
-		<div id="latency"></div>
-		<div id="avg"></div>
+		<main class="max-size">
+			<h1>Tapping</h1>
+			<div>
+				<a data-imusic="play">START</a>
+				<a data-imusic="stop">STOP</a>
+			</div>
+			<div id="touchpad"></div>
+			<div id="output"></div>
+			<div id="latency"></div>
+			<div id="avg"></div>
+		</main>
 		<script src="imusic_091.js" data-music-structure="music.xml"></script>
 		<script src="myscript.js"></script>
 	</body>

@@ -4,7 +4,12 @@
 body {
 	font-family: sans-serif;
 	text-align: center;
-	font-size: 3.5em;
+	font-size: 200%;
+	background-color: black;
+}
+
+h1 {
+	margin-bottom: 1em;
 }
 
 a {
@@ -13,11 +18,15 @@ a {
 	border: 2px solid black;
 	padding: 0.2em;
 }
-
+.max-size {
+	height: 1000px;
+	width: 680px;
+	background-color: white;
+}
 #touchpad {
 	font-size: 4em;
 	color: white;
-	margin: 0.2em auto;
+	margin: 0.6em auto;
 	padding-top: 0.35em;
 	box-sizing: border-box;
 	width: 2em;
