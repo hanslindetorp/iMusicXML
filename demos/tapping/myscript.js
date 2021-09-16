@@ -35,11 +35,13 @@ window.onload = e => {
                 let b = 20;
                 touchpad.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 
-                intervalID = setInterval(e => {
-                    r = Math.max(0, r - 5);
-                    g = Math.max(0, g - 5);
-                    touchpad.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-                }, 20);
+                setTimeout(e => {
+                    intervalID = setInterval(e => {
+                        r = Math.max(0, r - 5);
+                        g = Math.max(0, g - 5);
+                        touchpad.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                    }, 20);
+                }, 100);
             }
             
         }
