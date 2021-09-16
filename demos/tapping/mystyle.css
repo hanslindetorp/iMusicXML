@@ -1,0 +1,33 @@
+/* Detta sätter alla grundmarginaler till 0 och ser till att sidan fyller hela webbläsaren */
+
+
+body {
+	font-family: sans-serif;
+	text-align: center;
+	font-size: 3.5em;
+}
+
+a {
+	text-decoration: none; /* tar bort understrykningar i länkar */
+}
+
+#touchpad {
+	font-size: 4em;
+	color: white;
+	margin: 0.2em auto;
+	padding-top: 0.35em;
+	box-sizing: border-box;
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+	border: 10px solid black;
+	background-color:blue;
+}
+
+#output {
+	overflow-y: scroll;
+	margin: 10px auto;
+	width: 50%;
+	height: 6em;
+	border: 1px solid black;
+}
