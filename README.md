@@ -6,6 +6,7 @@ All rights belongs to Hans Lindetorp. Feel free to use it. The code will change 
 * [Getting-Started](https://hanslindetorp.github.io/imusic/demos/getting-started/)
 * [Randomized music](https://hanslindetorp.github.io/imusic/demos/imusic-randomize/)
 * [Game Music](https://hanslindetorp.github.io/imusic/demos/pancake-game/)
+* [Tapping test](https://hanslindetorp.github.io/imusic/demos/tapping/)
 
 ## Documentation
 * [Concept](https://github.com/hanslindetorp/imusic/wiki)
