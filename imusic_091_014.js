@@ -831,6 +831,17 @@ class GUI {
 			 	});
 
 
+				var e2 = new CustomEvent('playfile', {
+					detail: {
+						url: url,
+						id: track ? track.idName : obj.idName,
+						classList: track ? track.tags : obj.tags
+					}
+			   	});
+
+				setTimeout(e => defaultInstance.dispatchEvent(e2), msToStart);
+
+
 
 		 		// call function if set when a sound is about to play
 		 		// bad sync with JS
@@ -988,7 +999,7 @@ class GUI {
 
 		this.parameters = this.initParameters(o);
 
-		this.splitter = audioContext.createChannelSplitter();
+		//this.splitter = audioContext.createChannelSplitter();
 
 		// these parameters are not settable
 
@@ -1017,18 +1028,18 @@ class GUI {
 		// this.panner.setPosition(0,0,0);
 		// this.panner.connect(this.output);
 
-		this.filter = audioContext.createBiquadFilter();
-		this.filter.frequency.value = 20000;
-		this.filter.connect(this.output);
+		// this.filter = audioContext.createBiquadFilter();
+		// this.filter.frequency.value = 20000;
+		// this.filter.connect(this.output);
 
-		this.inserts = [];
-		this.inserts.push(this.filter);
+		// this.inserts = [];
+		// this.inserts.push(this.filter);
 
 	  this.input = createGainNode();
-		this.input.connect(this.filter);
-		this.sends = {};
+		this.input.connect(this.output);
+		// this.sends = {};
 
-		this.channelMerger = o.channelMerger || self.channelMerger;
+		// this.channelMerger = o.channelMerger || self.channelMerger;
 
 
 		return this;
@@ -1557,6 +1568,9 @@ class GUI {
 		var self = this;
 		o = o || {};
 
+		let body = document.querySelector("body");
+		body.classList.add("imusic-loading");
+
 
 		if(typeof o === "string" || Array.isArray(o)){
 
@@ -1568,7 +1582,8 @@ class GUI {
 			o.onLoadComplete = o.onLoadComplete || b;
 		}
 
-
+		this._listeners = {};
+		this.triggerIntervals = [];
 
 		// Music instance
 		this.loadFile = loadFile;
@@ -1576,6 +1591,7 @@ class GUI {
 
 		this.init = function(){
 			initAudioContextTimer(this);
+			let body = document.querySelector("body");
 			body.classList.add("imusic-running");
 			body.classList.remove("imusic-pending");
 		}
@@ -1660,7 +1676,6 @@ class GUI {
 			}
 
 			iMus.onload();
-
 			let body = document.querySelector("body");
 			body.classList.add("imusic-pending");
 			body.classList.remove("imusic-loading");
@@ -2539,6 +2554,31 @@ class GUI {
 					let delay = timeToLegalBreak - maxOffset;
 					delay = delay > preroll ? delay - preroll: 0;
 
+					
+
+					// activate event triggers for each listener
+					setTimeout(e => {
+						// stop current trigger intervals
+						self.clearTriggerIntervals();
+
+						Object.keys(self._listeners).forEach(key => {
+
+							switch(key){
+								case "playfile":
+									break;
+
+								default:
+									let time = this.divisionToTime(key);
+									let event = new CustomEvent(key);
+
+									self.dispatchEvent(event);
+									let id = setInterval(() => self.dispatchEvent(event), time * 1000);
+									self.triggerIntervals.push(id);
+									break;
+							}
+						});
+					}, timeToLegalBreak * 1000);
+					
 
 
 					setTimeout(() => {
@@ -4061,6 +4101,12 @@ class GUI {
 	iMus.prototype.fadeOut = fadeOut;
 	iMus.prototype.fadeIn = fadeIn;
 
+	iMus.prototype.clearTriggerIntervals = function(){
+		while(this.triggerIntervals.length){
+			clearInterval(this.triggerIntervals.pop());
+		}
+	}
+	
 
 	iMus.prototype.setOffset = function(offset){
 
@@ -4092,6 +4138,7 @@ class GUI {
 
 	}
 	iMus.prototype.addAction = addAction;
+
 
 
 
@@ -6060,6 +6107,8 @@ class GUI {
 		} else {
 			defaultInstance.currentSection.stopAllSounds();
 		}
+		defaultInstance.clearTriggerIntervals();
+		
 		//defaultInstance.playing = false;
 
 
@@ -6075,6 +6124,18 @@ class GUI {
 		return isPlaying;
 	}
 
+
+	iMus.prototype.addEventListener = function(name, fn) {
+		if(typeof name !== "string"){return}
+		if(typeof fn !== "function"){return}
+		this._listeners[name] = this._listeners[name] || [];
+		this._listeners[name].push(fn);
+	}
+
+	iMus.prototype.dispatchEvent = function(e) {
+		this._listeners[e.type] = this._listeners[e.type] || [];
+		this._listeners[e.type].forEach(fn => fn(e));
+	}
 
 	iMus.setInterval = function(fn, interval, offset, counter){
 		counter = counter || -1;
@@ -6443,10 +6504,6 @@ class GUI {
 	}
 
 
-	setInterval(function(){
-		//console.log("musicalStart", round(defaultInstance.sectionStart));
-	}, 1000);
-
 
 	iMus.onload = function(){};
 
@@ -6456,7 +6513,9 @@ class GUI {
 		initAudioContextTimer();
 	});
 
-	window.addEventListener("load", function(event) {
+	// window.addEventListener("load", function(event) {
+
+	iMus.connectToHTML = e => {
 
 
     	// read through meta tags to set default values
@@ -6546,12 +6605,66 @@ class GUI {
 		// 	}
 		// });
 
+
+		
+		[...document.querySelectorAll("*")].forEach( el => {
+
+			[...el.attributes].forEach( attr => {
+
+				if(attr.localName.startsWith("data-imusic-")){
+					let fn;
+					let attrNameArr = attr.localName.split("-");
+
+					switch(attrNameArr[2]){
+
+						// i.e. "beat, 0, 100, red, 0, 300"
+						case "style":
+							let animationData = attr.value.split(",");
+							let Q = (animationData[0] || "beat").trim();
+							let offset = (animationData[1] || "0").trim();
+							let sustain = (animationData[2] || "").trim();
+							let className = (animationData[3] || "imus-trigger").trim();
+							let attack = (animationData[4] || "").trim();
+							let decay = (animationData[5] || "").trim();
+							defaultInstance.addEventListener(Q, e => {
+								let delay = 0;
+								if(offset.includes("ms")){
+									delay = parseFloat(offset);
+								} else {
+									delay = defaultInstance.currentSection.divisionToTime(offset) * 1000;
+								}
+								
+								let A = parseFloat(attack || el.style.transitionDuration || 0);
+								let S = defaultInstance.currentSection.divisionToTime(sustain || Q) * 1000 / (sustain ? 1 : 2);
+								el.style.transitionDuration = A + "ms";
+
+								setTimeout(() => el.classList.add(className), delay);
+
+								setTimeout(() => {
+									if(decay){
+										el.style.transitionDuration = decay + "ms";
+									}
+									el.classList.remove(className);
+								}, delay + A + S);
+
+							});
+							break;
+
+						default:
+							break;
+					}
+				}
+			});
+		});
+
 		// add imusic commands to click on links
 		[...document.querySelectorAll("a")].forEach( el => {
 
 			[...el.attributes].forEach( attr => {
 				if(attr.localName.startsWith("data-imusic")){
 
+					// gör om hela denna koppling som den är gjord i 
+					// WebAudioXML (som kopplingen ovan)
 					var deadLink = "javascript:void(0)";
 					if(!el.attributes.href){
 						el.setAttribute("href", deadLink);
@@ -6586,9 +6699,9 @@ class GUI {
 						case "data-imusic-select":
 						case "data-imusic-trig":
 						fn = e => {
-							[...attr.nodeValue].forEach(target => {
-								iMusic.play(target ? target : undefined);
-							});
+							//[...attr.nodeValue].forEach(target => {
+								iMusic.play(attr.nodeValue ? attr.nodeValue : undefined);
+							//});
 						}
 						break;
 
@@ -6611,7 +6724,7 @@ class GUI {
 		});
 
 
-  	});
+  	}
 
 
 
@@ -7048,6 +7161,8 @@ class GUI {
 
 			iMus.GUI = new GUI();
 			console.log("XML parse time: " + (Date.now() - XMLtimeStamp));
+
+			iMus.connectToHTML();
 
 	  	}
 
@@ -7706,7 +7821,7 @@ class GUI {
 
 	}
 
-	console.log("iMusicXML is installed. Version 0.91.12");
+	console.log("iMusicXML is installed. Version 0.91.13");
 
 
 

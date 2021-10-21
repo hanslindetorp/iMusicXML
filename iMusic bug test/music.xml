@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<imusic version="1.0" tempo="100" timeSign="4/4" loopLength="4" showGUI="false">
+  <arrangement class="A">
+    <track fadeTime="0" src="audio/A.mp3"></track>
+  </arrangement>
+</imusic>
