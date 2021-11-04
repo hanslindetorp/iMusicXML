@@ -2324,7 +2324,7 @@ class GUI {
 					// find the earliest start on any Stem and sets musicalStart accordingly
 
 					var maxUpbeatOffset = getMaxUpbeatOffset(this.tracks);
-					self.sectionStart = audioContext.currentTime + maxUpbeatOffset + timeWindow;
+					self.sectionStart = audioContext.currentTime + maxUpbeatOffset + timeWindow * 2;
 
 
 				}
@@ -2567,6 +2567,11 @@ class GUI {
 	 					track.nextTime = nextTime;
 	 				}
 
+					// These lines were added to cope with missing files with upbeat
+					// if they are the first start of playback
+					maxOffset = maxOffset || this.getMaxUpbeatOffset();
+					timeToLegalBreak = timeToLegalBreak || 0;
+					
 					let preroll = timeWindow * 2;
 					let delay = timeToLegalBreak - maxOffset;
 					delay = delay > preroll ? delay - preroll: 0;
@@ -6720,7 +6725,9 @@ class GUI {
 						case "play":
 						case "trig":
 						case "select":
-							fn = e => iMusic.play(val);
+							fn = e => {
+								val.split(",").forEach(v => iMusic.play(v.trim()));
+							}
 							break;
 
 						case "stop":
