@@ -6030,6 +6030,51 @@ class GUI {
 		var obj = defaultInstance.sections[sectionID].set(param, val);
 		defaultInstance.parameters[obj.param] = obj.val;
 		defaultParams[obj.param] = obj.val;
+
+		switch(param){
+
+			case "osc":
+			// Jag fick aldrig osc.WebSocketPort att funka, så nu fick det bli socket.io istället
+			// if(osc){
+			// 	// activate OSC communication if available
+			// 	var oscPort = new osc.WebSocketPort({
+			// 		url: val, // val shall contain the URL to your Web Socket server.
+			// 		metadata: true
+			// 	});
+			// 	oscPort.open();
+			// 	oscPort.on("message", oscMsg => {
+			// 		console.log("OSC", oscMsg);
+			// 	});
+			// }
+
+			if(io){
+				socket = io(val);
+				socket.on('serverToClient', msg => {
+					let address = msg.address.split("/");
+					let args = msg.args;
+					if(address[1] == "imusic"){
+
+						switch(address[2]){
+
+							case "play":
+							if(msg.args[0])iMus.play(address[3]);
+							break;
+
+							case "stop":
+							if(msg.args[0])iMus.stop();
+							break;
+
+							case "set":
+							iMus.select(address[3], msg.args[0]);
+							break;
+						}
+
+					}
+
+				});
+			}
+			break;
+		}
 	}
 
 	iMus.get = function(param){
