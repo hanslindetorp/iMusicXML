@@ -1120,10 +1120,7 @@ class GUI {
 		if(typeof dest == "string"){
 
 			if(window.webAudioXML){
-				let destElement = window.webAudioXML._xml.querySelector(dest);
-				if(destElement){
-					destination = destElement.audioObject;
-				}
+				destination = window.webAudioXML.getInputBus(dest);
 			}
 			if(!destination){
 				destination = iMus.objects[dest];
@@ -1132,7 +1129,7 @@ class GUI {
 		} else if(dest instanceof AudioObject || dest instanceof Bus || dest instanceof Bus2){
 			destination = dest;
 		}
-		if(!destination){console.log("No destination");return}
+		if(!destination){console.warn("No destination");return}
 		if(!destination.input){console.log("No input on destination");return}
 
 		this.output.disconnect(0);
