@@ -650,7 +650,7 @@ class GUI {
 
 
 	var buffers = {};
-	var timeWindow = 0.1; // s
+	var timeWindow = 0.3; // s
 	var checkQueueTime = 20; // ms
 
 
@@ -2642,8 +2642,9 @@ class GUI {
 		Section.prototype.addLoopTrack = function(urls){
 
 			if(typeof urls === "string"){urls = [urls];}
+			let tags = [];
 			if(!this.tags.length){
-				let tags = urlsToTags(urls);
+				tags = urlsToTags(urls);
 			}
 			// let tags = mergeArrays(urlsToTags(urls), this.tags);
 			//var tags = urlsToTags(urls).concat(this.tags);
@@ -6116,7 +6117,7 @@ class GUI {
 				section.tracks.forEach(track => {
 					let curState = track.active > 0;
 					let newState = track.getSoloState(key, value);
-					if(newState != curState){
+					if(typeof newState != "undefined" && newState != curState){
 						let nlb = track.getNextLegalBreak();
 						if(nlb){
 							nlbtl = Math.max(nlbtl, nlb.timeLeft);
@@ -6165,6 +6166,17 @@ class GUI {
 			}
 		}
 
+
+	}
+
+	iMus.next = function(){
+		if(!defaultInstance.currentSection){
+			iMus.play();
+		} else {
+			let i = defaultInstance.sections.indexOf(defaultInstance.currentSection);
+			i = ++i % defaultInstance.sections.length;
+			defaultInstance.sections[i].play();
+		}
 
 	}
 
@@ -6554,6 +6566,8 @@ class GUI {
 
 	var defaultInstance = new iMus();
 	//defaultInstance.addSection({tags: defaultSectionName});
+	// Ta bort denna tomma instans. Men det kräver också att kod
+	// som beror på den måste fixas som t.ex. iMus.set()
 	defaultInstance.addSection();
 	iMus.addSection = defaultInstance.addSection;
 
@@ -6776,10 +6790,19 @@ class GUI {
 							fn = e => iMusic.stop();
 							break;
 
+						break;
+
 						default:
-							fn = e => {
-								iMusic.select(commandName, val);
+							if(eventName == "input"){
+								fn = e => {
+									iMusic.select(commandName, e.target.value);
+								}
+							} else {
+								fn = e => {
+									iMusic.select(commandName, val);
+								}
 							}
+							
 							break;
 					}
 					el.addEventListener(eventName, fn);
@@ -7269,7 +7292,8 @@ class GUI {
 		window.webAudioXML.registerPlugin({
 			name: "iMusic",
 			variables: {},
-			init:  parseImusicXML
+			init:  parseImusicXML,
+			setVariable: (key, val) => iMusic.select(key, val)
 		});
 	} else {
 		// else, just parse iMusic when window is loaded
