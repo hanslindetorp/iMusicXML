@@ -3183,7 +3183,7 @@ class GUI {
 				// and not be disconnected
 				// BUT if timeToLegalBreak is shorter than the remaining part of the region
 				// (set by partLength) it will be faded and disconnected anyway
-
+				return;
 				let remainingTime = 0;
 				this.playingParts.forEach(part => {
 					let remainingPartTime = (part.lastTriggedTime + part.length) - (audioContext.currentTime + timeToLegalBreak);
@@ -6056,6 +6056,9 @@ class GUI {
 
 							case "play":
 							if(msg.args[0])iMus.play(address[3]);
+							if(window.waxml){
+								window.waxml.start(address[3]);
+							}
 							break;
 
 							case "stop":
@@ -6064,6 +6067,10 @@ class GUI {
 
 							case "set":
 							iMus.select(address[3], msg.args[0]);
+							if(window.waxml){
+								// det här är ju ett dumt upplägg men det blir bra när waxml och imusic gifter sig ;-)
+								window.waxml.setVariable(address[3], msg.args[0]);
+							}
 							break;
 						}
 
@@ -6170,6 +6177,7 @@ class GUI {
 	}
 
 	iMus.next = function(){
+		console.log("next");
 		if(!defaultInstance.currentSection){
 			iMus.play();
 		} else {
