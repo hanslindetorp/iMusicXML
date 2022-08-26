@@ -164,7 +164,7 @@ elementFormDefault="qualified">
 
     <xs:annotation>
       <xs:documentation>The imusic element is the root element. It typically contains arrangements but can also contain global motifs and leadins. The variables specified here will be global and affect all child elements if they don't have individual settings. This makes this element a good place for specifying tempo, timeSign etc.</xs:documentation>
-      <xs:documentation>Elements: &lt;arrangement&gt;, &lt;motif&gt; and &lt;leadin&gt;</xs:documentation>
+      <xs:documentation>Elements: arrangement, motif and leadin</xs:documentation>
       <xs:documentation>Attributes: version, audioPath, tempo, timeSign, suffix, showGUI, changeOnNext, fadeTime and loopLength</xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -193,7 +193,7 @@ elementFormDefault="qualified">
   <xs:element name="arrangement">
     <xs:annotation>
       <xs:documentation>An arrangement contains one or several tracks, motifs and leadins.</xs:documentation>
-      <xs:documentation>Elements: &lt;track&gt;, &lt;motif&gt; and &lt;leadin&gt;</xs:documentation>
+      <xs:documentation>Elements: track, motif and leadin</xs:documentation>
       <xs:documentation>Attributes: class, id, audioPath, tempo, timeSign, suffix, changeOnNext, fadeTime, loopLength and src.</xs:documentation>
     </xs:annotation>
 
@@ -224,7 +224,7 @@ elementFormDefault="qualified">
 
     <xs:annotation>
       <xs:documentation>A track typically plays a looped audiofile specified by the attribute 'src'. It can also contain multiple regions, each playing a separate audio file.</xs:documentation>
-      <xs:documentation>Elements: &lt;region&gt;</xs:documentation>
+      <xs:documentation>Elements: region</xs:documentation>
       <xs:documentation>Attributes: class, id, audioPath, suffix, changeOnNext, fadeTime, loopLength, src, partLength, upbeat, active, loopActive, retrig</xs:documentation>
     </xs:annotation>
 
@@ -258,7 +258,7 @@ elementFormDefault="qualified">
 
     <xs:annotation>
       <xs:documentation>A region typically plays an audiofile at a specified position. The audiofile is specified by the attribute 'src'. It can also contain multiple option to randomize the playback between different audio files each time the region is triggered.</xs:documentation>
-      <xs:documentation>Element: &lt;option&gt;</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
       <xs:documentation>Attributes:  src, pos, upbeat</xs:documentation>
     </xs:annotation>
 
@@ -293,7 +293,7 @@ elementFormDefault="qualified">
 
     <xs:annotation>
       <xs:documentation>A motif typically triggers a non-looped audiofile in sync with the tracks in the same arrangement. The audiofile is specified by the attribute 'src'. It can also contain multiple options, each playing a separate audio file. The quantize attribute defines the nearest musical value used for syncronizing the motif.</xs:documentation>
-      <xs:documentation>Element: &lt;option&gt;</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
       <xs:documentation>Attributes: class, id, active, src, upbeat, retrig, blockRetrig, repeat and release.</xs:documentation>
     </xs:annotation>
 
@@ -321,7 +321,7 @@ elementFormDefault="qualified">
     
     <xs:annotation>
       <xs:documentation>A leadin typically used to play a non-looped audiofile when transitioning from one arrangement to another. The audiofile is specified by the attribute 'src'. It triggers in sync with the tracks in the same arrangement and will align iself leading up to the following barline. The position is determained with the upbeat attribute</xs:documentation>
-      <xs:documentation>Element: &lt;option&gt;</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
       <xs:documentation>Attributes: class, id, active, src, upbeat, retrig</xs:documentation>
     </xs:annotation>
 
