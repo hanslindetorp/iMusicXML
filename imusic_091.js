@@ -3548,8 +3548,8 @@ class GUI {
 
 
 
-				if(this.parameters.release){
-					this.fadeOut(0, this.parameters.release);
+				if(this.parameters.fadeTime){
+					this.fadeOut(0, this.parameters.fadeTime);
 				}
 
 
