@@ -223,7 +223,7 @@ elementFormDefault="qualified">
   <xs:element name="track">
 
     <xs:annotation>
-      <xs:documentation>A track typically plays a looped audiofile. It can also contain multiple regions, each playing a separate audio file.</xs:documentation>
+      <xs:documentation>A track typically plays a looped audiofile specified by the attribute 'src'. It can also contain multiple regions, each playing a separate audio file.</xs:documentation>
       <xs:documentation>Elements: &lt;region&gt;</xs:documentation>
       <xs:documentation>Attributes: class, id, audioPath, suffix, changeOnNext, fadeTime, loopLength, src, partLength, upbeat, active, loopActive, retrig</xs:documentation>
     </xs:annotation>
@@ -257,7 +257,7 @@ elementFormDefault="qualified">
   <xs:element name="region">
 
     <xs:annotation>
-      <xs:documentation>A region typically plays an audiofile at a specified position. It can also contain multiple option to randomize the playback between different audio files each time the region is triggered.</xs:documentation>
+      <xs:documentation>A region typically plays an audiofile at a specified position. The audiofile is specified by the attribute 'src'. It can also contain multiple option to randomize the playback between different audio files each time the region is triggered.</xs:documentation>
       <xs:documentation>Element: &lt;option&gt;</xs:documentation>
       <xs:documentation>Attributes:  src, pos, upbeat</xs:documentation>
     </xs:annotation>
@@ -278,7 +278,7 @@ elementFormDefault="qualified">
   <xs:element name="option">
 
     <xs:annotation>
-      <xs:documentation>An option plays an audiofile when triggered. There is one file connected to one option. There can be multiple options in regions, motifs and leadins.</xs:documentation>
+      <xs:documentation>An option plays an audiofile when triggered. The audiofile is specified by the attribute 'src'. There is one file connected to one option. There can be multiple options in regions, motifs and leadins.</xs:documentation>
       <xs:documentation>Attributes: src, upbeat</xs:documentation>
     </xs:annotation>
 
@@ -292,7 +292,7 @@ elementFormDefault="qualified">
 
 
     <xs:annotation>
-      <xs:documentation>A motif typically triggers a non-looped audiofile in sync with the tracks in the same arrangement. It can also contain multiple options, each playing a separate audio file. The quantize attribute defines the nearest musical value used for syncronizing the motif.</xs:documentation>
+      <xs:documentation>A motif typically triggers a non-looped audiofile in sync with the tracks in the same arrangement. The audiofile is specified by the attribute 'src'. It can also contain multiple options, each playing a separate audio file. The quantize attribute defines the nearest musical value used for syncronizing the motif.</xs:documentation>
       <xs:documentation>Element: &lt;option&gt;</xs:documentation>
       <xs:documentation>Attributes: class, id, active, src, upbeat, retrig, blockRetrig, repeat and release.</xs:documentation>
     </xs:annotation>
@@ -320,7 +320,7 @@ elementFormDefault="qualified">
   <xs:element name="leadin">
     
     <xs:annotation>
-      <xs:documentation>A leadin typically used to play a non-looped audiofile when transitioning from one arrangement to another. It triggers in sync with the tracks in the same arrangement and will align iself leading up to the following barline. The position is determained with the upbeat attribute</xs:documentation>
+      <xs:documentation>A leadin typically used to play a non-looped audiofile when transitioning from one arrangement to another. The audiofile is specified by the attribute 'src'. It triggers in sync with the tracks in the same arrangement and will align iself leading up to the following barline. The position is determained with the upbeat attribute</xs:documentation>
       <xs:documentation>Element: &lt;option&gt;</xs:documentation>
       <xs:documentation>Attributes: class, id, active, src, upbeat, retrig</xs:documentation>
     </xs:annotation>
