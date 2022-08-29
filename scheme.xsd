@@ -58,7 +58,20 @@ elementFormDefault="qualified">
   </xs:simpleType>
 
 
+  <xs:simpleType name="audioPath">
+    <xs:annotation>
+      <xs:documentation>Relative or absolute path to the audio files used in elements inside this element.</xs:documentation>
+      <xs:documentation>It makes it unnecessary to specify the path for each audio file. Default is 'audio'.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="((http|https)*://)*([a-zA-Z0-9_\-/])+"></xs:pattern>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="fileName">
+    <xs:annotation>
+      <xs:documentation>File name. The directory can be omitted if 'audioPath' set on a parent element. The file extension (mp3, wav, ogg or m4a) can be omitted if 'suffix' is set on a parent element.</xs:documentation>
+    </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:pattern value="([a-zA-Z0-9_\-/])+|([a-zA-Z0-9_\-])+\.mp3|([a-zA-Z0-9_\-])+\.wav|([a-zA-Z0-9_\-])+\.ogg|([a-zA-Z0-9_\-])+\.m4a"/>
     </xs:restriction>
@@ -124,13 +137,6 @@ elementFormDefault="qualified">
   </xs:simpleType>
 
 
-  <xs:simpleType name="audioPath">
-    <xs:annotation>
-      <xs:documentation>Relative or absolute path to the audio files used in elements inside this element.</xs:documentation>
-      <xs:documentation>It makes it unnecessary to specify the path for each audio file. Default is 'audio'.</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:string"/>
-  </xs:simpleType>
 
 
   <xs:simpleType name="fadeTime">
@@ -152,24 +158,45 @@ elementFormDefault="qualified">
   </xs:simpleType>
 
 
-  <xs:attribute name="repeat" type="xs:integer"/>
-  <xs:attribute name="release" type="xs:integer"/>
+
+  <xs:simpleType name="voice">
+    <xs:annotation>
+      <xs:documentation>The output of this object is handled as a monophonic voice with all other objects tagged with the same instrument name. This means i.e. that triggering a motif temporarily mutes a track if they are set to the same voice. The feature is useful for having motifs or leadins altering the content of an instrument rather than adding a new instrument.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
 
 
   <!-- Element Groups -->
 
+  <xs:group name="imusic">
+    <xs:choice>
+      <xs:element ref="arrangement"/>
+      <xs:element ref="motif"/>
+      <xs:element ref="leadin"/>
+    </xs:choice>   
+  </xs:group>
 
-<xs:group name="imusic">
-  <xs:choice>
-    <xs:element ref="arrangement"/>
-    <xs:element ref="motif"/>
-    <xs:element ref="leadin"/>
-  </xs:choice>   
-</xs:group>
+  <xs:group name="arrangement">
+    <xs:choice>
+      <xs:element ref="track"/>
+      <xs:element ref="motif"/>
+      <xs:element ref="leadin"/>
+    </xs:choice>   
+  </xs:group>
+
+
+  <xs:group name="track">
+    <xs:choice>
+      <xs:element ref="region"/>
+      <xs:element ref="leadin"/>
+    </xs:choice>   
+  </xs:group>
 
 
 
-<!-- Elements -->
+  <!-- Elements -->
 
   <xs:element name="imusic">
 
@@ -178,16 +205,11 @@ elementFormDefault="qualified">
       <xs:documentation>Elements: arrangement, motif and leadin</xs:documentation>
       <xs:documentation>Attributes: version, audioPath, tempo, timeSign, suffix, showGUI, changeOnNext, fadeTime and loopLength</xs:documentation>
     </xs:annotation>
+
     <xs:complexType>
 
-    <xs:group ref="imusic" minOccurs="0" maxOccurs="unbounded"/>
-      <!-- <xs:sequence>
-        <xs:element ref="arrangement" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="motif" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="leadin" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence> -->
-
-      
+      <xs:group ref="imusic" minOccurs="0" maxOccurs="unbounded"/>
+        
       <xs:attribute name="version" type="xs:string"/>
       <xs:attribute name="audioPath" type="audioPath"/>
       <xs:attribute name="tempo" type="tempo"/>
@@ -211,11 +233,7 @@ elementFormDefault="qualified">
 
     <xs:complexType>
 
-      <xs:sequence>
-        <xs:element ref="track" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="motif" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="leadin" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
+      <xs:group ref="arrangement" minOccurs="0" maxOccurs="unbounded"/>
 
       <xs:attribute name="class" type="class"/>
       <xs:attribute name="id" type="id"/>
@@ -242,12 +260,11 @@ elementFormDefault="qualified">
 
     <xs:complexType>
 
-      <xs:sequence>
-        <xs:element ref="region" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
+      <xs:group ref="track" minOccurs="0" maxOccurs="unbounded"/>
 
       <xs:attribute name="class" type="class"/>
       <xs:attribute name="id" type="id"/>
+      <xs:attribute name="voice" type="voice"/>
       <xs:attribute name="audioPath" type="audioPath"/>
       <xs:attribute name="suffix" type="suffix"/>
       <xs:attribute name="src" type="fileName"/>
@@ -317,6 +334,7 @@ elementFormDefault="qualified">
 
       <xs:attribute name="class" type="xs:string"/>
       <xs:attribute name="id" type="xs:string"/>
+      <xs:attribute name="voice" type="voice"/>
 
       <xs:attribute name="src" type="fileName"/>
       <xs:attribute name="upbeat" type="meter"/>
@@ -345,6 +363,7 @@ elementFormDefault="qualified">
 
       <xs:attribute name="class" type="xs:string"/>
       <xs:attribute name="id" type="xs:string"/>
+      <xs:attribute name="voice" type="voice"/>
 
       <xs:attribute name="src" type="fileName"/>
       <xs:attribute name="upbeat" type="meter"/>
