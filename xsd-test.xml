@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<imusic
+  xmlns="https://www.w3schools.com"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.w3schools.com scheme.xsd"
+  version="1.0"
+  suffix="mp3">
+
+
+  <arrangement loopLength="4" tempo="120" timeSign="4/4" audioPath="//test/test1/">
+    <track fadeTime="100" src="audio/sound" active="1">
+      <leadin src="leadin1.mp3"></leadin>
+    </track>
+    <leadin src="test1.mp3"></leadin>
+  </arrangement>
+
+
+</imusic>
