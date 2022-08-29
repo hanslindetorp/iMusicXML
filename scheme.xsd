@@ -60,7 +60,7 @@ elementFormDefault="qualified">
 
   <xs:simpleType name="fileName">
     <xs:restriction base="xs:string">
-      <xs:pattern value="([a-zA-Z_\-/])+|([a-zA-Z_\-])+\.mp3|([a-zA-Z_\-])+\.wav|([a-zA-Z_\-])+\.ogg|([a-zA-Z_\-])+\.m4a"/>
+      <xs:pattern value="([a-zA-Z0-9_\-/])+|([a-zA-Z0-9_\-])+\.mp3|([a-zA-Z0-9_\-])+\.wav|([a-zA-Z0-9_\-])+\.ogg|([a-zA-Z0-9_\-])+\.m4a"/>
     </xs:restriction>
   </xs:simpleType>
 
