@@ -15,361 +15,474 @@
 	var LENGTH = "l";
 
 
+
+
+	class VoiceController {
+
+		constructor(){
+			this.counter = 0;
+			this.voices = [];
+			this.fadeTime = 0.001;
+		}
+
+		addVoiceObject(name, priority, gainObject, fadeTime = this.fadeTime){
+			let voiceNames = name.split(" ").map(str => str.trim());
+			this.voices.push(new VoiceObject(this.counter, voiceNames, priority, gainObject, fadeTime));
+			return this.counter++;
+		}
+
+		removeVoiceObject(id){
+			this.voices = this.voices.filter(voice.id !== id);
+		}
+
+		getVoiceObject(id){
+			return this.voices.find(voice => voice.id == id);
+		}
+
+		getVoiceGroup(targetGroups, id){
+			return this.voices.filter(voice => {
+				// let include = voice.name == name;
+				let include = voice.groups.find(group => targetGroups.includes(group)) ? true : false;
+				if(typeof id !== "undefined"){
+					// omit one voiceObject if specified
+					include = include && voice.id != id;
+				}
+				return include;
+			});
+		}
+
+		getVoicePriorityGroup(name, priority){
+			return this.voices.filter(voice => voice.groups.find(str => str == name) && voice.priority == priority);
+		}
+
+		getLowerVoicePriorityGroups(priority){
+			return this.voices.filter(voice => voice.groups.find(str => str == name) && voice.priority < priority);
+		}
+
+		playVoiceObject(id, startTime, endTime, voiceGroups){
+			let voiceObject = this.getVoiceObject(id);
+			if(voiceObject){
+				this.getVoiceGroup(voiceGroups || voiceObject.groups, id).forEach(obj => {
+					obj.mute(startTime, endTime);
+				}); 
+			}
+		}
+
+	}
+
+
+	class VoiceObject {
+		constructor(id, groups, priority, gainObject, fadeTime){
+			this.id = id;
+			this.groups = groups;
+			this.priority = priority;
+			this.gainObject = gainObject;
+			this.fadeTime = fadeTime;
+
+			this.startMuteTime = 0;
+			this.endMuteTime = 0;
+		}
+		play(startTime, endTime){
+			// unmute if startTime is earlier than any scheduled fades
+			this.gainObject.gain.cancelScheduledValues(startTime);
+			this.gainObject.gain.setTargetAtTime(1, startTime, this.fadeTime);
+		}
+
+		mute(startTime, endTime){
+			let currentTime = this.gainObject.context.currentTime;
+
+			this.gainObject.gain.cancelScheduledValues(0);
+			
+			// find earliest startTime (if several triggers interfers) 
+			this.startMuteTime = this.startMuteTime < currentTime ? startTime : Math.min(startTime, this.startMuteTime);
+			this.endMuteTime = this.endMuteTime < currentTime ? endTime : Math.max(endTime, this.endMuteTime);
+
+			this.gainObject.gain.setTargetAtTime(0, this.startMuteTime, this.fadeTime);
+			this.gainObject.gain.setTargetAtTime(1, this.endMuteTime, this.fadeTime);
+
+		}
+	}
+
+
+
 	// ******************************************************
 	// GUI
 
 
-class GUI {
+	class GUI {
 
-	constructor(target = document.body){
-
-		let style = document.createElement("style");
-		style.innerHTML = `
-
-			* {
-				font-family: sans-serif;
-			}
-			#iMusic-GUI {
-				top: 0px;
-				left: 0px;
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				overflow: auto;
-				padding: 1em;
-				transition: 0.5s;
-				background-color: #eef;
-				color: black;
-			}
-
-			#iMusic-GUI > button {
-				border-radius: 5px;
-				padding: 5px;
-				margin-top: 0px;
-				margin-left: 0px;
-			}
-
-			#iMusic-GUI > button.close {
-				min-width: 40px;
-				font-weight: bold;
-				background-color: red;
-			}
+		constructor(target = document.body){
 
 
-			#iMusic-GUI > button.control {
-				font-weight: bold;
-			}
+			let style = document.createElement("style");
+			style.innerHTML = `
 
-			#iMusic-GUI > p {
-				width: 80%;
-			}
-
-			#iMusic-GUI div > span.arrangement {
-				margin-right: 20px;
-			}
-			#iMusic-GUI button.tag {
-				border-radius: 5px;
-				padding: 5px;
-				min-width: 100px;
-			}
-			#iMusic-GUI span.label {
-				display: inline-block;
-				width: 150px;
-				overflow: hidden;
-			}
-			#iMusic-GUI span.numOutput {
-				font-size: 80%;
-				display: inline-block;
-				text-align: right;
-				padding: 2px;
-				border: 1px solid grey;
-				border-radius: 5px;
-				min-width: 40px;
-			}
-			#iMusic-GUI input[type='range'] {
-				width: 200px;
-				margin: 0px 20px;
-				vertical-align: middle;
-			}
-		`;
-
-
-		var instID = 1;
-
-		iMus.instances.forEach(inst => {
-
-			let sectionTags = [];
-			let motifTags = [];
-			let selectGroups = {};
-			let el, row, span;
-
-			inst.sections.forEach(section => {
-
-				section.tags.forEach(tag => {
-						if(!inArray(tag, sectionTags) && tag.length){sectionTags.push(tag)}
-				});
-
-				let selectGroup = section.parameters["select-group"] || section.parameters["select-variable"];
-				let selectValues = section.parameters["select-value"];
-				let values;
-				if(selectGroup){
-					if(!selectGroups[selectGroup]){
-						selectGroups[selectGroup] = [];
-					}
-					values = selectGroups[selectGroup];
-					selectValues.forEach(val => {
-						if(!inArray(val, values)){
-							values.push(val);
-						}
-					});
+				* {
+					font-family: sans-serif;
+				}
+				#iMusic-GUI {
+					top: 0px;
+					left: 0px;
+					width: 100%;
+					height: 100%;
+					position: absolute;
+					overflow: auto;
+					padding: 1em;
+					transition: 0.5s;
+					background-color: #eef;
+					color: black;
 				}
 
-				section.tracks.forEach(track => {
-					track.soloGroups.forEach(group => {
-						if(!selectGroups[group.name]){
-							selectGroups[group.name] = [];
+				#iMusic-GUI > button {
+					border-radius: 5px;
+					padding: 5px;
+					margin-top: 0px;
+					margin-left: 0px;
+				}
+
+				#iMusic-GUI > button.close {
+					min-width: 40px;
+					font-weight: bold;
+					background-color: red;
+				}
+
+
+				#iMusic-GUI > button.control {
+					font-weight: bold;
+				}
+
+				#iMusic-GUI > p {
+					width: 80%;
+				}
+
+				#iMusic-GUI div > span.arrangement {
+					margin-right: 20px;
+				}
+				#iMusic-GUI button.tag {
+					border-radius: 5px;
+					padding: 5px;
+					min-width: 100px;
+				}
+				#iMusic-GUI span.label {
+					display: inline-block;
+					width: 150px;
+					overflow: hidden;
+				}
+				#iMusic-GUI span.numOutput {
+					font-size: 80%;
+					display: inline-block;
+					text-align: right;
+					padding: 2px;
+					border: 1px solid grey;
+					border-radius: 5px;
+					min-width: 40px;
+				}
+				#iMusic-GUI input[type='range'] {
+					width: 200px;
+					margin: 0px 20px;
+					vertical-align: middle;
+				}
+			`;
+
+
+			var instID = 1;
+
+			iMus.instances.forEach(inst => {
+
+				let sectionTags = [];
+				let motifTags = [];
+				let selectGroups = {};
+				let el, row, span;
+
+				inst.sections.forEach(section => {
+
+					section.tags.forEach(tag => {
+							if(!inArray(tag, sectionTags) && tag.length){sectionTags.push(tag)}
+					});
+
+					let selectGroup = section.parameters["select-group"] || section.parameters["select-variable"];
+					let selectValues = section.parameters["select-value"];
+					let values;
+					if(selectGroup){
+						if(!selectGroups[selectGroup]){
+							selectGroups[selectGroup] = [];
 						}
-						values = selectGroups[group.name];
-						group.value.forEach(val => {
+						values = selectGroups[selectGroup];
+						selectValues.forEach(val => {
 							if(!inArray(val, values)){
 								values.push(val);
 							}
 						});
-					});
-				});
-
-
-				section.motifs.forEach(motif => {
-					motif.tags.forEach(tag => {
-							if(!inArray(tag, motifTags) && tag.length){motifTags.push(tag)}
-					});
-				});
-
-			});
-
-			inst.motifs.forEach(motif => {
-				motif.tags.forEach(function(tag){
-					if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
-						if(!tag.includes(".")){
-							// avoid file names
-							motifTags.push(tag);
-						}
 					}
+
+					section.tracks.forEach(track => {
+						track.soloGroups.forEach(group => {
+							if(!selectGroups[group.name]){
+								selectGroups[group.name] = [];
+							}
+							values = selectGroups[group.name];
+							group.value.forEach(val => {
+								if(!inArray(val, values)){
+									values.push(val);
+								}
+							});
+						});
+					});
+
+
+					section.motifs.forEach(motif => {
+						motif.parameters.class.split(" ").forEach(className => {
+							className = className.trim();
+							if(className.length && !inArray(className, motifTags) && !inArray(className, sectionTags)){
+								motifTags.push(className);
+							}
+						});
+						// motif.tags.forEach(tag => {
+						// 		if(!inArray(tag, motifTags) && tag.length){
+						// 			if(!tag.includes(".")){
+						// 				// avoid file names
+						// 				motifTags.push(tag)
+						// 			}
+						// 		}
+						// });
+					});
+
 				});
-			});
 
-
-
-			let shadowContainer = document.createElement("div");
-			shadowContainer.style.width = "0%";
-			shadowContainer.style.height = "0%";
-			shadowContainer.style.display = "none";
-			shadowContainer.style.overflow = "visible";
-			target.appendChild(shadowContainer);
-
-			let shadowElement = shadowContainer.attachShadow({mode: 'open'});
-	    	shadowElement.appendChild(style);
-
-			let container = document.createElement("div");
-			shadowElement.appendChild(container);
-
-			container.id = "iMusic-GUI";
-			var iMusBtn;
-			if(iMus.getDefaultInstance().parameters.showGUI == "true"){
-				iMusBtn = document.createElement("button");
-				iMusBtn.innerHTML = "iMusic";
-				iMusBtn.style.position = "absolute";
-				target.appendChild(iMusBtn);
-				iMusBtn.addEventListener("click", e => {
-					e.target.style.display = "none";
-					shadowContainer.style.width = "100%";
-					shadowContainer.style.height = "100%";
-					shadowContainer.style.display = "block";
+				inst.motifs.forEach(motif => {
+					motif.parameters.class.split(" ").forEach(className => {
+						className = className.trim();
+						if(className.length && !inArray(className, motifTags) && !inArray(className, sectionTags)){
+							motifTags.push(className);
+						}
+					});
+					// motif.tags.forEach(function(tag){
+					// 	if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
+					// 		if(!tag.includes(".")){
+					// 			// avoid file names
+					// 			motifTags.push(tag);
+					// 		}
+					// 	}
+					// });
 				});
-			}
 
-			el = document.createElement("button");
-			el.innerHTML = "X";
-			el.classList.add("close");
-			container.appendChild(el);
-			el.addEventListener("click", e => {
-				iMusBtn.style.display = "block";
-				shadowContainer.style.width = "0%";
-				shadowContainer.style.height = "0%";
-				shadowContainer.style.display = "none";
-			});
-
-			el = document.createElement("button");
-			el.innerHTML = "PLAY";
-			el.classList.add("control");
-			container.appendChild(el);
-			el.addEventListener("click", e => iMusic.play());
-
-			el = document.createElement("button");
-			el.innerHTML = "STOP";
-			el.classList.add("control");
-			container.appendChild(el);
-			el.addEventListener("click", e => iMusic.stop());
+				let shadowElement;
+				if(window.webAudioXML){
+					shadowElement = window.webAudioXML.GUI.HTML;
+				} else {
+					let shadowContainer = document.createElement("div");
+					shadowContainer.style.width = "0%";
+					shadowContainer.style.height = "0%";
+					shadowContainer.style.display = "none";
+					shadowContainer.style.overflow = "visible";
+					target.appendChild(shadowContainer);
 
 
-			el = document.createElement("h1");
-			el.innerHTML = "iMusic";
-			container.appendChild(el);
+					let shadowElement = shadowContainer.attachShadow({mode: 'open'});
+					shadowElement.appendChild(style);
 
-			// PLAY BUTTONS
-			el = document.createElement("h3");
-			el.innerHTML = "class (arrangements + leadins):";
-			container.appendChild(el);
+					
+					var iMusBtn;
+					if(iMus.getDefaultInstance().parameters.showGUI == "true"){
+						iMusBtn = document.createElement("button");
+						iMusBtn.innerHTML = "iMusic";
+						iMusBtn.style.position = "absolute";
+						target.appendChild(iMusBtn);
+						iMusBtn.addEventListener("click", e => {
+							e.target.style.display = "none";
+							shadowContainer.style.width = "100%";
+							shadowContainer.style.height = "100%";
+							shadowContainer.style.display = "block";
+						});
+					}
 
-			// el = document.createElement("p");
-			// el.innerHTML = `Give arrangements and motifs a class name in the file <a target="_blank" href='music.xml'>music.xml</a>.
-			// This generates one button for each class name. Use the buttons to play the corresponding
-			// arrangements/motifs/leadins.`;
-			// container.appendChild(el);
+					el = document.createElement("button");
+					el.innerHTML = "X";
+					el.classList.add("close");
+					container.appendChild(el);
+					el.addEventListener("click", e => {
+						iMusBtn.style.display = "block";
+						shadowContainer.style.width = "0%";
+						shadowContainer.style.height = "0%";
+						shadowContainer.style.display = "none";
+					});
+				}
+				let container = document.createElement("div");
+				container.id = "iMusic-GUI";
+				shadowElement.prepend(container);
 
-			row = document.createElement("div");
-			container.appendChild(row);
-			//
-			// span = document.createElement("span");
-			// span.classList.add("arrangement");
-			// row.appendChild(span);
 
-			sectionTags.forEach(tag => {
+				el = document.createElement("h1");
+				el.innerHTML = "iMusic";
+				container.appendChild(el);
+
 				el = document.createElement("button");
-				el.innerHTML = tag;
-				el.classList.add("tag");
-				row.appendChild(el);
+				el.innerHTML = "PLAY";
+				el.classList.add("control");
+				container.appendChild(el);
+				el.addEventListener("click", e => iMusic.play());
 
-				el.addEventListener("click", e => {
-					iMusic.play(tag);
-				});
-			});
-
-			el = document.createElement("h3");
-			el.innerHTML = "class (separate motifs):";
-			container.appendChild(el);
-
-			row = document.createElement("div");
-			container.appendChild(row);
-
-			// span = document.createElement("span");
-			// span.classList.add("motifs");
-			// row.appendChild(span);
-
-			motifTags.forEach(tag => {
 				el = document.createElement("button");
-				el.innerHTML = tag;
-				el.classList.add("tag");
-				row.appendChild(el);
+				el.innerHTML = "STOP";
+				el.classList.add("control");
+				container.appendChild(el);
+				el.addEventListener("click", e => iMusic.stop());
 
-				el.addEventListener("click", e => {
-					iMusic.play(tag);
+
+				// PLAY BUTTONS
+				el = document.createElement("h3");
+				el.innerHTML = "class (arrangements + leadins):";
+				container.appendChild(el);
+
+				// el = document.createElement("p");
+				// el.innerHTML = `Give arrangements and motifs a class name in the file <a target="_blank" href='music.xml'>music.xml</a>.
+				// This generates one button for each class name. Use the buttons to play the corresponding
+				// arrangements/motifs/leadins.`;
+				// container.appendChild(el);
+
+				row = document.createElement("div");
+				container.appendChild(row);
+				//
+				// span = document.createElement("span");
+				// span.classList.add("arrangement");
+				// row.appendChild(span);
+
+				sectionTags.forEach(tag => {
+					el = document.createElement("button");
+					el.innerHTML = tag;
+					el.classList.add("tag");
+					row.appendChild(el);
+
+					el.addEventListener("click", e => {
+						iMusic.play(tag);
+					});
 				});
-			});
 
+				el = document.createElement("h3");
+				el.innerHTML = "class (separate motifs):";
+				container.appendChild(el);
 
-			el = document.createElement("h3");
-			el.innerHTML = "follow-variables: (e.g. intensity)";
-			container.appendChild(el);
-
-
-			// el = document.createElement("p");
-			// el.innerHTML = `Give the tracks different select-group and select-values to
-			// make a variable control the dynamics by muting and unmuting them.
-			// Use the slider (for numeric values) or menu (string values) to select
-			// different tracks depending on their select-group and select-value settings.`;
-			// container.appendChild(el);
-
-			// selection sliders and radio buttons
-			Object.keys(selectGroups).forEach(key => {
-
-				let value = selectGroups[key];
-				let range = new Range(value);
 				row = document.createElement("div");
 				container.appendChild(row);
 
-				el = document.createElement("span");
-				el.innerHTML = key;
-				el.classList.add("label");
-				row.appendChild(el);
+				// span = document.createElement("span");
+				// span.classList.add("motifs");
+				// row.appendChild(span);
+
+				motifTags.forEach(tag => {
+					el = document.createElement("button");
+					el.innerHTML = tag;
+					el.classList.add("tag");
+					row.appendChild(el);
+
+					el.addEventListener("click", e => {
+						iMusic.play(tag);
+					});
+				});
 
 
-				switch (range.type) {
-					case "number":
-						// slider
-						//let minVal = Math.min(0, range.min);
-						let minVal = range.min;
+				el = document.createElement("h3");
+				el.innerHTML = "follow-variables: (e.g. intensity)";
+				container.appendChild(el);
 
-						el = document.createElement("input");
-						el.setAttribute("type", "range");
-						el.setAttribute("min", minVal);
-						el.setAttribute("max", range.max);
-						el.setAttribute("value", minVal);
-						el.setAttribute("class", "slider");
-						row.appendChild(el);
-						let numOutput = document.createElement("span");
-						numOutput.classList.add("numOutput");
-						row.appendChild(numOutput);
 
-						numOutput.innerHTML = minVal;
-						iMusic.select(key, minVal);
+				// el = document.createElement("p");
+				// el.innerHTML = `Give the tracks different select-group and select-values to
+				// make a variable control the dynamics by muting and unmuting them.
+				// Use the slider (for numeric values) or menu (string values) to select
+				// different tracks depending on their select-group and select-value settings.`;
+				// container.appendChild(el);
 
-						el.addEventListener("input", e => {
-							numOutput.innerHTML = e.target.value;
-							iMusic.select(key, parseFloat(e.target.value).toFixed(2));
-						});
-						break;
-					case "string":
-						// radio
-						let popMenu = document.createElement("select");
-						value.forEach(str => {
+				// selection sliders and radio buttons
+				Object.keys(selectGroups).forEach(key => {
 
-							//
-							// el = document.createElement("input");
-							// el.value = str;
-							//
-							// let id = key + "-" + str;
-							// el.id = id;
-							// el.name = key;
-							// el.type = "radio";
-							// row.appendChild(el);
-							//
-							// el.addEventListener("change", e => {
-							// 	iMusic.select(key, e.target.value);
-							// });
-							//
-							// el = document.createElement("label");
-							// el.innerHTML = str;
-							// el.for = id;
+					let value = selectGroups[key];
+					let range = new Range(value);
+					row = document.createElement("div");
+					container.appendChild(row);
 
-							el = document.createElement("option");
-							el.value = str;
-							el.innerHTML = str;
-							popMenu.appendChild(el);
+					el = document.createElement("span");
+					el.innerHTML = key;
+					el.classList.add("label");
+					row.appendChild(el);
 
-						});
-						popMenu.addEventListener("change", e => {
-							iMusic.select(key, e.target.value);
-						});
-						iMusic.select(key, value[0]);
-						row.appendChild(popMenu);
-						break;
-					default:
 
-				}
+					switch (range.type) {
+						case "number":
+							// slider
+							//let minVal = Math.min(0, range.min);
+							let minVal = range.min;
+
+							el = document.createElement("input");
+							el.setAttribute("type", "range");
+							el.setAttribute("min", minVal);
+							el.setAttribute("max", range.max);
+							el.setAttribute("value", minVal);
+							el.setAttribute("class", "slider");
+							row.appendChild(el);
+							let numOutput = document.createElement("span");
+							numOutput.classList.add("numOutput");
+							row.appendChild(numOutput);
+
+							numOutput.innerHTML = minVal;
+							iMusic.select(key, minVal);
+
+							el.addEventListener("input", e => {
+								numOutput.innerHTML = e.target.value;
+								iMusic.select(key, parseFloat(e.target.value).toFixed(2));
+							});
+							break;
+						case "string":
+							// radio
+							let popMenu = document.createElement("select");
+							value.forEach(str => {
+
+								//
+								// el = document.createElement("input");
+								// el.value = str;
+								//
+								// let id = key + "-" + str;
+								// el.id = id;
+								// el.name = key;
+								// el.type = "radio";
+								// row.appendChild(el);
+								//
+								// el.addEventListener("change", e => {
+								// 	iMusic.select(key, e.target.value);
+								// });
+								//
+								// el = document.createElement("label");
+								// el.innerHTML = str;
+								// el.for = id;
+
+								el = document.createElement("option");
+								el.value = str;
+								el.innerHTML = str;
+								popMenu.appendChild(el);
+
+							});
+							popMenu.addEventListener("change", e => {
+								iMusic.select(key, e.target.value);
+							});
+							iMusic.select(key, value[0]);
+							row.appendChild(popMenu);
+							break;
+						default:
+
+					}
+
+				});
+				instID++;
 
 			});
-			instID++;
+		}
 
-		});
+
+		setCurrentSection(currentSection){
+
+		}
+
 	}
-
-
-	setCurrentSection(currentSection){
-
-	}
-
-}
 
 
 
@@ -437,6 +550,7 @@ class GUI {
 
 		if(div == "off"){
 			// One year ;-)
+			// good for non-looped tracks
 			return 60 * 60 * 24 * 365;
 		} else {
 			ts = ts || this.parameters.timeSign;
@@ -656,12 +770,13 @@ class GUI {
 
 
 
-	function playSound(obj, time, callBackOnStart, callBackOnFinish, track) {
+	function playSound(obj, time, callBackOnStart, callBackOnFinish, track, crop = 0) {
 
 		// console.log(audioContext.currentTime);
 		// check if source is already played
 		// if so, disconnect
 		time = time || 0;
+		
 
 		if(track){
 	 		if(track.parameters.randomOffset){
@@ -798,9 +913,10 @@ class GUI {
 
 		 		// play
 				if (typeof source.start === 'undefined'){
-					source.noteOn(time);
+					// obsolete. Used in Safari ages ago.
+					source.noteOn(time, crop);
 				}else{
-					source.start(time);
+					source.start(time, crop);
 		 		}
 
 		 		obj.counter = ++obj.counter || 1;
@@ -1012,47 +1128,16 @@ class GUI {
 
 		this.parameters = this.initParameters(o);
 
-		//this.splitter = audioContext.createChannelSplitter();
-
-		// these parameters are not settable
-
-		//this.splitter.channelCount = 1; Not allowed
-		//this.splitter.channelCountMode = "explicit";
-		//this.splitter.channelInterpretation = "discrete";
-
-
 		let webAudioDest;
-		// if(o.output && window.webAudioXML){
-		// 	let el = window.webAudioXML._xml.querySelector(o.output);
-		// 	if(el){webAudioDest = el.audioObject.input}
-		// }
 		var destination = webAudioDest || o.destination || audioContext.destination;
 
 		this.output = createGainNode();
 		this.output.gain.value = (typeof o.volume == "number") ? o.volume : 1;
-		this.output.connect(destination);
+		
 
-		// this.compressor = audioContext.createDynamicsCompressor();
-		// this.compressor.connect(this.output);
-		// this.compressor.ratio.value = 1;
-
-
-		// this.panner = audioContext.createPanner();
-		// this.panner.setPosition(0,0,0);
-		// this.panner.connect(this.output);
-
-		// this.filter = audioContext.createBiquadFilter();
-		// this.filter.frequency.value = 20000;
-		// this.filter.connect(this.output);
-
-		// this.inserts = [];
-		// this.inserts.push(this.filter);
-
-	  this.input = createGainNode();
-		this.input.connect(this.output);
-		// this.sends = {};
-
-		// this.channelMerger = o.channelMerger || self.channelMerger;
+	  	this.input = createGainNode();
+	  	this.voiceGain = createGainNode();
+		this.input.connect(this.voiceGain).connect(this.output).connect(destination);
 
 
 		return this;
@@ -2872,9 +2957,11 @@ class GUI {
 
 		Section.prototype.getMaxLeadInUpbeatOffset = function(){
 			var maxOffset = 0;
-			this.leadIns.forEach(function(leadIn){
-				maxOffset = Math.max(maxOffset, leadIn.getMaxUpbeatOffset());
-			});
+			if(this.leadIns){
+				this.leadIns.forEach(function(leadIn){
+					maxOffset = Math.max(maxOffset, leadIn.getMaxUpbeatOffset());
+				});
+			}
 			return maxOffset;
 		}
 
@@ -2957,6 +3044,7 @@ class GUI {
 			this.playing = false;
 
 
+
 			// active is a number value between 0 and 1 that controls the the random factor
 			// to play or not to play a part on an active track
 			// 0 = muted = no parts will play
@@ -2977,6 +3065,12 @@ class GUI {
 			}
 
 			this.parameters = this.initParameters(params, section.parameters);
+
+
+
+			if(this.parameters.voice){
+				this.parameters.voiceObjectID = iMus.voiceController.addVoiceObject(this.parameters.voice, 0, this.bus.voiceGain, this.parameters.fadeTime);
+			}
 
 			var beatDuration = self.getBeatDuration(); // !!
 			var barDuration = self.getBarDuration();
@@ -3456,10 +3550,10 @@ class GUI {
 			this.type = "motif";
 
 			var me = this;
-			var beatDuration = self.getBeatDuration();
 
-			var parentObj = section || defaultInstance;
-			o.quantize = getTimeSign(o.quantize || parentObj.parameters.quantize || self.parameters.quantize, parentObj.parameters.timeSign);
+			this.parentObj = section || defaultInstance;
+			var beatDuration = this.parentObj.getBeatDuration();
+			o.quantize = getTimeSign(o.quantize || this.parentObj.parameters.quantize || self.parameters.quantize, this.parentObj.parameters.timeSign);
 
 			this.volume = o.volume || 1;
 			this.parameters = this.initParameters(o, self.parameters);
@@ -3477,6 +3571,10 @@ class GUI {
 			this.parameters.channelMerger = self.channelMerger;
 			this.bus = new Bus(this.parameters);
 
+			if(this.parameters.voice){
+				this.parameters.voiceObjectID = iMus.voiceController.addVoiceObject(this.parameters.voice, 1, this.bus.voiceGain, this.parameters.fadeTime/1000);
+			}
+
 			if(this.parameters.output){
 				this.bus.connect(this.parameters.output);
 			}
@@ -3486,7 +3584,11 @@ class GUI {
 
 			this.active = typeof o.active === "number" ? o.active : 1;
 			this.sounds = [];
-			this.offset = -self.getTime(this.parameters.upbeat);
+			this.offset = -this.parentObj.divisionToTime(this.parameters.upbeat);
+			this.changeOnNext = this.parentObj.divisionToTime(this.parameters.changeOnNext);
+			this.parameters.length = this.parentObj.divisionToTime(this.parameters.length);
+
+			// this.parameters.length
 
 			var obj;
 			var url;
@@ -3514,13 +3616,22 @@ class GUI {
 
 					// length
 					if(obj.length){
-						var length = getTimeSign(obj.length);
-						obj.length = length.nominator * beatDuration * self.parameters.timeSign.denominator / length.denominator;
+						obj.length = this.parentObj.divisionToTime(obj.length);
+
+						// var length = getTimeSign(obj.length);
+						// obj.length = length.nominator * beatDuration * this.parentObj.parameters.timeSign.denominator / length.denominator;
+					} else {
+						// default one beat
+						// obj.length = beatDuration;
 					}
 
+					if(obj.voice){
+						obj.voice = obj.voice.split(" ").map(str => str.trim());
+					}
 
-					obj.offset = -self.getTime(obj.upbeat || this.parameters.upbeat);
-					obj.offset = obj.offset || 0;
+					obj.changeOnNext = this.parentObj.divisionToTime(this.parameters.changeOnNext);
+					obj.offset = -this.parentObj.divisionToTime(obj.upbeat) || this.offset || 0;
+
 				} else {
 
 					console.error("Motif url is not correct: " + url);
@@ -3547,9 +3658,10 @@ class GUI {
 				if(!this.active){return}
 
 
-
+				// I'm not sure what this is for. It seems to case problems, making the motifs
+				// staying at zero volume
 				if(this.parameters.fadeTime){
-					this.fadeOut(0, this.parameters.fadeTime);
+						//this.fadeOut(0, this.parameters.fadeTime);
 				}
 
 
@@ -3647,20 +3759,46 @@ class GUI {
 					this.url.push(targetSound);
 				}
 				//var targetSound = targetSounds[Math.floor(Math.random()*targetSounds.length)];
+				let crop = 0;
 
 				if(this.parameters.quantize != "off"){
 					// move to next legal Q if time is to early
-					var t = Qtime + targetSound.offset;
+					var t = Qtime + (targetSound ? targetSound.offset : 0);
 
 					if(this.parameters.type != "leadIn"){
+
+						// Motifs are always played at the next Q-time.
+						// Leadins are only played if they fit BEFORE the 
+						// next Q-time
 						while(t < audioContext.currentTime) {
 							t+=Q;
 						}
 					} else {
+						// Qtime += Q; // detta blev fel
 						if(t < audioContext.currentTime){
-							// don't play a leadin if it's too late
-							console.log(`Too late: ${t, audioContext.currentTime, targetSound.offset}`);
-							return;
+							
+
+							// If a leadin has changeOnNext set, then make a cut-in
+							let ChOn = targetSound.changeOnNext || this.changeOnNext;
+							let offset = targetSound.offset || this.offset;
+							if(ChOn){
+								t += Q; // next Q-point i.e. bar
+								let nrOfChOn = parseInt(timeToQ / ChOn);
+								if(!nrOfChOn){
+									// don't play a leadin if it's way too late (less than one changeOnNext-unit)
+									return;
+								}
+								crop = Math.abs(offset) - nrOfChOn * ChOn;
+								t -= nrOfChOn * ChOn;
+
+								if(iMus.debug){
+									console.log({time: t, Q: Q, nrOfChOn: nrOfChOn, crop: crop})	
+								}
+							} else {
+								// don't play a leadin if it's too late
+								console.log(`Too late: ${t, audioContext.currentTime, targetSound.offset}`);
+								return;
+							}
 						}
 					}
 				} else {
@@ -3700,7 +3838,23 @@ class GUI {
 					if(that.callBackOnFinish){that.callBackOnFinish();}
 				}
 
-				var chosenURL = playSound(this, t, this.callBackOnStart, doOnFinishPlaying);
+
+				// This is problematic for various reasons. This.url is set to (potentially) multiple 
+				// sound objects and the random selection is done in the playSound() method. This means 
+				// that the Motif object needs to retrieve which one was set to do clever things depending on it. 
+				var chosenURL = playSound(this, t, this.callBackOnStart, doOnFinishPlaying, undefined, crop);
+
+
+				if(this.parameters.voiceObjectID){
+					let endTime;
+					if(this.parameters.type == "leadIn"){
+						endTime = Qtime;
+					} else {
+						let length = chosenURL.length || this.parameters.length || this.parentObj.getBeatDuration();
+						endTime = t + length;
+					}
+					iMus.voiceController.playVoiceObject(this.parameters.voiceObjectID, t, endTime, chosenURL.voice);
+				}
 
 				switch(this.parameters.retrig){
 
@@ -3806,9 +3960,13 @@ class GUI {
 		Motif.prototype.getMaxUpbeatOffset = function(){
 
 			var maxOffset = 0;
-			this.sounds.forEach(function(sound){
-				maxOffset = Math.min(maxOffset, sound.offset);
-			});
+			if(this.sounds){
+				this.sounds.forEach(function(sound){
+					if(sound){
+						maxOffset = Math.min(maxOffset, sound.offset);
+					}
+				});
+			}
 
 			return -maxOffset;
 		}
@@ -3817,7 +3975,9 @@ class GUI {
 
 			var minOffset = -this.getBarDuration();
 			this.sounds.forEach(function(sound){
-				minOffset = Math.max(minOffset, sound.offset);
+				if(sound){
+					minOffset = Math.max(minOffset, sound.offset);
+				}
 			});
 
 			return -minOffset;
@@ -3958,6 +4118,7 @@ class GUI {
 
 				case "string":
 				if(pos == "off"){
+					// this is to give non-looped track a VERY long loop length
 					 time = 60 * 60 * 24 * 365;
 				} else {
 					var obj = posStringToObject(pos);
@@ -5712,14 +5873,20 @@ class GUI {
 
 
 
-		for (let i in attributes){
-			if(attributes.hasOwnProperty(i)){
-				let param = attributes[i].name;
-				let value = typeFixParam(param, attributes[i].value);
-				obj[param] = value;
+		// for (let i in attributes){
+		// 	if(attributes.hasOwnProperty(i)){
+		// 		let param = attributes[i].name;
+		// 		let value = typeFixParam(param, attributes[i].value);
+		// 		obj[param] = value;
+		// 	}
+		// }
+		[...attributes].forEach(attr => {
+			if(attr.name){
+				let value = typeFixParam(attr.name, attr.value);
+				obj[attr.name] = value;
 			}
+		});
 
-		}
 		return obj;
 	}
 
@@ -6583,6 +6750,8 @@ class GUI {
 
 	iMus.variations = {};
 
+	iMus.voiceController = new VoiceController();
+
 
 	iMus.setVariation = function(groupID, val){
 		iMus.variations[groupID] = val;
@@ -6981,7 +7150,7 @@ class GUI {
 
 				this.tags = [];
 
-
+			// old system before audio mixing was split into WebAudioXML
 		  	let busses = root.querySelectorAll("bus");
 		  	var objCnt = 0;
 		  	let busObjects = [];
@@ -7326,6 +7495,7 @@ class GUI {
 	  	}
   	}
 
+	
 
   	class Bus2 {
 
@@ -8004,8 +8174,9 @@ Städa upp mellan musicalStart och sectionStart
 Jonas ideas:
 
 Add possibility to loop part for a certain number of times within a track
-
-
 gör partposition oberoende av beatDuration etc.
 
+2022-09-02
+
+changeOnNext="12/4" ger tre takter om globala taktarten är 3/4 men changeOnNext="4" funkar
 */
