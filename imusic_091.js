@@ -231,39 +231,28 @@
 
 
 					section.motifs.forEach(motif => {
+						if(motif.parameters.class){
+							motif.parameters.class.split(" ").forEach(className => {
+								className = className.trim();
+								if(className.length && !inArray(className, motifTags) && !inArray(className, sectionTags)){
+									motifTags.push(className);
+								}
+							});
+						}
+					
+					});
+
+				});
+
+				inst.motifs.forEach(motif => {
+					if(motif.parameters.class){
 						motif.parameters.class.split(" ").forEach(className => {
 							className = className.trim();
 							if(className.length && !inArray(className, motifTags) && !inArray(className, sectionTags)){
 								motifTags.push(className);
 							}
 						});
-						// motif.tags.forEach(tag => {
-						// 		if(!inArray(tag, motifTags) && tag.length){
-						// 			if(!tag.includes(".")){
-						// 				// avoid file names
-						// 				motifTags.push(tag)
-						// 			}
-						// 		}
-						// });
-					});
-
-				});
-
-				inst.motifs.forEach(motif => {
-					motif.parameters.class.split(" ").forEach(className => {
-						className = className.trim();
-						if(className.length && !inArray(className, motifTags) && !inArray(className, sectionTags)){
-							motifTags.push(className);
-						}
-					});
-					// motif.tags.forEach(function(tag){
-					// 	if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
-					// 		if(!tag.includes(".")){
-					// 			// avoid file names
-					// 			motifTags.push(tag);
-					// 		}
-					// 	}
-					// });
+					}
 				});
 
 				let shadowElement;
