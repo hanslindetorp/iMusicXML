@@ -15,7 +15,6 @@
 	var LENGTH = "l";
 
 
-
 	class Selection{
          
         constructor(selector, container){
@@ -42,7 +41,7 @@
                 break;
             }
 
-            if(!selector.length){return this}
+            if(!selector.length){return}
 
             var type;
             switch(typeof selector){
@@ -74,7 +73,7 @@
                 break;
 
                 default:
-                return this;
+                return;
                 break;
 
             }
@@ -131,13 +130,6 @@
                         allObjects.push(action);
                     });
 
-                    /* instance.SFXs not implemented yet
-                    instance.SFXs.forEach(function(sfx){
-
-                        allObjects.push(sfx);
-                    });
-                    */
-
                 });
 
             }
@@ -149,7 +141,7 @@
             var targetSection;
 
 
-            allObjects.some(function(obj){
+            allObjects.some(obj => {
 
                 switch(type){
 
@@ -218,23 +210,18 @@
 
 
             this.objects = objects;
+		}
 
-            return this;
-        }
 
         createDefaultSectionIfNeeded(){
 
             // generate section if no matches
             if(!this.objects.length){
-    
                 var newSection = defaultInstance.addSection({tags: this.selector});
-    
                 if(!defaultInstance.currentSection){
                     defaultInstance.currentSection = newSection;
                 }
-                this.objects.push(newSection);
-    
-    
+                this.objects.push(newSection);    
             }
         }
 
@@ -243,57 +230,39 @@
             var newObj;
             this.createDefaultSectionIfNeeded();
             if(!urls){urls = [];}
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.addLoopTrack){return}
                 newObj = obj.addLoopTrack(urls);
-    
-    
             });
-    
             this.objects = [newObj];
             return this;
-    
         }
 
         addLFO(prop, frequency, range, offset, object){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.addLFO){return}
-    
                 obj.addLFO(prop, frequency, range, offset, object);
-    
             });
             return this;
-    
         }
 
         addDelay(params){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.bus){return}
-    
                 obj.bus.addSerialDelay(params);
-    
             });
             return this;
-    
         }
 
         addReverb(params){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.bus){return}
-    
                 obj.bus.addReverb(params);
-    
-    
             });
             return this;
-    
         }
 
         addMotif(urls, q, upbeat){
@@ -307,22 +276,17 @@
                 // add sections tags to motif
                 tags = mergeArrays(tags, this.objects[0].tags);
             }
-    
-    
-            var targetObj = this.objects.find(function(obj){
+            var targetObj = this.objects.find(obj => {
                 // connect Motif to Section
                 return typeof obj.addMotif === "function";
             }) || defaultInstance;
-    
             var params = typeof q == "object" ? q : {};
             params.tags =  params.tags || tags;
             params.quantize =  params.quantize || q;
             params.upbeat =  params.upbeat || upbeat;
-    
             var newObj = targetObj.addMotif(params, urls);
             this.objects = [newObj];
             return this;
-    
         }
 
         addLeadIn(urls, params){
@@ -338,13 +302,10 @@
 
         setSoloGroup(grp, val){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setSoloGroup){return}
                 obj.setSoloGroup(grp, val);
-    
             });
-    
         }
 
 	    // funkar den här och i sånt fall, hur?
@@ -360,17 +321,12 @@
 
 
             var returnVal = {};
-    
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.play){return}
                 returnVal.delay = obj.play(arg1, arg2, arg3);
-    
             });
             this.returnVal = returnVal;
             return this;
-    
-    
         }
 
         trig(arg1, arg2, arg3){
@@ -379,37 +335,28 @@
 
         replay(){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.replay){return}
                 return obj.replay();
-    
             });
             return this;
         }
 
         stop(params){
             params = params || {};
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.stop){return}
-    
                 // to mute other tracks in a group
                 if(obj == params.omit){return}
-    
                 return obj.stop();
-    
             });
             return this;
         }
 
         stopAllSounds(){
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.stopAllSounds){return}
-    
                 obj.stopAllSounds();
-    
             });
             return this;
         }
@@ -417,7 +364,7 @@
         isPlaying(){
 
             var isPlaying = false;
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 var curObjIsPlaying = obj.isPlaying ? obj.isPlaying() : obj.playing;
                 isPlaying = isPlaying || curObjIsPlaying;
             });
@@ -426,22 +373,18 @@
 
         setActive(active){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setActive){return}
                 return obj.setActive(active);
-    
             });
             return this;
         }
 
         setActive(active){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setActive){return}
                 return obj.setActive(active);
-    
             });
             return this;
         }
@@ -449,11 +392,9 @@
         setVolume(arg1, arg2){
 
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setVolume){return}
                 return obj.setVolume(arg1, arg2);
-    
             });
             return this;
         }
@@ -461,11 +402,9 @@
         getVolume(){
 
             var vol = -1;
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.getVolume){return -1}
                 vol = Math.max(vol, obj.getVolume());
-    
             });
             return vol;
         }
@@ -475,7 +414,7 @@
             delay = delay || 0;
             duration = duration || 250;
             duration /= 1000;
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 if(!obj.fade){return}
                 return obj.fade(val, delay, duration);
             });
@@ -483,7 +422,7 @@
         }
 
         fadeIn(){
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 if(!obj.fadeIn){return}
                 return obj.fadeIn();
             });
@@ -494,7 +433,7 @@
 
             if(duration){duration = duration / 1000}
             if(delay){delay = delay / 1000}
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 if(!obj.fadeOut){return}
                 return obj.fadeOut(delay, duration);
             });
@@ -503,8 +442,7 @@
 
         setVariation(val, val2){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(typeof obj.setVariation === "function"){
                     obj.setVariation(val, val2);
                 } else {
@@ -512,36 +450,30 @@
                 }
             });
             return this;
-    
         }
 
         setActiveVariations(activeVariations){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setActiveVariations){return}
                 return obj.setActiveVariations(activeVariations);
-    
             });
             return this;
-    
         }
         get(param1, param2){
             var value;
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 if(!obj.get){return}
                 value = obj.get(param1, param2);
             });
             return value;
         }
 
-        setParams = function(params){
+        setParams(params){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.setParams){return}
                 return obj.setParams(params);
-    
             });
             return this;
         }
@@ -549,7 +481,7 @@
         set(param, value, value2){
 
             this.createDefaultSectionIfNeeded();
-            this.objects.forEach(function(obj){
+            this.objects.forEach(obj => {
                 if(!obj.set){return}
                 return obj.set(param, value, value2);
             });
@@ -558,11 +490,9 @@
 
         map(param, valIn, minIn, maxIn, minOut, maxOut, exp){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(!obj.map){return}
                 return obj.map(param, valIn, minIn, maxIn, minOut, maxOut, exp);
-    
             });
             return this;
         }
@@ -570,8 +500,7 @@
         group(){
 
             var thisSelection = this;
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(obj.groups){
                     obj.groups.push(thisSelection);
                 }
@@ -580,25 +509,21 @@
         }
 
         addTrackGroup(selection){
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(obj.addTrackGroup){
                     obj.addTrackGroup(selection);
                 }
             });
             return this;
-    
         }
 
         getPosition(pos, flags){
 
             var positionObj;
-    
             if(!this.objects.length){
                 this.objects = [defaultInstance];
             }
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(obj.getPosition){
                     positionObj = obj.getPosition(pos, flags);
                 }
@@ -608,8 +533,7 @@
 
         on(event, fn, delay){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(obj.eventHandler){
                     obj.eventHandler.addEvent(event, fn, delay);
                 }
@@ -618,8 +542,7 @@
 
         update(arg1){
 
-            this.objects.forEach(function(obj){
-    
+            this.objects.forEach(obj => {
                 if(obj.update){
                     obj.update(arg1);
                 }
@@ -630,10 +553,8 @@
         find(selector){
             return new Selection(selector, this);
         }
-    
-    }
 
-
+	}
 
 
 	class VoiceController {
@@ -938,7 +859,12 @@
 
 				el = document.createElement("h1");
 				el.innerHTML = "iMusic";
-				container.appendChild(el);
+				if(container.childNodes.length){
+					container.insertBefore(el, container.lastElementChild);
+				} else {
+					container.appendChild(el);
+				}
+				
 
 				el = document.createElement("button");
 				el.innerHTML = "PLAY";
@@ -1171,6 +1097,7 @@
 	function divisionToTime(div, ts, beatDuration){
 
 		if(!div){return 0;}
+		if(typeof div == "number"){return div}
 
 		if(div == "off"){
 			// One year ;-)
@@ -2859,6 +2786,11 @@
 			o.loopEnd = o.loopEnd || o.end || defaultParams.loopEnd;
 			this.parameters.loopEnd = this.getPosition(o.loopEnd).time;
 			this.parameters.length = this.divisionToTime(o.length);
+
+			if(this.parameters.length && !o.changeOnNexts){
+				// set this.parameters.changeOnNext by length if not specified separately 
+				this.parameters.changeOnNext = this.parameters.length;
+			}
 
 			this.type = "section";
 
@@ -6303,7 +6235,7 @@
 		if(selector){
 
 			if(iMus.delayedPlay){
-				this.clearTimeout(iMus.delayedPlay);
+				clearTimeout(iMus.delayedPlay);
 			}
 			
 			// get new selection
@@ -6311,34 +6243,48 @@
 
 			// check if the selection includes a section
 			if(selection.sections.length){
-				let newSection = selection.sections.unshift();
+				let newSection = selection.sections[0];
 				// Note: sections can have multiple classes. Find the one that matches this selector.
-				let newSelectedSectionString = newSection.tags.find(tag => tag == selection.string).pop();
+				let newSelectedSectionString = newSection.tags.find(tag => tag == selection.string);
+
+				console.log(iMus.lastSelectedSectionString, newSelectedSectionString);
 
 				if(newSelectedSectionString && iMus.lastSelectedSectionString){
 					// make interlude selection (i.e. A-B)
 					let interludeSelector = `${iMus.lastSelectedSectionString}-${newSelectedSectionString}`;
 					
-					let interludeSelection = new Selection(interludeSelector, defaultInstance).sections.pop();
-					if(interludeSelection){
-						// if there is a match, only play leadIns and Motifs now
-						[...selection.motifs, selection.leadIns].forEach(obj => obj.play(options, arg2, arg3));
+					let interludeSelection = new Selection(interludeSelector, defaultInstance);
+					let interludeSection = interludeSelection.sections.pop();
+					if(interludeSection){
+						// if there is a match, first trig leadIns and Motifs now
+						[...interludeSelection.motifs, ...interludeSelection.leadIns].forEach(obj => obj.play(options, arg2, arg3));
 
-						// play interlude
-						let timeToLegalBreak = interludeSelection.play(options, arg2, arg3).timeToLegalBreak;
+						// then play interlude and store time until it changes
+						let timeToLegalBreak = interludeSection.play(options, arg2, arg3).timeToLegalBreak;
 
 						// delay call to play target selection until interlude is done
-						let delay = timeToLegalBreak + interludeSelection.getLength() - timeWindow*2 - iMus.audioContext.currentTime;
+						let delay = timeToLegalBreak+interludeSection.getLength()-timeWindow;
 						iMus.delayedPlay = setTimeout(() => {
 							// it's just one but who knows? ;-)
-							selection.sections.forEach(obj => obj.play(options, arg2, arg3));
+							iMus.lastSelectedSectionString = newSelectedSectionString;
+							selection.play(options, arg2, arg3);
 						}, delay * 1000);
 						
 					} else {
 						// otherwise, play all matches now
+						iMus.lastSelectedSectionString = newSelectedSectionString;
 						return selection.play(options, arg2, arg3);
 					}
+				} else {
+
+					// otherwise, play all matches now
+					// (screwed up logic with several ifs and elses...)
+					iMus.lastSelectedSectionString = newSelectedSectionString;
+					return selection.play(options, arg2, arg3);
 				}
+			} else {
+				// play motifs
+				return selection.play(options, arg2, arg3);
 			}
 
 
