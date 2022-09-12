@@ -62,8 +62,9 @@
 		playVoiceObject(id, startTime, endTime, voiceGroups){
 			let voiceObject = this.getVoiceObject(id);
 			if(voiceObject){
+				voiceObject.play(startTime, endTime);
 				this.getVoiceGroup(voiceGroups || voiceObject.groups, id).forEach(obj => {
-					obj.mute(startTime, endTime);
+					obj.mute(startTime, endTime, voiceObject.priority);
 				}); 
 			}
 		}
@@ -83,22 +84,29 @@
 			this.endMuteTime = 0;
 		}
 		play(startTime, endTime){
-			// unmute if startTime is earlier than any scheduled fades
 			this.gainObject.gain.cancelScheduledValues(startTime);
-			this.gainObject.gain.setTargetAtTime(1, startTime, this.fadeTime);
+			this.gainObject.gain.setTargetAtTime(1, startTime-this.fadeTime, this.fadeTime);
+			this.startTime = startTime;
+			this.endTime = endTime;
 		}
 
-		mute(startTime, endTime){
+		mute(startTime, endTime, priority){
 			let currentTime = this.gainObject.context.currentTime;
 
-			this.gainObject.gain.cancelScheduledValues(0);
-			
-			// find earliest startTime (if several triggers interfers) 
-			this.startMuteTime = this.startMuteTime < currentTime ? startTime : Math.min(startTime, this.startMuteTime);
-			this.endMuteTime = this.endMuteTime < currentTime ? endTime : Math.max(endTime, this.endMuteTime);
+			if(this.endTime && this.endTime > currentTime || priority > this.priority){
+				// endTime is only set for motifs and leadins
+				// Don't touch them if the stored endTime has already passed.
+				// This preserves the audio tail in recently pleayed objects.
 
-			this.gainObject.gain.setTargetAtTime(0, this.startMuteTime, this.fadeTime);
-			this.gainObject.gain.setTargetAtTime(1, this.endMuteTime, this.fadeTime);
+				this.gainObject.gain.cancelScheduledValues(0);
+				
+				// find earliest startTime (if several triggers interfers) 
+				this.startMuteTime = this.startMuteTime < currentTime ? startTime : Math.min(startTime, this.startMuteTime);
+				this.endMuteTime = this.endMuteTime < currentTime ? endTime : Math.max(endTime, this.endMuteTime);
+
+				this.gainObject.gain.setTargetAtTime(0, this.startMuteTime-this.fadeTime, this.fadeTime);
+				this.gainObject.gain.setTargetAtTime(1, this.endMuteTime-this.fadeTime, this.fadeTime);
+			}
 
 		}
 	}
@@ -253,6 +261,14 @@
 							}
 						});
 					}
+					// motif.tags.forEach(function(tag){
+					// 	if(!inArray(tag, motifTags) && !inArray(tag, sectionTags)&& tag.length){
+					// 		if(!tag.includes(".")){
+					// 			// avoid file names
+					// 			motifTags.push(tag);
+					// 		}
+					// 	}
+					// });
 				});
 
 				let shadowElement;
@@ -320,7 +336,7 @@
 
 				// PLAY BUTTONS
 				el = document.createElement("h3");
-				el.innerHTML = "class (arrangements + leadins):";
+				el.innerHTML = "Arrangements + Leadins";
 				container.appendChild(el);
 
 				// el = document.createElement("p");
@@ -348,7 +364,7 @@
 				});
 
 				el = document.createElement("h3");
-				el.innerHTML = "class (separate motifs):";
+				el.innerHTML = "Motifs";
 				container.appendChild(el);
 
 				row = document.createElement("div");
@@ -371,7 +387,7 @@
 
 
 				el = document.createElement("h3");
-				el.innerHTML = "follow-variables: (e.g. intensity)";
+				el.innerHTML = "Variables";
 				container.appendChild(el);
 
 
