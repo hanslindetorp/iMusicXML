@@ -5912,19 +5912,21 @@
 	function getFollowRules(str){
 
 		let selectAttributes = [];
-		if(str.includes("=")){
-			// logical expression i.e. "intensity=1;mood=happy"
-			selectAttributes = str.split(";").map(expression => {
-				let arr = expression.split("=").map(s => s.trim());
-				let rule;
-				if(arr[0]){
-					rule = {key: arr[0], value: arr[1]};
-				} else {
-					rule = -1; // syntax error
-				}
-				return rule;
-			}).filter(rule => rule != -1);
-		} 
+		if(str){
+			if(str.includes("=")){
+				// logical expression i.e. "intensity=1;mood=happy"
+				selectAttributes = str.split(";").map(expression => {
+					let arr = expression.split("=").map(s => s.trim());
+					let rule;
+					if(arr[0]){
+						rule = {key: arr[0], value: arr[1]};
+					} else {
+						rule = -1; // syntax error
+					}
+					return rule;
+				}).filter(rule => rule != -1);
+			} 
+		}
 		return selectAttributes;
 	}
 
