@@ -1,0 +1,505 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="https://www.w3schools.com"
+xmlns="https://www.w3schools.com"
+elementFormDefault="qualified">
+
+  
+
+  <!-- Types -->
+
+  <xs:simpleType name="tempo">
+    <xs:annotation>
+      <xs:documentation>Beats per minute. Note: it always relates to the beat specified with timeSign.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:decimal"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="quantize">
+    <xs:annotation>
+      <xs:documentation>Musical value for synchronizing objects: 'bar', 'beat', nr of bars, 4/4, 3/4, 6/8, 5/8 etc</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="bar|beat|([0-9])+|([0-9])+/([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="length">
+    <xs:annotation>
+      <xs:documentation>Musical length: 'bar', 'beat', nr of bars, 4/4, 3/4, 6/8, 5/8 etc</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="bar|beat|([0-9])+|([0-9])+/([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="loopLength">
+    <xs:annotation>
+      <xs:documentation>Loop length specified by a musical meter: 'bar', 'beat', nr of bars, 4/4, 3/4, 6/8, 5/8 etc or 'off' (for no loop)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="off|bar|beat|([0-9])+|([0-9])+/([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="meter">
+    <xs:annotation>
+      <xs:documentation>Musical meter: 4/4, 3/4, 6/8, 5/8 etc</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9])+/([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="position">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="bar|beat|([0-9])+|([0-9])+[.]([0-9])+|([0-9])+[.]([0-9])+[.]([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="active">
+    <xs:annotation>
+      <xs:documentation>Controls the likeliness for each region on a track to playback. If set to '1', they will always play. If set to '0' they will never play. If set to '0.5', there will a 50% chance of the regions to play. If there are no regions on the track the setting will apply to the whole track. The value can also be any variable expression like '$intensity = 1', '$intensity = 1...3, 5...6' or similar.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([-])*([0-9])+\.?([0-9])*|$?([a-zA-Z])+|$?([a-zA-Z])+\,([ ])*([a-zA-Z])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="filter">
+    <xs:annotation>
+      <xs:documentation>Controls the state of a track depending on one or multiple variables. 
+        Value is given as an expression like filter='intensity=1' which causes this object to 
+        play only when the variable intensity is equal to 1. It is possible to use multiple values
+        ranges of values, strings and multiple expressions separated with semi colon.
+        (i.e. filter="intensity=1,2,5; mood=happy; room=2...5")</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="loopActive">
+    <xs:annotation>
+      <xs:documentation>Controls the likeliness for the the track to playback each loop. If set to '1' it will always play. If set to '0' it will never play. If set to '0.5', there will a 50% chance that it plays. The value can also be any variable expression like '$intensity = 1', '$intensity = 1...3, 5...6' or similar.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([-])*([0-9])+\.?([0-9])*|$?([a-zA-Z])+|$?([a-zA-Z])+\,([ ])*([a-zA-Z])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="audioPath">
+    <xs:annotation>
+      <xs:documentation>Relative or absolute path to the audio files used in elements inside this element.</xs:documentation>
+      <xs:documentation>It makes it unnecessary to specify the path for each audio file. Default is 'audio'.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="((http|https)*://)*([a-zA-Z0-9_\-/])+"></xs:pattern>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fileName">
+    <xs:annotation>
+      <xs:documentation>File name. The directory can be omitted if 'audioPath' set on a parent element. The file extension (mp3, wav, ogg or m4a) can be omitted if 'suffix' is set on a parent element.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([a-zA-Z0-9_\-/])+|([a-zA-Z0-9_\-/])+\.mp3|([a-zA-Z0-9_\-/])+\.wav|([a-zA-Z0-9_\-/])+\.ogg|([a-zA-Z0-9_\-/])+\.m4a"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="suffix">
+    <xs:annotation>
+      <xs:documentation>File extension: 'mp3', 'wav', 'ogg' or 'm4a'</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="mp3|wav|ogg|m4a"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="retrig">
+    <xs:annotation>
+      <xs:documentation>Controls how the different options are selected: 'shuffle', 'next' or 'other'.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="shuffle|next|other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="blockRetrig">
+    <xs:annotation>
+      <xs:documentation>Controls the time before the same motif can be triggered again. Time unit is default set to 'ms'.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="shuffle|next|other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  
+
+  <xs:simpleType name="version">
+    <xs:annotation>
+      <xs:documentation>Version number of iMusicXML specification.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="class">
+    <xs:annotation>
+      <xs:documentation>CSS class name for selecting and triggering from iMusic javascript API.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="id">
+    <xs:annotation>
+      <xs:documentation>CSS ID for selecting and triggering from iMusic javascript API.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="showGUI">
+    <xs:annotation>
+      <xs:documentation>'true' or 'false' - determains if the iMusic GUI button should be visible.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:boolean"/>
+  </xs:simpleType>
+
+
+
+
+  <xs:simpleType name="fadeTime">
+    <xs:annotation>
+      <xs:documentation>The time used for crossfades when this object (often tracks) is replaced by another. Default unit is set to 'ms'.</xs:documentation>
+      <xs:documentation>If set to '0', the audio file will always play its full length and might cause layers of files playing.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:decimal"/>
+  </xs:simpleType>
+
+
+
+
+  <xs:simpleType name="repeat">
+    <xs:annotation>
+      <xs:documentation>The number of repeats. -1 = until stopped, 1 = no repeat, >1 = the number of repeats.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer"/>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="output">
+    <xs:annotation>
+      <xs:documentation>Specify a CSS selector referring to an element in a WebAudioXML configuration to apply realtime audio effects to this object..</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="voice">
+    <xs:annotation>
+      <xs:documentation>The output of this object is handled as a monophonic voice with all other objects tagged with the same instrument name. This means i.e. that triggering a motif temporarily mutes a track if they are set to the same voice. The feature is useful for having motifs or leadins altering the content of an instrument rather than adding a new instrument.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="times">
+    <xs:annotation>
+      <xs:documentation>A comma separated list of time positions. Use note values or seconds. ''now'' means it will trigger directly when the track, the motif or the leadin is triggered</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="values">
+    <xs:annotation>
+      <xs:documentation>A comma separated list of values used with matching time value to shape an envelope. First value is the start value.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="target">
+    <xs:annotation>
+      <xs:documentation>Target parameter in WebAudioXML</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="ENVdefault">
+    <xs:annotation>
+      <xs:documentation>Default value for an envelope</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="convert">
+    <xs:annotation>
+      <xs:documentation>Formula for converting the value. Either a mathematical expression including 'x' (i.e. 'Math.pow(x, 2)' or one of the following preset methods: 'MIDI->frequency' 'dB->power'</xs:documentation>
+    </xs:annotation>
+    
+    <xs:restriction base="xs:string">
+      <xs:pattern value="MIDI->frequency|dB->power|.+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <!-- Element Groups -->
+
+  <xs:group name="imusic">
+    <xs:choice>
+      <xs:element ref="arrangement"/>
+      <xs:element ref="motif"/>
+      <xs:element ref="leadin"/>
+    </xs:choice>   
+  </xs:group>
+
+  <xs:group name="arrangement">
+    <xs:choice>
+      <xs:element ref="track"/>
+      <xs:element ref="motif"/>
+      <xs:element ref="leadin"/>
+    </xs:choice>   
+  </xs:group>
+
+
+  <xs:group name="track">
+    <xs:choice>
+      <xs:element ref="region"/>
+      <xs:element ref="leadin"/>
+      <xs:element ref="envelope"/>
+    </xs:choice>   
+  </xs:group>
+
+
+  <xs:group name="motif">
+    <xs:choice>
+      <xs:element ref="option"/>
+      <xs:element ref="envelope"/>
+    </xs:choice>   
+  </xs:group>
+
+
+  <xs:group name="leadin">
+    <xs:choice>
+      <xs:element ref="option"/>
+      <xs:element ref="envelope"/>
+    </xs:choice>   
+  </xs:group>
+
+
+
+  <!-- Elements -->
+
+  <xs:element name="imusic">
+
+    <xs:annotation>
+      <xs:documentation>The imusic element is the root element. It typically contains arrangements but can also contain global motifs and leadins. The variables specified here will be global and affect all child elements if they don't have individual settings. This makes this element a good place for specifying tempo, timeSign etc.</xs:documentation>
+      <xs:documentation>Elements: arrangement, motif and leadin</xs:documentation>
+      <xs:documentation>Attributes: version, audioPath, tempo, timeSign, suffix, showGUI, changeOnNext, fadeTime and loopLength</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:group ref="imusic" minOccurs="0" maxOccurs="unbounded"/>
+        
+      <xs:attribute name="version" type="xs:string"/>
+      <xs:attribute name="audioPath" type="audioPath"/>
+      <xs:attribute name="tempo" type="tempo"/>
+      <xs:attribute name="timeSign" type="meter"/>
+      <xs:attribute name="suffix" type="suffix"/>
+      <xs:attribute name="showGUI" type="showGUI"/>
+      <xs:attribute name="changeOnNext" type="length"/>
+      <xs:attribute name="fadeTime" type="fadeTime"/>
+      <xs:attribute name="loopLength" type="length"/>
+
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="arrangement">
+    <xs:annotation>
+      <xs:documentation>An arrangement contains one or several tracks, motifs and leadins.</xs:documentation>
+      <xs:documentation>Elements: track, motif and leadin</xs:documentation>
+      <xs:documentation>Attributes: class, id, audioPath, tempo, timeSign, suffix, changeOnNext, fadeTime, loopLength, length and src.</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:group ref="arrangement" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:attribute name="class" type="class"/>
+      <xs:attribute name="id" type="id"/>
+      <xs:attribute name="audioPath" type="audioPath"/>
+      <xs:attribute name="tempo" type="tempo"/>
+      <xs:attribute name="timeSign" type="meter"/>
+      <xs:attribute name="suffix" type="suffix"/>
+      <xs:attribute name="changeOnNext" type="length"/>
+      <xs:attribute name="fadeTime" type="fadeTime"/>
+      <xs:attribute name="loopLength" type="length"/>
+      <xs:attribute name="length" type="length"/>
+      <xs:attribute name="src" type="fileName"/>
+
+    </xs:complexType>
+    
+  </xs:element>
+
+  <xs:element name="track">
+
+    <xs:annotation>
+      <xs:documentation>A track typically plays a looped audiofile specified by the attribute 'src'. It can also contain multiple regions, each playing a separate audio file.</xs:documentation>
+      <xs:documentation>Elements: region</xs:documentation>
+      <xs:documentation>Attributes: class, id, voice,  audioPath, suffix, changeOnNext, fadeTime, loopLength, src, partLength, upbeat, output, active, and loopActive</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:group ref="track" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:attribute name="class" type="class"/>
+      <xs:attribute name="id" type="id"/>
+      <xs:attribute name="voice" type="voice"/>
+      <xs:attribute name="output" type="output"/>
+      <xs:attribute name="audioPath" type="audioPath"/>
+      <xs:attribute name="suffix" type="suffix"/>
+      <xs:attribute name="src" type="fileName"/>
+
+      <xs:attribute name="changeOnNext" type="length"/>
+      <xs:attribute name="fadeTime" type="fadeTime"/>
+      <xs:attribute name="loopLength" type="loopLength"/>
+      <xs:attribute name="partLength" type="length"/>
+      <xs:attribute name="upbeat" type="length"/>
+      <xs:attribute name="active" type="active"/>
+      <xs:attribute name="filter" type="filter"/>
+      <xs:attribute name="loopActive" type="loopActive"/>
+
+    </xs:complexType>
+  </xs:element>
+
+
+
+  <xs:element name="region">
+
+    <xs:annotation>
+      <xs:documentation>A region typically plays an audiofile at a specified position. The audiofile is specified by the attribute 'src'. It can also contain multiple option to randomize the playback between different audio files each time the region is triggered.</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
+      <xs:documentation>Attributes:  src, pos, upbeat</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:sequence>
+        <xs:element ref="option" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+
+      <xs:attribute name="pos" type="position"/>
+      <xs:attribute name="upbeat" type="length"/>
+      <xs:attribute name="src" type="fileName"/>
+      <xs:attribute name="length" type="length"/>
+
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="option">
+
+    <xs:annotation>
+      <xs:documentation>An option plays an audiofile when triggered. The audiofile is specified by the attribute 'src'. There is one file connected to one option. There can be multiple options in regions, motifs and leadins.</xs:documentation>
+      <xs:documentation>Attributes: src, upbeat, length and voice</xs:documentation>
+    </xs:annotation>
+
+
+    <xs:complexType>
+
+      <xs:sequence>
+        <xs:element ref="envelope" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+
+      <xs:attribute name="src" type="fileName"/>
+      <xs:attribute name="length" type="length"/>
+      <xs:attribute name="upbeat" type="length"/>
+      <xs:attribute name="voice" type="voice"/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="motif">
+
+
+    <xs:annotation>
+      <xs:documentation>A motif typically triggers a non-looped audiofile in sync with the tracks in the same arrangement. The audiofile is specified by the attribute 'src'. It can also contain multiple options, each playing a separate audio file. The quantize attribute defines the nearest musical value used for syncronizing the motif.</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
+      <xs:documentation>Attributes: class, id, voice,  active, src, quantize, upbeat, length, retrig, blockRetrig, repeat, output and release.</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:group ref="motif" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:attribute name="class" type="xs:string"/>
+      <xs:attribute name="id" type="xs:string"/>
+      <xs:attribute name="voice" type="voice"/>
+      <xs:attribute name="output" type="output"/>
+
+      <xs:attribute name="src" type="fileName"/>      
+      <xs:attribute name="quantize" type="quantize"/>
+      <xs:attribute name="upbeat" type="length"/>
+      <xs:attribute name="length" type="length"/>
+      <xs:attribute name="active" type="active"/>
+      <xs:attribute name="filter" type="filter"/>
+      <xs:attribute name="retrig" type="retrig"/>
+      <xs:attribute name="blockRetrig" type="blockRetrig"/>
+      <xs:attribute name="repeat" type="repeat"/>
+      <xs:attribute name="fadeTime" type="fadeTime"/>
+
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="leadin">
+    
+    <xs:annotation>
+      <xs:documentation>A leadin typically used to play a non-looped audiofile when transitioning from one arrangement to another. The audiofile is specified by the attribute 'src'. It triggers in sync with the tracks in the same arrangement and will align iself leading up to the following barline. The position is determained with the upbeat attribute</xs:documentation>
+      <xs:documentation>Element: option</xs:documentation>
+      <xs:documentation>Attributes: class, id, voice,  active, src, quantize, upbeat, retrig and output</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:group ref="leadin" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:attribute name="class" type="xs:string"/>
+      <xs:attribute name="id" type="xs:string"/>
+      <xs:attribute name="voice" type="voice"/>
+      <xs:attribute name="output" type="output"/>
+
+      <xs:attribute name="src" type="fileName"/>   
+      <xs:attribute name="quantize" type="quantize"/>
+      <xs:attribute name="changeOnNext" type="length"/>
+      <xs:attribute name="upbeat" type="length"/>
+      <xs:attribute name="length" type="length"/>
+      <xs:attribute name="active" type="active"/>
+      <xs:attribute name="filter" type="filter"/>
+      <xs:attribute name="retrig" type="retrig"/>
+
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="envelope">
+    
+    <xs:annotation>
+      <xs:documentation>An Envelope can control any variable inside WebAudioXML. Specify the name of the variable, the values and the time positions.</xs:documentation>
+      <xs:documentation>Attributes: name, times, values, default, convert and target</xs:documentation>
+    
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="times" type="times"/>
+      <xs:attribute name="values" type="values"/>
+      <xs:attribute name="target" type="target"/>
+      <xs:attribute name="default" type="ENVdefault"/>
+      <xs:attribute name="convert" type="convert"/>
+    </xs:complexType>
+  </xs:element>
+
+
+</xs:schema>
