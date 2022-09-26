@@ -1574,7 +1574,7 @@
 			 	});
 
 
-				var e2 = new CustomEvent('playfile', {
+				var e2 = new CustomEvent('playFile', {
 					detail: {
 						url: url,
 						id: track ? track.idName : obj.idName,
@@ -3222,7 +3222,7 @@
 						Object.keys(self._listeners).forEach(key => {
 
 							switch(key){
-								case "playfile":
+								case "playFile":
 									break;
 
 								default:
@@ -6831,14 +6831,15 @@
 					let fn;
 					let attrNameArr = attr.localName.split("-");
 
+					let sustain;
+					let animationData = attr.value.split(",");
 					switch(attrNameArr[2]){
 
 						// i.e. "beat, 0, 100, red, 0, 300"
 						case "style":
-							let animationData = attr.value.split(",");
 							let Q = (animationData[0] || "beat").trim();
 							let offset = (animationData[1] || "0").trim();
-							let sustain = (animationData[2] || "").trim();
+							sustain = (animationData[2] || "").trim();
 							let className = (animationData[3] || "imus-trigger").trim();
 							let attack = (animationData[4] || "").trim();
 							let decay = (animationData[5] || "").trim();
@@ -6863,6 +6864,19 @@
 									el.classList.remove(className);
 								}, delay + A + S);
 
+							});
+							break;
+
+						
+							case "trigger":
+							sustain = 200;
+							let url = animationData[0];
+							defaultInstance.addEventListener("playFile", musicEvent => {
+								if(musicEvent.detail.url == url){
+									if(el.timeout){clearTimeout(el.timeout)}
+									el.classList.add("imusic-trigger");
+									el.timeout = setTimeout(e => el.classList.remove("imusic-trigger"), sustain);
+								}
 							});
 							break;
 
@@ -6927,6 +6941,7 @@
 
 						break;
 
+
 						case "set":
 							// New syntax 2022-09-15. Target variable is now not be a part of 
 							// the attribute name, but as a part of the expression
@@ -6949,6 +6964,13 @@
 								
 							} 
 							break;
+
+						case "trigger":
+						case "style":
+							// this is a bit weird
+							// just added to avoid doing something wrong for attributes
+							// that shall attach eventListeners to iMusic (above)
+						break;
 
 						default:
 							if(variableName){
