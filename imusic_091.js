@@ -6273,6 +6273,10 @@
 				});
 			}
 			break;
+
+			default:
+			iMus.select(param, val);
+			break;
 		}
 	}
 
@@ -7256,7 +7260,7 @@
 					// It's NOT a good way of including variable-names as part of the attribute name
 					// We should instead allow for multiple variables to be specified in the attribute value
 					// separated with semicolon. And it should not be 'follow'. I'll try "filter"
-					// i.e. active="intensity=1; mood=happy; place=1,2..4,8"
+					// i.e. filter="intensity=1; mood=happy; place=1,2..4,8"
 
 					getFollowRules(track.getAttribute("filter")).forEach(entry => {
 						stem.setSoloGroup(entry.key, entry.value);
