@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Audio 
+
+    xmlns="https://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.w3schools.com https://momdev.se/lindetorp/waxml/scheme_1.16.xsd"
+
+    version="1.0" 
+    timeUnit="ms" 
+    gain="0dB"
+    controls="show">
+
+
+    <var name="mix_intensity" default="0" mapin="0,1" />
+    <var name="mix_blend" default="0"/>
+    <var name="mix_transition_time" default="500" />
+
+    
+
+    <Mixer id="intensity-mixer" controls="waxml-dynamic-mixer" mix="$mix_intensity" selectindex="$intensity_index" crossFadeRange="$mix_blend" transitionTime="$mix_transition_time" output="#music">       
+        <GainNode id="mix1" />
+        <GainNode id="mix2" />
+        <GainNode id="mix3" />
+        <GainNode id="mix4" />
+    </Mixer>
+
+    <include id="stereo-mixer-4ch" href="plugins/mixer.xml" transitionTime="$mix_transition_time" />
+
+
+    <Snapshot class="LP">
+        <Command type="set" variable="mix_transition_time" value="1000" />
+        <Command type="set" variable="music_volume" value="-2.56" />
+        <Command type="set" variable="music_filter_cutoff" value="-57.15" />
+        <Command type="set" variable="music_filter_resonance" value="4.51" />
+    </Snapshot>
+
+
+    <Snapshot class="HP">
+        <Command type="set" variable="mix_transition_time" value="1000" />
+        <Command type="set" variable="music_volume" value="-2.56" />
+        <Command type="set" variable="music_filter_cutoff" value="57.15" />
+        <Command type="set" variable="music_filter_resonance" value="4.51" />
+    </Snapshot>
+
+
+</Audio>

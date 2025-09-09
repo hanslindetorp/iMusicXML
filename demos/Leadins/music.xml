@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<imusic
+
+
+  xmlns="https://www.w3schools.com"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.w3schools.com https://momdev.se/lindetorp/imusic/scheme_1.1.28.xsd"
+  
+  version="1.0" 
+  tempo="120" 
+  timeSign="4/4"
+  
+  changeOnNext="bar" 
+  fadeTime="10"
+  showGUI="true">
+
+    <arrangement class="A">
+        <track src="audio/intro.mp3" loopLength="4" />
+        <leadin src="audio/piano_leadin.mp3" class="B" delay="-1/4" />  
+    </arrangement>
+
+    <arrangement class="B">
+        <track src="audio/piano-git-synth-rhodes.mp3" loopLength="8"/>
+        <track class="drums" src="audio/drums_low.mp3" loopLength="8" voice="drums" />
+        
+        <leadin class="C" src="audio/drums_leadin.mp3" delay="-4/4" changeOnNext="1/8" voice="drums" />
+    </arrangement>
+
+    <arrangement class="C">
+        <track src="audio/ending.mp3" loopLength="off" />
+    </arrangement>
+</imusic>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Audio 
+    xmlns="https://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.w3schools.com https://momdev.se/lindetorp/waxml/scheme_1.16.xsd"
+
+    version="1.0" 
+    timeUnit="ms" 
+    gain="0dB">
+
+    <Mixer gain="$click_volume+0" transitionTime="0">
+        <AudioBufferSourceNode id="click_bar" src="click_bar.mp3" />
+        <AudioBufferSourceNode id="click_beat" src="click_beat.mp3" />
+    </Mixer>
+
+
+    <!-- <Chain> -->
+        <Mixer controls="waxml-variable-matrix">
+            
+            <Chain id="ch1" output="#master">
+                <var name="volume" value="$ch1_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="pan" value="$ch1_pan" mapin="-1,1" default="0"/>
+                <var name="filter_cutoff" value="$ch1_filter_cutoff" mapin="-100,100" default="0"/>
+                <var name="filter_resonance" value="$ch1_filter_resonance" mapin="0,30" default="0"/>
+                <var name="send1" value="$ch1_send1" mapin="-30,6" default="-40" convert="dB->power" />
+                
+                <GainNode output=".channel"/>
+                <include href="mixer-channel.xml"/>
+            </Chain>
+
+
+            
+            <Chain id="ch2" output="#master">
+                <var name="volume" value="$ch2_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="pan" value="$ch2_pan" mapin="-1,1" default="0"/>
+                <var name="filter_cutoff" value="$ch2_filter_cutoff" mapin="-100,100" default="0"/>
+                <var name="filter_resonance" value="$ch2_filter_resonance" mapin="0,30" default="0"/>
+                <var name="send1" value="$ch2_send1" mapin="-30,6" default="-40" convert="dB->power" />
+                
+                <GainNode output=".channel"/>
+                <include href="mixer-channel.xml"/>
+            </Chain>
+
+
+
+            
+            <Chain id="ch3" output="#master">
+                <var name="volume" value="$ch3_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="pan" value="$ch3_pan" mapin="-1,1" default="0"/>
+                <var name="filter_cutoff" value="$ch3_filter_cutoff" mapin="-100,100" default="0"/>
+               <var name="filter_resonance" value="$ch3_filter_resonance" mapin="0,30" default="0"/>
+                 <var name="send1" value="$ch3_send1" mapin="-30,6" default="-40" convert="dB->power" />
+                
+                <GainNode output=".channel"/>
+                <include href="mixer-channel.xml"/>
+            </Chain>
+
+
+
+            
+            <Chain id="ch4" output="#master">
+                <var name="volume" value="$ch4_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="pan" value="$ch4_pan" mapin="-1,1" default="0"/>
+                <var name="filter_cutoff" value="$ch4_filter_cutoff" mapin="-100,100" default="0"/>
+                <var name="filter_resonance" value="$ch4_filter_resonance" mapin="0,30" default="0"/>
+                <var name="send1" value="$ch4_send1" mapin="-30,6" default="-40" convert="dB->power" />
+                
+                <GainNode output=".channel"/>
+                <include href="mixer-channel.xml"/>
+            </Chain>
+
+
+            
+            <Chain id="music" output="#master">
+                <var name="volume" value="$music_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="pan" value="$music_pan" mapin="-1,1" default="0"/>
+                <var name="filter_cutoff" value="$music_filter_cutoff" mapin="-100,100" default="0"/>
+                <var name="filter_resonance" value="$music_filter_resonance" mapin="0,30" default="0"/>
+                <var name="send1" value="$music_send1" mapin="-30,6" default="-40" convert="dB->power" />
+                
+                <GainNode output=".channel"/>
+                <include href="mixer-channel.xml"/>
+            </Chain>
+
+            <ConvolverNode id="send1" src="convolution/hall.wav"/>
+            
+
+        </Mixer>
+
+        <Mixer controls="waxml-variable-matrix">
+            <Chain id="master">
+                <var name="volume" value="$master_volume" mapin="-30,6" default="0" convert="dB->power" />
+                <var name="filter_cutoff" value="$master_filter_cutoff" mapin="-100,100" default="0"/>
+                <var name="filter_resonance" value="$master_filter_resonance" mapin="0,30" default="0"/>
+    
+                <var name="compressor_ratio" value="$master_comp_ratio" default="1" mapin="1,20"/>
+                <var name="compressor_threshold" value="$master_comp_threshold" default="0" mapin="-50,0"/>
+               
+                <GainNode output=".channel"/>
+                <include href="master-channel.xml"/>
+            </Chain>
+        </Mixer>
+
+    <!-- </Chain> -->
+</Audio>
